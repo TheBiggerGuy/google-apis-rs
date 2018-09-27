@@ -1,7 +1,14 @@
 language: rust
+sudo: false 
+dist: xenial
 os:
   - linux
   - osx
+addons:
+  apt:
+    packages:
+      - python
+    update: true
 rust:
   - stable
   - nightly
