@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *Cloud OS Login* crate version *1.0.7+20171120*, where *20171120* is the exact revision of the *oslogin:v1beta* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *Cloud OS Login* crate version *1.0.7+20181008*, where *20181008* is the exact revision of the *oslogin:v1beta* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *Cloud OS Login* *v1_beta* API can be found at the
 //! [official documentation site](https://cloud.google.com/compute/docs/oslogin/rest/).
@@ -378,32 +378,40 @@ impl<'a, C, A> CloudOSLogin<C, A>
 // ############
 // SCHEMAS ###
 // ##########
-/// The user profile information used for logging in to a virtual machine on
-/// Google Compute Engine.
+/// The POSIX account information associated with a Google account.
 /// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [get login profile users](struct.UserGetLoginProfileCall.html) (response)
+/// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct LoginProfile {
-    /// The list of POSIX accounts associated with the user.
-    #[serde(rename="posixAccounts")]
-    pub posix_accounts: Option<Vec<PosixAccount>>,
-    /// A map from SSH public key fingerprint to the associated key object.
-    #[serde(rename="sshPublicKeys")]
-    pub ssh_public_keys: Option<HashMap<String, SshPublicKey>>,
-    /// The primary email address that uniquely identifies the user.
-    pub name: Option<String>,
-    /// Indicates if the user is suspended. A suspended user cannot log in but
-    /// their profile information is retained.
-    pub suspended: Option<bool>,
+pub struct PosixAccount {
+    /// The username of the POSIX account.
+    pub username: Option<String>,
+    /// The path to the logic shell for this account.
+    pub shell: Option<String>,
+    /// The user ID.
+    pub uid: Option<String>,
+    /// Only one POSIX account can be marked as primary.
+    pub primary: Option<bool>,
+    /// The operating system type where this account applies.
+    #[serde(rename="operatingSystemType")]
+    pub operating_system_type: Option<String>,
+    /// The default group ID.
+    pub gid: Option<String>,
+    /// System identifier for which account the username or uid applies to.
+    /// By default, the empty value is used.
+    #[serde(rename="systemId")]
+    pub system_id: Option<String>,
+    /// The path to the home directory for this account.
+    #[serde(rename="homeDirectory")]
+    pub home_directory: Option<String>,
+    /// The GECOS (user information) entry for this account.
+    pub gecos: Option<String>,
+    /// Output only. A POSIX account identifier.
+    #[serde(rename="accountId")]
+    pub account_id: Option<String>,
 }
 
-impl ResponseResult for LoginProfile {}
+impl Part for PosixAccount {}
 
 
 /// A response message for importing an SSH public key.
@@ -423,6 +431,30 @@ pub struct ImportSshPublicKeyResponse {
 }
 
 impl ResponseResult for ImportSshPublicKeyResponse {}
+
+
+/// A generic empty message that you can re-use to avoid defining duplicated
+/// empty messages in your APIs. A typical example is to use it as the request
+/// or the response type of an API method. For instance:
+/// 
+///     service Foo {
+///       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
+///     }
+/// 
+/// The JSON representation for `Empty` is empty JSON object `{}`.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [ssh public keys delete users](struct.UserSshPublicKeyDeleteCall.html) (response)
+/// * [projects delete users](struct.UserProjectDeleteCall.html) (response)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct Empty { _never_set: Option<bool> }
+
+impl ResponseResult for Empty {}
 
 
 /// The SSH public key information associated with a Google account.
@@ -453,61 +485,29 @@ impl RequestValue for SshPublicKey {}
 impl ResponseResult for SshPublicKey {}
 
 
-/// A generic empty message that you can re-use to avoid defining duplicated
-/// empty messages in your APIs. A typical example is to use it as the request
-/// or the response type of an API method. For instance:
-/// 
-///     service Foo {
-///       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
-///     }
-/// 
-/// The JSON representation for `Empty` is empty JSON object `{}`.
+/// The user profile information used for logging in to a virtual machine on
+/// Google Compute Engine.
 /// 
 /// # Activities
 /// 
 /// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
 /// The list links the activity name, along with information about where it is used (one of *request* and *response*).
 /// 
-/// * [ssh public keys delete users](struct.UserSshPublicKeyDeleteCall.html) (response)
-/// * [projects delete users](struct.UserProjectDeleteCall.html) (response)
+/// * [get login profile users](struct.UserGetLoginProfileCall.html) (response)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Empty { _never_set: Option<bool> }
-
-impl ResponseResult for Empty {}
-
-
-/// The POSIX account information associated with a Google account.
-/// 
-/// This type is not used in any activity, and only used as *part* of another schema.
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct PosixAccount {
-    /// The username of the POSIX account.
-    pub username: Option<String>,
-    /// The path to the logic shell for this account.
-    pub shell: Option<String>,
-    /// The user ID.
-    pub uid: Option<String>,
-    /// Only one POSIX account can be marked as primary.
-    pub primary: Option<bool>,
-    /// The default group ID.
-    pub gid: Option<String>,
-    /// System identifier for which account the username or uid applies to.
-    /// By default, the empty value is used.
-    #[serde(rename="systemId")]
-    pub system_id: Option<String>,
-    /// The path to the home directory for this account.
-    #[serde(rename="homeDirectory")]
-    pub home_directory: Option<String>,
-    /// The GECOS (user information) entry for this account.
-    pub gecos: Option<String>,
-    /// Output only. A POSIX account identifier.
-    #[serde(rename="accountId")]
-    pub account_id: Option<String>,
+pub struct LoginProfile {
+    /// The list of POSIX accounts associated with the user.
+    #[serde(rename="posixAccounts")]
+    pub posix_accounts: Option<Vec<PosixAccount>>,
+    /// A map from SSH public key fingerprint to the associated key object.
+    #[serde(rename="sshPublicKeys")]
+    pub ssh_public_keys: Option<HashMap<String, SshPublicKey>>,
+    /// A unique user ID.
+    pub name: Option<String>,
 }
 
-impl Part for PosixAccount {}
+impl ResponseResult for LoginProfile {}
 
 
 
@@ -894,16 +894,14 @@ impl<'a, C, A> UserProjectDeleteCall<'a, C, A> where C: BorrowMut<hyper::Client>
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> UserProjectDeleteCall<'a, C, A>
@@ -1192,16 +1190,14 @@ impl<'a, C, A> UserImportSshPublicKeyCall<'a, C, A> where C: BorrowMut<hyper::Cl
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> UserImportSshPublicKeyCall<'a, C, A>
@@ -1447,16 +1443,14 @@ impl<'a, C, A> UserSshPublicKeyDeleteCall<'a, C, A> where C: BorrowMut<hyper::Cl
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> UserSshPublicKeyDeleteCall<'a, C, A>
@@ -1701,16 +1695,14 @@ impl<'a, C, A> UserGetLoginProfileCall<'a, C, A> where C: BorrowMut<hyper::Clien
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> UserGetLoginProfileCall<'a, C, A>
@@ -1956,16 +1948,14 @@ impl<'a, C, A> UserSshPublicKeyGetCall<'a, C, A> where C: BorrowMut<hyper::Clien
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> UserSshPublicKeyGetCall<'a, C, A>
@@ -2255,16 +2245,14 @@ impl<'a, C, A> UserSshPublicKeyPatchCall<'a, C, A> where C: BorrowMut<hyper::Cli
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> UserSshPublicKeyPatchCall<'a, C, A>

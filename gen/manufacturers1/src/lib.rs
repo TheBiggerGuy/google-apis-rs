@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *Manufacturer Center* crate version *1.0.7+20171207*, where *20171207* is the exact revision of the *manufacturers:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *Manufacturer Center* crate version *1.0.7+20180919*, where *20180919* is the exact revision of the *manufacturers:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *Manufacturer Center* *v1* API can be found at the
 //! [official documentation site](https://developers.google.com/manufacturers/).
@@ -48,7 +48,7 @@
 //! 
 //! ```ignore
 //! let r = hub.accounts().products_update(...).doit()
-//! let r = hub.accounts().products_get(...).doit()
+//! let r = hub.accounts().products_delete(...).doit()
 //! ```
 //! 
 //! The `resource()` and `activity(...)` calls create [builders][builder-pattern]. The second one dealing with `Activities` 
@@ -74,7 +74,7 @@
 //! extern crate hyper_rustls;
 //! extern crate yup_oauth2 as oauth2;
 //! extern crate google_manufacturers1 as manufacturers1;
-//! use manufacturers1::Product;
+//! use manufacturers1::Attributes;
 //! use manufacturers1::{Result, Error};
 //! # #[test] fn egal() {
 //! use std::default::Default;
@@ -96,7 +96,7 @@
 //! // As the method needs a request, you would usually fill it with the desired information
 //! // into the respective structure. Some of the parts shown here might not be applicable !
 //! // Values shown here are possibly random and not representative !
-//! let mut req = Product::default();
+//! let mut req = Attributes::default();
 //! 
 //! // You can configure optional parameters by calling the respective setters at will, and
 //! // execute the final call using `doit()`.
@@ -259,7 +259,7 @@ impl Default for Scope {
 /// extern crate hyper_rustls;
 /// extern crate yup_oauth2 as oauth2;
 /// extern crate google_manufacturers1 as manufacturers1;
-/// use manufacturers1::Product;
+/// use manufacturers1::Attributes;
 /// use manufacturers1::{Result, Error};
 /// # #[test] fn egal() {
 /// use std::default::Default;
@@ -281,7 +281,7 @@ impl Default for Scope {
 /// // As the method needs a request, you would usually fill it with the desired information
 /// // into the respective structure. Some of the parts shown here might not be applicable !
 /// // Values shown here are possibly random and not representative !
-/// let mut req = Product::default();
+/// let mut req = Attributes::default();
 /// 
 /// // You can configure optional parameters by calling the respective setters at will, and
 /// // execute the final call using `doit()`.
@@ -386,54 +386,21 @@ impl Part for Count {}
 /// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
 /// The list links the activity name, along with information about where it is used (one of *request* and *response*).
 /// 
-/// * [products update accounts](struct.AccountProductUpdateCall.html) (request|response)
 /// * [products get accounts](struct.AccountProductGetCall.html) (response)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Product {
     /// The target country of the product as a CLDR territory code (for example,
     /// US).
-    /// @OutputOnly
     #[serde(rename="targetCountry")]
     pub target_country: Option<i64>,
-    /// Names of the attributes of the product deleted manually via the
-    /// Manufacturer Center UI.
-    /// @OutputOnly
-    #[serde(rename="manuallyDeletedAttributes")]
-    pub manually_deleted_attributes: Option<Vec<String>>,
-    /// The content language of the product as a two-letter ISO 639-1 language code
-    /// (for example, en).
-    /// @OutputOnly
-    #[serde(rename="contentLanguage")]
-    pub content_language: Option<String>,
+    /// The status of the destinations.
+    #[serde(rename="destinationStatuses")]
+    pub destination_statuses: Option<Vec<DestinationStatus>>,
     /// Parent ID in the format `accounts/{account_id}`.
     /// 
     /// `account_id` - The ID of the Manufacturer Center account.
-    /// @OutputOnly
     pub parent: Option<String>,
-    /// Attributes of the product provided manually via the Manufacturer Center UI.
-    /// @OutputOnly
-    #[serde(rename="manuallyProvidedAttributes")]
-    pub manually_provided_attributes: Option<Attributes>,
-    /// Final attributes of the product. The final attributes are obtained by
-    /// overriding the uploaded attributes with the manually provided and deleted
-    /// attributes. Google systems only process, evaluate, review, and/or use final
-    /// attributes.
-    /// @OutputOnly
-    #[serde(rename="finalAttributes")]
-    pub final_attributes: Option<Attributes>,
-    /// Attributes of the product uploaded via the Manufacturer Center API or via
-    /// feeds.
-    #[serde(rename="uploadedAttributes")]
-    pub uploaded_attributes: Option<Attributes>,
-    /// The ID of the product. For more information, see
-    /// https://support.google.com/manufacturers/answer/6124116#id.
-    /// @OutputOnly
-    #[serde(rename="productId")]
-    pub product_id: Option<String>,
-    /// A server-generated list of issues associated with the product.
-    /// @OutputOnly
-    pub issues: Option<Vec<Issue>>,
     /// Name in the format `{target_country}:{content_language}:{product_id}`.
     /// 
     /// `target_country`   - The target country of the product as a CLDR territory
@@ -444,11 +411,22 @@ pub struct Product {
     /// 
     /// `product_id`     -   The ID of the product. For more information, see
     ///                      https://support.google.com/manufacturers/answer/6124116#id.
-    /// @OutputOnly
     pub name: Option<String>,
+    /// Attributes of the product uploaded to the Manufacturer Center. Manually
+    /// edited attributes are taken into account.
+    pub attributes: Option<Attributes>,
+    /// The content language of the product as a two-letter ISO 639-1 language code
+    /// (for example, en).
+    #[serde(rename="contentLanguage")]
+    pub content_language: Option<String>,
+    /// A server-generated list of issues associated with the product.
+    pub issues: Option<Vec<Issue>>,
+    /// The ID of the product. For more information, see
+    /// https://support.google.com/manufacturers/answer/6124116#id.
+    #[serde(rename="productId")]
+    pub product_id: Option<String>,
 }
 
-impl RequestValue for Product {}
 impl ResponseResult for Product {}
 
 
@@ -489,6 +467,21 @@ pub struct Image {
 }
 
 impl Part for Image {}
+
+
+/// The destination status.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct DestinationStatus {
+    /// The status of the destination.
+    pub status: Option<String>,
+    /// The name of the destination.
+    pub destination: Option<String>,
+}
+
+impl Part for DestinationStatus {}
 
 
 /// There is no detailed description.
@@ -554,7 +547,12 @@ impl Part for ProductDetail {}
 /// Attributes of the product. For more information, see
 /// https://support.google.com/manufacturers/answer/6124116.
 /// 
-/// This type is not used in any activity, and only used as *part* of another schema.
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [products update accounts](struct.AccountProductUpdateCall.html) (request)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Attributes {
@@ -578,6 +576,9 @@ pub struct Attributes {
     /// https://support.google.com/manufacturers/answer/6124116#video.
     #[serde(rename="videoLink")]
     pub video_link: Option<Vec<String>>,
+    /// A list of excluded destinations.
+    #[serde(rename="excludedDestination")]
+    pub excluded_destination: Option<Vec<String>>,
     /// The flavor of the product. For more information, see
     /// https://support.google.com/manufacturers/answer/6124116#flavor.
     pub flavor: Option<String>,
@@ -591,6 +592,9 @@ pub struct Attributes {
     /// The size of the product. For more information, see
     /// https://support.google.com/manufacturers/answer/6124116#size.
     pub size: Option<String>,
+    /// The material of the product. For more information, see
+    /// https://support.google.com/manufacturers/answer/6124116#material.
+    pub material: Option<String>,
     /// The capacity of the product. For more information, see
     /// https://support.google.com/manufacturers/answer/6124116#capacity.
     pub capacity: Option<Capacity>,
@@ -611,9 +615,9 @@ pub struct Attributes {
     /// see https://support.google.com/manufacturers/answer/6124116#price.
     #[serde(rename="suggestedRetailPrice")]
     pub suggested_retail_price: Option<Price>,
-    /// The material of the product. For more information, see
-    /// https://support.google.com/manufacturers/answer/6124116#material.
-    pub material: Option<String>,
+    /// A list of included destinations.
+    #[serde(rename="includedDestination")]
+    pub included_destination: Option<Vec<String>>,
     /// The description of the product. For more information, see
     /// https://support.google.com/manufacturers/answer/6124116#description.
     pub description: Option<String>,
@@ -677,7 +681,7 @@ pub struct Attributes {
     pub age_group: Option<String>,
 }
 
-impl Part for Attributes {}
+impl RequestValue for Attributes {}
 
 
 /// Product issue.
@@ -686,20 +690,26 @@ impl Part for Attributes {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Issue {
-    /// If present, the attribute that triggered the issue. For more information
-    /// about attributes, see
-    /// https://support.google.com/manufacturers/answer/6124116.
-    pub attribute: Option<String>,
     /// The server-generated type of the issue, for example,
     /// “INCORRECT_TEXT_FORMATTING”, “IMAGE_NOT_SERVEABLE”, etc.
     #[serde(rename="type")]
     pub type_: Option<String>,
-    /// Description of the issue.
+    /// Longer description of the issue focused on how to resolve it.
     pub description: Option<String>,
-    /// The severity of the issue.
-    pub severity: Option<String>,
+    /// Short title describing the nature of the issue.
+    pub title: Option<String>,
+    /// If present, the attribute that triggered the issue. For more information
+    /// about attributes, see
+    /// https://support.google.com/manufacturers/answer/6124116.
+    pub attribute: Option<String>,
+    /// The destination this issue applies to.
+    pub destination: Option<String>,
     /// The timestamp when this issue appeared.
     pub timestamp: Option<String>,
+    /// What needs to happen to resolve the issue.
+    pub resolution: Option<String>,
+    /// The severity of the issue.
+    pub severity: Option<String>,
 }
 
 impl Part for Issue {}
@@ -735,6 +745,7 @@ impl Part for Price {}
 /// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
 /// The list links the activity name, along with information about where it is used (one of *request* and *response*).
 /// 
+/// * [products update accounts](struct.AccountProductUpdateCall.html) (response)
 /// * [products delete accounts](struct.AccountProductDeleteCall.html) (response)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
@@ -801,6 +812,7 @@ impl<'a, C, A> AccountMethods<'a, C, A> {
             _parent: parent.to_string(),
             _page_token: Default::default(),
             _page_size: Default::default(),
+            _include: Default::default(),
             _delegate: Default::default(),
             _scopes: Default::default(),
             _additional_params: Default::default(),
@@ -809,18 +821,21 @@ impl<'a, C, A> AccountMethods<'a, C, A> {
     
     /// Create a builder to help you perform the following task:
     ///
-    /// Inserts or updates the product in a Manufacturer Center account.
+    /// Inserts or updates the attributes of the product in a Manufacturer Center
+    /// account.
     /// 
-    /// The checks at upload time are minimal. All required attributes need to be
-    /// present for a product to be valid. Issues may show up later
-    /// after the API has accepted an update for a product and it is possible to
-    /// overwrite an existing valid product with an invalid product. To detect
-    /// this, you should retrieve the product and check it for issues once the
-    /// updated version is available.
+    /// Creates a product with the provided attributes. If the product already
+    /// exists, then all attributes are replaced with the new ones. The checks at
+    /// upload time are minimal. All required attributes need to be present for a
+    /// product to be valid. Issues may show up later after the API has accepted a
+    /// new upload for a product and it is possible to overwrite an existing valid
+    /// product with an invalid product. To detect this, you should retrieve the
+    /// product and check it for issues once the new version is available.
     /// 
-    /// Inserted or updated products first need to be processed before they can be
+    /// Uploaded attributes first need to be processed before they can be
     /// retrieved. Until then, new products will be unavailable, and retrieval
-    /// of updated products will return the original state of the product.
+    /// of previously uploaded products will return the original state of the
+    /// product.
     /// 
     /// # Arguments
     ///
@@ -834,7 +849,7 @@ impl<'a, C, A> AccountMethods<'a, C, A> {
     ///                                 ISO 639-1 language code (for example, en).
     ///            `product_id`     -   The ID of the product. For more information, see
     ///                                 https://support.google.com/manufacturers/answer/6124116#id.
-    pub fn products_update(&self, request: Product, parent: &str, name: &str) -> AccountProductUpdateCall<'a, C, A> {
+    pub fn products_update(&self, request: Attributes, parent: &str, name: &str) -> AccountProductUpdateCall<'a, C, A> {
         AccountProductUpdateCall {
             hub: self.hub,
             _request: request,
@@ -898,6 +913,7 @@ impl<'a, C, A> AccountMethods<'a, C, A> {
             hub: self.hub,
             _parent: parent.to_string(),
             _name: name.to_string(),
+            _include: Default::default(),
             _delegate: Default::default(),
             _scopes: Default::default(),
             _additional_params: Default::default(),
@@ -943,6 +959,7 @@ impl<'a, C, A> AccountMethods<'a, C, A> {
 /// let result = hub.accounts().products_list("parent")
 ///              .page_token("accusam")
 ///              .page_size(-8)
+///              .add_include("justo")
 ///              .doit();
 /// # }
 /// ```
@@ -953,6 +970,7 @@ pub struct AccountProductListCall<'a, C, A>
     _parent: String,
     _page_token: Option<String>,
     _page_size: Option<i32>,
+    _include: Vec<String>,
     _delegate: Option<&'a mut Delegate>,
     _additional_params: HashMap<String, String>,
     _scopes: BTreeMap<String, ()>
@@ -975,7 +993,7 @@ impl<'a, C, A> AccountProductListCall<'a, C, A> where C: BorrowMut<hyper::Client
         };
         dlg.begin(MethodInfo { id: "manufacturers.accounts.products.list",
                                http_method: hyper::method::Method::Get });
-        let mut params: Vec<(&str, String)> = Vec::with_capacity((5 + self._additional_params.len()));
+        let mut params: Vec<(&str, String)> = Vec::with_capacity((6 + self._additional_params.len()));
         params.push(("parent", self._parent.to_string()));
         if let Some(value) = self._page_token {
             params.push(("pageToken", value.to_string()));
@@ -983,7 +1001,12 @@ impl<'a, C, A> AccountProductListCall<'a, C, A> where C: BorrowMut<hyper::Client
         if let Some(value) = self._page_size {
             params.push(("pageSize", value.to_string()));
         }
-        for &field in ["alt", "parent", "pageToken", "pageSize"].iter() {
+        if self._include.len() > 0 {
+            for f in self._include.iter() {
+                params.push(("include", f.to_string()));
+            }
+        }
+        for &field in ["alt", "parent", "pageToken", "pageSize", "include"].iter() {
             if self._additional_params.contains_key(field) {
                 dlg.finished(false);
                 return Err(Error::FieldClash(field));
@@ -1128,6 +1151,15 @@ impl<'a, C, A> AccountProductListCall<'a, C, A> where C: BorrowMut<hyper::Client
         self._page_size = Some(new_value);
         self
     }
+    /// The information to be included in the response. Only sections listed here
+    /// will be returned.
+    ///
+    /// Append the given value to the *include* query property.
+    /// Each appended value will retain its original ordering and be '/'-separated in the URL's parameters.
+    pub fn add_include(mut self, new_value: &str) -> AccountProductListCall<'a, C, A> {
+        self._include.push(new_value.to_string());
+        self
+    }
     /// The delegate implementation is consulted whenever there is an intermediate result, or if something goes wrong
     /// while executing the actual API request.
     /// 
@@ -1148,10 +1180,8 @@ impl<'a, C, A> AccountProductListCall<'a, C, A> where C: BorrowMut<hyper::Client
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -1193,18 +1223,21 @@ impl<'a, C, A> AccountProductListCall<'a, C, A> where C: BorrowMut<hyper::Client
 }
 
 
-/// Inserts or updates the product in a Manufacturer Center account.
+/// Inserts or updates the attributes of the product in a Manufacturer Center
+/// account.
 /// 
-/// The checks at upload time are minimal. All required attributes need to be
-/// present for a product to be valid. Issues may show up later
-/// after the API has accepted an update for a product and it is possible to
-/// overwrite an existing valid product with an invalid product. To detect
-/// this, you should retrieve the product and check it for issues once the
-/// updated version is available.
+/// Creates a product with the provided attributes. If the product already
+/// exists, then all attributes are replaced with the new ones. The checks at
+/// upload time are minimal. All required attributes need to be present for a
+/// product to be valid. Issues may show up later after the API has accepted a
+/// new upload for a product and it is possible to overwrite an existing valid
+/// product with an invalid product. To detect this, you should retrieve the
+/// product and check it for issues once the new version is available.
 /// 
-/// Inserted or updated products first need to be processed before they can be
+/// Uploaded attributes first need to be processed before they can be
 /// retrieved. Until then, new products will be unavailable, and retrieval
-/// of updated products will return the original state of the product.
+/// of previously uploaded products will return the original state of the
+/// product.
 ///
 /// A builder for the *products.update* method supported by a *account* resource.
 /// It is not used directly, but through a `AccountMethods` instance.
@@ -1218,7 +1251,7 @@ impl<'a, C, A> AccountProductListCall<'a, C, A> where C: BorrowMut<hyper::Client
 /// # extern crate hyper_rustls;
 /// # extern crate yup_oauth2 as oauth2;
 /// # extern crate google_manufacturers1 as manufacturers1;
-/// use manufacturers1::Product;
+/// use manufacturers1::Attributes;
 /// # #[test] fn egal() {
 /// # use std::default::Default;
 /// # use oauth2::{Authenticator, DefaultAuthenticatorDelegate, ApplicationSecret, MemoryStorage};
@@ -1232,7 +1265,7 @@ impl<'a, C, A> AccountProductListCall<'a, C, A> where C: BorrowMut<hyper::Client
 /// // As the method needs a request, you would usually fill it with the desired information
 /// // into the respective structure. Some of the parts shown here might not be applicable !
 /// // Values shown here are possibly random and not representative !
-/// let mut req = Product::default();
+/// let mut req = Attributes::default();
 /// 
 /// // You can configure optional parameters by calling the respective setters at will, and
 /// // execute the final call using `doit()`.
@@ -1245,7 +1278,7 @@ pub struct AccountProductUpdateCall<'a, C, A>
     where C: 'a, A: 'a {
 
     hub: &'a ManufacturerCenter<C, A>,
-    _request: Product,
+    _request: Attributes,
     _parent: String,
     _name: String,
     _delegate: Option<&'a mut Delegate>,
@@ -1259,7 +1292,7 @@ impl<'a, C, A> AccountProductUpdateCall<'a, C, A> where C: BorrowMut<hyper::Clie
 
 
     /// Perform the operation you have build so far.
-    pub fn doit(mut self) -> Result<(hyper::client::Response, Product)> {
+    pub fn doit(mut self) -> Result<(hyper::client::Response, Empty)> {
         use url::percent_encoding::{percent_encode, DEFAULT_ENCODE_SET};
         use std::io::{Read, Seek};
         use hyper::header::{ContentType, ContentLength, Authorization, Bearer, UserAgent, Location};
@@ -1411,7 +1444,7 @@ impl<'a, C, A> AccountProductUpdateCall<'a, C, A> where C: BorrowMut<hyper::Clie
     ///
     /// Even though the property as already been set when instantiating this call,
     /// we provide this method for API completeness.
-    pub fn request(mut self, new_value: Product) -> AccountProductUpdateCall<'a, C, A> {
+    pub fn request(mut self, new_value: Attributes) -> AccountProductUpdateCall<'a, C, A> {
         self._request = new_value;
         self
     }
@@ -1466,10 +1499,8 @@ impl<'a, C, A> AccountProductUpdateCall<'a, C, A> where C: BorrowMut<hyper::Clie
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -1742,10 +1773,8 @@ impl<'a, C, A> AccountProductDeleteCall<'a, C, A> where C: BorrowMut<hyper::Clie
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -1821,6 +1850,7 @@ impl<'a, C, A> AccountProductDeleteCall<'a, C, A> where C: BorrowMut<hyper::Clie
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.accounts().products_get("parent", "name")
+///              .add_include("gubergren")
 ///              .doit();
 /// # }
 /// ```
@@ -1830,6 +1860,7 @@ pub struct AccountProductGetCall<'a, C, A>
     hub: &'a ManufacturerCenter<C, A>,
     _parent: String,
     _name: String,
+    _include: Vec<String>,
     _delegate: Option<&'a mut Delegate>,
     _additional_params: HashMap<String, String>,
     _scopes: BTreeMap<String, ()>
@@ -1852,10 +1883,15 @@ impl<'a, C, A> AccountProductGetCall<'a, C, A> where C: BorrowMut<hyper::Client>
         };
         dlg.begin(MethodInfo { id: "manufacturers.accounts.products.get",
                                http_method: hyper::method::Method::Get });
-        let mut params: Vec<(&str, String)> = Vec::with_capacity((4 + self._additional_params.len()));
+        let mut params: Vec<(&str, String)> = Vec::with_capacity((5 + self._additional_params.len()));
         params.push(("parent", self._parent.to_string()));
         params.push(("name", self._name.to_string()));
-        for &field in ["alt", "parent", "name"].iter() {
+        if self._include.len() > 0 {
+            for f in self._include.iter() {
+                params.push(("include", f.to_string()));
+            }
+        }
+        for &field in ["alt", "parent", "name", "include"].iter() {
             if self._additional_params.contains_key(field) {
                 dlg.finished(false);
                 return Err(Error::FieldClash(field));
@@ -2004,6 +2040,15 @@ impl<'a, C, A> AccountProductGetCall<'a, C, A> where C: BorrowMut<hyper::Client>
         self._name = new_value.to_string();
         self
     }
+    /// The information to be included in the response. Only sections listed here
+    /// will be returned.
+    ///
+    /// Append the given value to the *include* query property.
+    /// Each appended value will retain its original ordering and be '/'-separated in the URL's parameters.
+    pub fn add_include(mut self, new_value: &str) -> AccountProductGetCall<'a, C, A> {
+        self._include.push(new_value.to_string());
+        self
+    }
     /// The delegate implementation is consulted whenever there is an intermediate result, or if something goes wrong
     /// while executing the actual API request.
     /// 
@@ -2024,10 +2069,8 @@ impl<'a, C, A> AccountProductGetCall<'a, C, A> where C: BorrowMut<hyper::Client>
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.

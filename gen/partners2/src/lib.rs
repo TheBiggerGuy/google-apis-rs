@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *Partners* crate version *1.0.7+20171206*, where *20171206* is the exact revision of the *partners:v2* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *Partners* crate version *1.0.7+20180925*, where *20180925* is the exact revision of the *partners:v2* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *Partners* *v2* API can be found at the
 //! [official documentation site](https://developers.google.com/partners/).
@@ -17,8 +17,6 @@
 //!  * [*log*](struct.ClientMessageLogCall.html)
 //! * [companies](struct.Company.html)
 //!  * [*get*](struct.CompanyGetCall.html), [*leads create*](struct.CompanyLeadCreateCall.html) and [*list*](struct.CompanyListCall.html)
-//! * exams
-//!  * [*get token*](struct.ExamGetTokenCall.html)
 //! * [leads](struct.Lead.html)
 //!  * [*list*](struct.LeadListCall.html)
 //! * offers
@@ -354,9 +352,6 @@ impl<'a, C, A> Partners<C, A>
     pub fn companies(&'a self) -> CompanyMethods<'a, C, A> {
         CompanyMethods { hub: &self }
     }
-    pub fn exams(&'a self) -> ExamMethods<'a, C, A> {
-        ExamMethods { hub: &self }
-    }
     pub fn leads(&'a self) -> LeadMethods<'a, C, A> {
         LeadMethods { hub: &self }
     }
@@ -406,26 +401,23 @@ impl<'a, C, A> Partners<C, A>
 // SCHEMAS ###
 // ##########
 /// Response message for
-/// ListUserStates.
+/// LogClientMessage.
 /// 
 /// # Activities
 /// 
 /// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
 /// The list links the activity name, along with information about where it is used (one of *request* and *response*).
 /// 
-/// * [list user states](struct.UserStateListCall.html) (response)
+/// * [log client messages](struct.ClientMessageLogCall.html) (response)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct ListUserStatesResponse {
-    /// User's states.
-    #[serde(rename="userStates")]
-    pub user_states: Option<Vec<String>>,
+pub struct LogMessageResponse {
     /// Current response metadata.
     #[serde(rename="responseMetadata")]
     pub response_metadata: Option<ResponseMetadata>,
 }
 
-impl ResponseResult for ListUserStatesResponse {}
+impl ResponseResult for LogMessageResponse {}
 
 
 /// Values to use instead of the user's respective defaults. These are only
@@ -529,26 +521,6 @@ pub struct DebugInfo {
 impl Part for DebugInfo {}
 
 
-/// Response message for
-/// LogClientMessage.
-/// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [log client messages](struct.ClientMessageLogCall.html) (response)
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct LogMessageResponse {
-    /// Current response metadata.
-    #[serde(rename="responseMetadata")]
-    pub response_metadata: Option<ResponseMetadata>,
-}
-
-impl ResponseResult for LogMessageResponse {}
-
-
 /// Available Offers to be distributed.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
@@ -565,8 +537,8 @@ pub struct AvailableOffer {
     pub qualified_customer: Option<Vec<OfferCustomer>>,
     /// Terms of the offer.
     pub terms: Option<String>,
-    /// Name of the offer.
-    pub name: Option<String>,
+    /// Description of the offer.
+    pub description: Option<String>,
     /// The maximum age of an account [in days] to be eligible.
     #[serde(rename="maxAccountAge")]
     pub max_account_age: Option<i32>,
@@ -584,8 +556,8 @@ pub struct AvailableOffer {
     /// Whether or not the list of qualified customers is definitely complete.
     #[serde(rename="qualifiedCustomersComplete")]
     pub qualified_customers_complete: Option<bool>,
-    /// Description of the offer.
-    pub description: Option<String>,
+    /// Name of the offer.
+    pub name: Option<String>,
 }
 
 impl Part for AvailableOffer {}
@@ -625,16 +597,16 @@ pub struct LocalizedCompanyInfo {
     /// List of country codes for the localized company info.
     #[serde(rename="countryCodes")]
     pub country_codes: Option<Vec<String>>,
-    /// Localized brief description that the company uses to advertise themselves.
-    pub overview: Option<String>,
-    /// Localized display name.
-    #[serde(rename="displayName")]
-    pub display_name: Option<String>,
     /// Language code of the localized company info, as defined by
     /// <a href="https://tools.ietf.org/html/bcp47">BCP 47</a>
     /// (IETF BCP 47, "Tags for Identifying Languages").
     #[serde(rename="languageCode")]
     pub language_code: Option<String>,
+    /// Localized display name.
+    #[serde(rename="displayName")]
+    pub display_name: Option<String>,
+    /// Localized brief description that the company uses to advertise themselves.
+    pub overview: Option<String>,
 }
 
 impl Part for LocalizedCompanyInfo {}
@@ -781,65 +753,44 @@ pub struct AnalyticsDataPoint {
 impl Part for AnalyticsDataPoint {}
 
 
-/// Response message for
-/// ListAnalytics.
+/// Offer info by country.
 /// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [list analytics](struct.AnalyticListCall.html) (response)
+/// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct ListAnalyticsResponse {
-    /// A token to retrieve next page of results.
-    /// Pass this value in the `ListAnalyticsRequest.page_token` field in the
-    /// subsequent call to
-    /// ListAnalytics to retrieve the
-    /// next page of results.
-    #[serde(rename="nextPageToken")]
-    pub next_page_token: Option<String>,
-    /// The list of analytics.
-    /// Sorted in ascending order of
-    /// Analytics.event_date.
-    pub analytics: Option<Vec<Analytics>>,
-    /// Current response metadata.
-    #[serde(rename="responseMetadata")]
-    pub response_metadata: Option<ResponseMetadata>,
-    /// Aggregated information across the response's
-    /// analytics.
-    #[serde(rename="analyticsSummary")]
-    pub analytics_summary: Option<AnalyticsSummary>,
+pub struct CountryOfferInfo {
+    /// (localized) Spend X amount for that country's offer.
+    #[serde(rename="spendXAmount")]
+    pub spend_x_amount: Option<String>,
+    /// Type of offer country is eligible for.
+    #[serde(rename="offerType")]
+    pub offer_type: Option<String>,
+    /// Country code for which offer codes may be requested.
+    #[serde(rename="offerCountryCode")]
+    pub offer_country_code: Option<i64>,
+    /// (localized) Get Y amount for that country's offer.
+    #[serde(rename="getYAmount")]
+    pub get_y_amount: Option<String>,
 }
 
-impl ResponseResult for ListAnalyticsResponse {}
+impl Part for CountryOfferInfo {}
 
 
-/// Response message for CreateLead.
+/// Agency specialization status
 /// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [leads create companies](struct.CompanyLeadCreateCall.html) (response)
+/// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct CreateLeadResponse {
-    /// Lead that was created depending on the outcome of
-    /// <a href="https://www.google.com/recaptcha/">reCaptcha</a> validation.
-    pub lead: Option<Lead>,
-    /// The outcome of <a href="https://www.google.com/recaptcha/">reCaptcha</a>
-    /// validation.
-    #[serde(rename="recaptchaStatus")]
-    pub recaptcha_status: Option<String>,
-    /// Current response metadata.
-    #[serde(rename="responseMetadata")]
-    pub response_metadata: Option<ResponseMetadata>,
+pub struct SpecializationStatus {
+    /// The specialization this status is for.
+    #[serde(rename="badgeSpecialization")]
+    pub badge_specialization: Option<String>,
+    /// State of agency specialization.
+    #[serde(rename="badgeSpecializationState")]
+    pub badge_specialization_state: Option<String>,
 }
 
-impl ResponseResult for CreateLeadResponse {}
+impl Part for SpecializationStatus {}
 
 
 /// A company resource in the Google Partners API. Once certified, it qualifies
@@ -898,15 +849,15 @@ pub struct Company {
     pub auto_approval_email_domains: Option<Vec<String>>,
     /// The name of the company.
     pub name: Option<String>,
-    /// Information related to the ranking of the company within the list of
-    /// companies.
-    pub ranks: Option<Vec<Rank>>,
-    /// Partner badge tier
-    #[serde(rename="badgeTier")]
-    pub badge_tier: Option<String>,
     /// The list of localized info for the company.
     #[serde(rename="localizedInfos")]
     pub localized_infos: Option<Vec<LocalizedCompanyInfo>>,
+    /// Partner badge tier
+    #[serde(rename="badgeTier")]
+    pub badge_tier: Option<String>,
+    /// Information related to the ranking of the company within the list of
+    /// companies.
+    pub ranks: Option<Vec<Rank>>,
     /// The Primary AdWords Manager Account id.
     #[serde(rename="primaryAdwordsManagerAccountId")]
     pub primary_adwords_manager_account_id: Option<String>,
@@ -918,6 +869,9 @@ pub struct Company {
     /// The list of Google Partners certification statuses for the company.
     #[serde(rename="certificationStatuses")]
     pub certification_statuses: Option<Vec<CertificationStatus>>,
+    /// Whether the company's badge authority is in AWN
+    #[serde(rename="badgeAuthorityInAwn")]
+    pub badge_authority_in_awn: Option<bool>,
     /// The minimum monthly budget that the company accepts for partner business,
     /// converted to the requested currency code.
     #[serde(rename="convertedMinMonthlyBudget")]
@@ -940,12 +894,12 @@ impl ResponseResult for Company {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct LogMessageRequest {
-    /// Map of client info, such as URL, browser navigator, browser platform, etc.
-    #[serde(rename="clientInfo")]
-    pub client_info: Option<HashMap<String, String>>,
     /// Current request metadata.
     #[serde(rename="requestMetadata")]
     pub request_metadata: Option<RequestMetadata>,
+    /// Map of client info, such as URL, browser navigator, browser platform, etc.
+    #[serde(rename="clientInfo")]
+    pub client_info: Option<HashMap<String, String>>,
     /// Details about the client message.
     pub details: Option<String>,
     /// Message level of client message.
@@ -1005,27 +959,39 @@ pub struct ListOffersHistoryResponse {
 impl ResponseResult for ListOffersHistoryResponse {}
 
 
-/// Offer info by country.
+/// Response message for
+/// ListAnalytics.
 /// 
-/// This type is not used in any activity, and only used as *part* of another schema.
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [list analytics](struct.AnalyticListCall.html) (response)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct CountryOfferInfo {
-    /// (localized) Spend X amount for that country's offer.
-    #[serde(rename="spendXAmount")]
-    pub spend_x_amount: Option<String>,
-    /// Country code for which offer codes may be requested.
-    #[serde(rename="offerCountryCode")]
-    pub offer_country_code: Option<i64>,
-    /// Type of offer country is eligible for.
-    #[serde(rename="offerType")]
-    pub offer_type: Option<String>,
-    /// (localized) Get Y amount for that country's offer.
-    #[serde(rename="getYAmount")]
-    pub get_y_amount: Option<String>,
+pub struct ListAnalyticsResponse {
+    /// A token to retrieve next page of results.
+    /// Pass this value in the `ListAnalyticsRequest.page_token` field in the
+    /// subsequent call to
+    /// ListAnalytics to retrieve the
+    /// next page of results.
+    #[serde(rename="nextPageToken")]
+    pub next_page_token: Option<String>,
+    /// The list of analytics.
+    /// Sorted in ascending order of
+    /// Analytics.event_date.
+    pub analytics: Option<Vec<Analytics>>,
+    /// Current response metadata.
+    #[serde(rename="responseMetadata")]
+    pub response_metadata: Option<ResponseMetadata>,
+    /// Aggregated information across the response's
+    /// analytics.
+    #[serde(rename="analyticsSummary")]
+    pub analytics_summary: Option<AnalyticsSummary>,
 }
 
-impl Part for CountryOfferInfo {}
+impl ResponseResult for ListAnalyticsResponse {}
 
 
 /// Response message for GetCompany.
@@ -1089,6 +1055,10 @@ impl Part for RequestMetadata {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct User {
+    /// Whether or not the user has opted to share their Academy for Ads info with
+    /// Google Partners.
+    #[serde(rename="afaInfoShared")]
+    pub afa_info_shared: Option<bool>,
     /// The profile information of a Partners user, contains all the directly
     /// editable user information.
     pub profile: Option<UserProfile>,
@@ -1138,26 +1108,31 @@ impl Resource for User {}
 impl ResponseResult for User {}
 
 
-/// Represents a whole calendar date, e.g. date of birth. The time of day and
-/// time zone are either specified elsewhere or are not significant. The date
-/// is relative to the Proleptic Gregorian Calendar. The day may be 0 to
-/// represent a year and month where the day is not significant, e.g. credit card
-/// expiration date. The year may be 0 to represent a month and day independent
-/// of year, e.g. anniversary date. Related types are google.type.TimeOfDay
-/// and `google.protobuf.Timestamp`.
+/// Represents a whole or partial calendar date, e.g. a birthday. The time of day
+/// and time zone are either specified elsewhere or are not significant. The date
+/// is relative to the Proleptic Gregorian Calendar. This can represent:
+/// 
+/// * A full date, with non-zero year, month and day values
+/// * A month and day value, with a zero year, e.g. an anniversary
+/// * A year on its own, with zero month and day values
+/// * A year and month value, with a zero day, e.g. a credit card expiration date
+/// 
+/// Related types are google.type.TimeOfDay and `google.protobuf.Timestamp`.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Date {
-    /// Month of year. Must be from 1 to 12.
-    pub month: Option<i32>,
-    /// Day of month. Must be from 1 to 31 and valid for the year and month, or 0
-    /// if specifying a year/month where the day is not significant.
-    pub day: Option<i32>,
     /// Year of date. Must be from 1 to 9999, or 0 if specifying a date without
     /// a year.
     pub year: Option<i32>,
+    /// Day of month. Must be from 1 to 31 and valid for the year and month, or 0
+    /// if specifying a year by itself or a year and month where the day is not
+    /// significant.
+    pub day: Option<i32>,
+    /// Month of year. Must be from 1 to 12, or 0 if specifying a year without a
+    /// month and day.
+    pub month: Option<i32>,
 }
 
 impl Part for Date {}
@@ -1184,8 +1159,9 @@ pub struct UserProfile {
     /// be empty.
     #[serde(rename="adwordsManagerAccount")]
     pub adwords_manager_account: Option<String>,
-    /// A list of ids representing which markets the user was interested in.
-    pub markets: Option<Vec<String>>,
+    /// A list of ids represnting which job categories the user selected.
+    #[serde(rename="jobFunctions")]
+    pub job_functions: Option<Vec<String>>,
     /// The list of opt-ins for the user, related to communication preferences.
     #[serde(rename="emailOptIns")]
     pub email_opt_ins: Option<OptIns>,
@@ -1197,20 +1173,19 @@ pub struct UserProfile {
     pub migrate_to_afa: Option<bool>,
     /// The list of languages this user understands.
     pub languages: Option<Vec<String>>,
-    /// The user's phone number.
-    #[serde(rename="phoneNumber")]
-    pub phone_number: Option<String>,
-    /// The user's mailing address, contains multiple fields.
-    pub address: Option<Location>,
     /// The email address the user has selected on the Partners site as primary.
     #[serde(rename="emailAddress")]
     pub email_address: Option<String>,
+    /// The user's mailing address, contains multiple fields.
+    pub address: Option<Location>,
+    /// The user's phone number.
+    #[serde(rename="phoneNumber")]
+    pub phone_number: Option<String>,
     /// The user's given name.
     #[serde(rename="givenName")]
     pub given_name: Option<String>,
-    /// A list of ids represnting which job categories the user selected.
-    #[serde(rename="jobFunctions")]
-    pub job_functions: Option<Vec<String>>,
+    /// A list of ids representing which markets the user was interested in.
+    pub markets: Option<Vec<String>>,
     /// Whether the user's public profile is visible to anyone with the URL.
     #[serde(rename="profilePublic")]
     pub profile_public: Option<bool>,
@@ -1289,18 +1264,18 @@ impl Part for TrafficSource {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct CertificationStatus {
-    /// The type of the certification.
-    #[serde(rename="type")]
-    pub type_: Option<String>,
-    /// List of certification exam statuses.
-    #[serde(rename="examStatuses")]
-    pub exam_statuses: Option<Vec<CertificationExamStatus>>,
     /// Whether certification is passing.
     #[serde(rename="isCertified")]
     pub is_certified: Option<bool>,
     /// Number of people who are certified,
     #[serde(rename="userCount")]
     pub user_count: Option<i32>,
+    /// The type of the certification.
+    #[serde(rename="type")]
+    pub type_: Option<String>,
+    /// List of certification exam statuses.
+    #[serde(rename="examStatuses")]
+    pub exam_statuses: Option<Vec<CertificationExamStatus>>,
 }
 
 impl Part for CertificationStatus {}
@@ -1332,18 +1307,18 @@ pub struct HistoricalOffer {
     /// Email address for client.
     #[serde(rename="clientEmail")]
     pub client_email: Option<String>,
-    /// Time this offer expires.
-    #[serde(rename="expirationTime")]
-    pub expiration_time: Option<String>,
+    /// Time last action was taken.
+    #[serde(rename="lastModifiedTime")]
+    pub last_modified_time: Option<String>,
     /// Type of offer.
     #[serde(rename="offerType")]
     pub offer_type: Option<String>,
     /// Name (First + Last) of the partners user to whom the incentive is allocated.
     #[serde(rename="senderName")]
     pub sender_name: Option<String>,
-    /// Time last action was taken.
-    #[serde(rename="lastModifiedTime")]
-    pub last_modified_time: Option<String>,
+    /// Time this offer expires.
+    #[serde(rename="expirationTime")]
+    pub expiration_time: Option<String>,
     /// Name of the client.
     #[serde(rename="clientName")]
     pub client_name: Option<String>,
@@ -1364,30 +1339,6 @@ pub struct ResponseMetadata {
 }
 
 impl Part for ResponseMetadata {}
-
-
-/// A token that allows a user to take an exam.
-/// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [get token exams](struct.ExamGetTokenCall.html) (response)
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct ExamToken {
-    /// The type of the exam the token belongs to.
-    #[serde(rename="examType")]
-    pub exam_type: Option<String>,
-    /// The token, only present if the user has access to the exam.
-    pub token: Option<String>,
-    /// The id of the exam the token is for.
-    #[serde(rename="examId")]
-    pub exam_id: Option<String>,
-}
-
-impl ResponseResult for ExamToken {}
 
 
 /// Analytics aggregated data for a `Company` for a given date range.
@@ -1536,9 +1487,6 @@ impl Part for RecaptchaChallenge {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct ListLeadsResponse {
-    /// The total count of leads for the given company.
-    #[serde(rename="totalSize")]
-    pub total_size: Option<i32>,
     /// The list of leads.
     pub leads: Option<Vec<Lead>>,
     /// A token to retrieve next page of results.
@@ -1548,6 +1496,9 @@ pub struct ListLeadsResponse {
     /// next page of results.
     #[serde(rename="nextPageToken")]
     pub next_page_token: Option<String>,
+    /// The total count of leads for the given company.
+    #[serde(rename="totalSize")]
+    pub total_size: Option<i32>,
     /// Current response metadata.
     #[serde(rename="responseMetadata")]
     pub response_metadata: Option<ResponseMetadata>,
@@ -1573,21 +1524,30 @@ pub struct CertificationExamStatus {
 impl Part for CertificationExamStatus {}
 
 
-/// Agency specialization status
+/// Response message for CreateLead.
 /// 
-/// This type is not used in any activity, and only used as *part* of another schema.
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [leads create companies](struct.CompanyLeadCreateCall.html) (response)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct SpecializationStatus {
-    /// The specialization this status is for.
-    #[serde(rename="badgeSpecialization")]
-    pub badge_specialization: Option<String>,
-    /// State of agency specialization.
-    #[serde(rename="badgeSpecializationState")]
-    pub badge_specialization_state: Option<String>,
+pub struct CreateLeadResponse {
+    /// Lead that was created depending on the outcome of
+    /// <a href="https://www.google.com/recaptcha/">reCaptcha</a> validation.
+    pub lead: Option<Lead>,
+    /// The outcome of <a href="https://www.google.com/recaptcha/">reCaptcha</a>
+    /// validation.
+    #[serde(rename="recaptchaStatus")]
+    pub recaptcha_status: Option<String>,
+    /// Current response metadata.
+    #[serde(rename="responseMetadata")]
+    pub response_metadata: Option<ResponseMetadata>,
 }
 
-impl Part for SpecializationStatus {}
+impl ResponseResult for CreateLeadResponse {}
 
 
 /// Basic information from a public profile.
@@ -1622,11 +1582,11 @@ impl Part for PublicProfile {}
 pub struct Certification {
     /// Whether this certification has been achieved.
     pub achieved: Option<bool>,
-    /// Whether this certification is in the state of warning.
-    pub warning: Option<bool>,
     /// The date the user last achieved certification.
     #[serde(rename="lastAchieved")]
     pub last_achieved: Option<String>,
+    /// Whether this certification is in the state of warning.
+    pub warning: Option<bool>,
     /// Date this certification is due to expire.
     pub expiration: Option<String>,
     /// The type of certification, the area of expertise.
@@ -1705,17 +1665,17 @@ pub struct Analytics {
     /// Date on which these events occurred.
     #[serde(rename="eventDate")]
     pub event_date: Option<Date>,
-    /// Instances of users contacting the `Company`
-    /// on the specified date.
-    pub contacts: Option<AnalyticsDataPoint>,
-    /// Instances of users seeing the `Company` in Google Partners Search results
-    /// on the specified date.
-    #[serde(rename="searchViews")]
-    pub search_views: Option<AnalyticsDataPoint>,
     /// Instances of users viewing the `Company` profile
     /// on the specified date.
     #[serde(rename="profileViews")]
     pub profile_views: Option<AnalyticsDataPoint>,
+    /// Instances of users seeing the `Company` in Google Partners Search results
+    /// on the specified date.
+    #[serde(rename="searchViews")]
+    pub search_views: Option<AnalyticsDataPoint>,
+    /// Instances of users contacting the `Company`
+    /// on the specified date.
+    pub contacts: Option<AnalyticsDataPoint>,
 }
 
 impl Part for Analytics {}
@@ -1758,11 +1718,11 @@ impl RequestValue for CreateLeadRequest {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct CompanyRelation {
-    /// The website URL for this company.
-    pub website: Option<String>,
     /// The AdWords manager account # associated this company.
     #[serde(rename="managerAccount")]
     pub manager_account: Option<String>,
+    /// The website URL for this company.
+    pub website: Option<String>,
     /// The list of Google Partners specialization statuses for the company.
     #[serde(rename="specializationStatus")]
     pub specialization_status: Option<Vec<SpecializationStatus>>,
@@ -1818,6 +1778,29 @@ pub struct CompanyRelation {
 
 impl RequestValue for CompanyRelation {}
 impl ResponseResult for CompanyRelation {}
+
+
+/// Response message for
+/// ListUserStates.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [list user states](struct.UserStateListCall.html) (response)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct ListUserStatesResponse {
+    /// User's states.
+    #[serde(rename="userStates")]
+    pub user_states: Option<Vec<String>>,
+    /// Current response metadata.
+    #[serde(rename="responseMetadata")]
+    pub response_metadata: Option<ResponseMetadata>,
+}
+
+impl ResponseResult for ListUserStatesResponse {}
 
 
 /// Key value data pair for an event.
@@ -2400,71 +2383,6 @@ impl<'a, C, A> OfferMethods<'a, C, A> {
 
 
 
-/// A builder providing access to all methods supported on *exam* resources.
-/// It is not used directly, but through the `Partners` hub.
-///
-/// # Example
-///
-/// Instantiate a resource builder
-///
-/// ```test_harness,no_run
-/// extern crate hyper;
-/// extern crate hyper_rustls;
-/// extern crate yup_oauth2 as oauth2;
-/// extern crate google_partners2 as partners2;
-/// 
-/// # #[test] fn egal() {
-/// use std::default::Default;
-/// use oauth2::{Authenticator, DefaultAuthenticatorDelegate, ApplicationSecret, MemoryStorage};
-/// use partners2::Partners;
-/// 
-/// let secret: ApplicationSecret = Default::default();
-/// let auth = Authenticator::new(&secret, DefaultAuthenticatorDelegate,
-///                               hyper::Client::with_connector(hyper::net::HttpsConnector::new(hyper_rustls::TlsClient::new())),
-///                               <MemoryStorage as Default>::default(), None);
-/// let mut hub = Partners::new(hyper::Client::with_connector(hyper::net::HttpsConnector::new(hyper_rustls::TlsClient::new())), auth);
-/// // Usually you wouldn't bind this to a variable, but keep calling *CallBuilders*
-/// // like `get_token(...)`
-/// // to build up your call.
-/// let rb = hub.exams();
-/// # }
-/// ```
-pub struct ExamMethods<'a, C, A>
-    where C: 'a, A: 'a {
-
-    hub: &'a Partners<C, A>,
-}
-
-impl<'a, C, A> MethodsBuilder for ExamMethods<'a, C, A> {}
-
-impl<'a, C, A> ExamMethods<'a, C, A> {
-    
-    /// Create a builder to help you perform the following task:
-    ///
-    /// Gets an Exam Token for a Partner's user to take an exam in the Exams System
-    /// 
-    /// # Arguments
-    ///
-    /// * `examType` - The exam type we are requesting a token for.
-    pub fn get_token(&self, exam_type: &str) -> ExamGetTokenCall<'a, C, A> {
-        ExamGetTokenCall {
-            hub: self.hub,
-            _exam_type: exam_type.to_string(),
-            _request_metadata_user_overrides_user_id: Default::default(),
-            _request_metadata_user_overrides_ip_address: Default::default(),
-            _request_metadata_traffic_source_traffic_sub_id: Default::default(),
-            _request_metadata_traffic_source_traffic_source_id: Default::default(),
-            _request_metadata_partners_session_id: Default::default(),
-            _request_metadata_locale: Default::default(),
-            _request_metadata_experiment_ids: Default::default(),
-            _delegate: Default::default(),
-            _additional_params: Default::default(),
-        }
-    }
-}
-
-
-
 /// A builder providing access to all methods supported on *userState* resources.
 /// It is not used directly, but through the `Partners` hub.
 ///
@@ -2973,17 +2891,15 @@ impl<'a, C, A> MethodUpdateCompanyCall<'a, C, A> where C: BorrowMut<hyper::Clien
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> MethodUpdateCompanyCall<'a, C, A>
@@ -3252,17 +3168,15 @@ impl<'a, C, A> MethodGetPartnersstatuCall<'a, C, A> where C: BorrowMut<hyper::Cl
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> MethodGetPartnersstatuCall<'a, C, A>
@@ -3575,17 +3489,15 @@ impl<'a, C, A> MethodUpdateLeadCall<'a, C, A> where C: BorrowMut<hyper::Client>,
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> MethodUpdateLeadCall<'a, C, A>
@@ -3793,17 +3705,15 @@ impl<'a, C, A> UserEventLogCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: 
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> UserEventLogCall<'a, C, A>
@@ -4013,17 +3923,15 @@ impl<'a, C, A> ClientMessageLogCall<'a, C, A> where C: BorrowMut<hyper::Client>,
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ClientMessageLogCall<'a, C, A>
@@ -4379,17 +4287,15 @@ impl<'a, C, A> CompanyGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oa
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> CompanyGetCall<'a, C, A>
@@ -4630,17 +4536,15 @@ impl<'a, C, A> CompanyLeadCreateCall<'a, C, A> where C: BorrowMut<hyper::Client>
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> CompanyLeadCreateCall<'a, C, A>
@@ -5168,17 +5072,15 @@ impl<'a, C, A> CompanyListCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: o
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> CompanyListCall<'a, C, A>
@@ -5488,17 +5390,15 @@ impl<'a, C, A> LeadListCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oaut
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> LeadListCall<'a, C, A>
@@ -5803,17 +5703,15 @@ impl<'a, C, A> AnalyticListCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: 
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> AnalyticListCall<'a, C, A>
@@ -6133,17 +6031,15 @@ impl<'a, C, A> OfferHistoryListCall<'a, C, A> where C: BorrowMut<hyper::Client>,
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> OfferHistoryListCall<'a, C, A>
@@ -6411,331 +6307,18 @@ impl<'a, C, A> OfferListCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oau
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> OfferListCall<'a, C, A>
-                                                        where T: AsRef<str> {
-        self._additional_params.insert(name.as_ref().to_string(), value.as_ref().to_string());
-        self
-    }
-
-}
-
-
-/// Gets an Exam Token for a Partner's user to take an exam in the Exams System
-///
-/// A builder for the *getToken* method supported by a *exam* resource.
-/// It is not used directly, but through a `ExamMethods` instance.
-///
-/// # Example
-///
-/// Instantiate a resource method builder
-///
-/// ```test_harness,no_run
-/// # extern crate hyper;
-/// # extern crate hyper_rustls;
-/// # extern crate yup_oauth2 as oauth2;
-/// # extern crate google_partners2 as partners2;
-/// # #[test] fn egal() {
-/// # use std::default::Default;
-/// # use oauth2::{Authenticator, DefaultAuthenticatorDelegate, ApplicationSecret, MemoryStorage};
-/// # use partners2::Partners;
-/// 
-/// # let secret: ApplicationSecret = Default::default();
-/// # let auth = Authenticator::new(&secret, DefaultAuthenticatorDelegate,
-/// #                               hyper::Client::with_connector(hyper::net::HttpsConnector::new(hyper_rustls::TlsClient::new())),
-/// #                               <MemoryStorage as Default>::default(), None);
-/// # let mut hub = Partners::new(hyper::Client::with_connector(hyper::net::HttpsConnector::new(hyper_rustls::TlsClient::new())), auth);
-/// // You can configure optional parameters by calling the respective setters at will, and
-/// // execute the final call using `doit()`.
-/// // Values shown here are possibly random and not representative !
-/// let result = hub.exams().get_token("examType")
-///              .request_metadata_user_overrides_user_id("amet")
-///              .request_metadata_user_overrides_ip_address("accusam")
-///              .request_metadata_traffic_source_traffic_sub_id("clita")
-///              .request_metadata_traffic_source_traffic_source_id("diam")
-///              .request_metadata_partners_session_id("justo")
-///              .request_metadata_locale("est")
-///              .add_request_metadata_experiment_ids("clita")
-///              .doit();
-/// # }
-/// ```
-pub struct ExamGetTokenCall<'a, C, A>
-    where C: 'a, A: 'a {
-
-    hub: &'a Partners<C, A>,
-    _exam_type: String,
-    _request_metadata_user_overrides_user_id: Option<String>,
-    _request_metadata_user_overrides_ip_address: Option<String>,
-    _request_metadata_traffic_source_traffic_sub_id: Option<String>,
-    _request_metadata_traffic_source_traffic_source_id: Option<String>,
-    _request_metadata_partners_session_id: Option<String>,
-    _request_metadata_locale: Option<String>,
-    _request_metadata_experiment_ids: Vec<String>,
-    _delegate: Option<&'a mut Delegate>,
-    _additional_params: HashMap<String, String>,
-}
-
-impl<'a, C, A> CallBuilder for ExamGetTokenCall<'a, C, A> {}
-
-impl<'a, C, A> ExamGetTokenCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oauth2::GetToken {
-
-
-    /// Perform the operation you have build so far.
-    pub fn doit(mut self) -> Result<(hyper::client::Response, ExamToken)> {
-        use std::io::{Read, Seek};
-        use hyper::header::{ContentType, ContentLength, Authorization, Bearer, UserAgent, Location};
-        let mut dd = DefaultDelegate;
-        let mut dlg: &mut Delegate = match self._delegate {
-            Some(d) => d,
-            None => &mut dd
-        };
-        dlg.begin(MethodInfo { id: "partners.exams.getToken",
-                               http_method: hyper::method::Method::Get });
-        let mut params: Vec<(&str, String)> = Vec::with_capacity((10 + self._additional_params.len()));
-        params.push(("examType", self._exam_type.to_string()));
-        if let Some(value) = self._request_metadata_user_overrides_user_id {
-            params.push(("requestMetadata.userOverrides.userId", value.to_string()));
-        }
-        if let Some(value) = self._request_metadata_user_overrides_ip_address {
-            params.push(("requestMetadata.userOverrides.ipAddress", value.to_string()));
-        }
-        if let Some(value) = self._request_metadata_traffic_source_traffic_sub_id {
-            params.push(("requestMetadata.trafficSource.trafficSubId", value.to_string()));
-        }
-        if let Some(value) = self._request_metadata_traffic_source_traffic_source_id {
-            params.push(("requestMetadata.trafficSource.trafficSourceId", value.to_string()));
-        }
-        if let Some(value) = self._request_metadata_partners_session_id {
-            params.push(("requestMetadata.partnersSessionId", value.to_string()));
-        }
-        if let Some(value) = self._request_metadata_locale {
-            params.push(("requestMetadata.locale", value.to_string()));
-        }
-        if self._request_metadata_experiment_ids.len() > 0 {
-            for f in self._request_metadata_experiment_ids.iter() {
-                params.push(("requestMetadata.experimentIds", f.to_string()));
-            }
-        }
-        for &field in ["alt", "examType", "requestMetadata.userOverrides.userId", "requestMetadata.userOverrides.ipAddress", "requestMetadata.trafficSource.trafficSubId", "requestMetadata.trafficSource.trafficSourceId", "requestMetadata.partnersSessionId", "requestMetadata.locale", "requestMetadata.experimentIds"].iter() {
-            if self._additional_params.contains_key(field) {
-                dlg.finished(false);
-                return Err(Error::FieldClash(field));
-            }
-        }
-        for (name, value) in self._additional_params.iter() {
-            params.push((&name, value.clone()));
-        }
-
-        params.push(("alt", "json".to_string()));
-
-        let mut url = self.hub._base_url.clone() + "v2/exams/{examType}/token";
-        
-        let mut key = self.hub.auth.borrow_mut().api_key();
-        if key.is_none() {
-            key = dlg.api_key();
-        }
-        match key {
-            Some(value) => params.push(("key", value)),
-            None => {
-                dlg.finished(false);
-                return Err(Error::MissingAPIKey)
-            }
-        }
-
-        for &(find_this, param_name) in [("{examType}", "examType")].iter() {
-            let mut replace_with: Option<&str> = None;
-            for &(name, ref value) in params.iter() {
-                if name == param_name {
-                    replace_with = Some(value);
-                    break;
-                }
-            }
-            url = url.replace(find_this, replace_with.expect("to find substitution value in params"));
-        }
-        {
-            let mut indices_for_removal: Vec<usize> = Vec::with_capacity(1);
-            for param_name in ["examType"].iter() {
-                if let Some(index) = params.iter().position(|t| &t.0 == param_name) {
-                    indices_for_removal.push(index);
-                }
-            }
-            for &index in indices_for_removal.iter() {
-                params.remove(index);
-            }
-        }
-
-        if params.len() > 0 {
-            url.push('?');
-            url.push_str(&url::form_urlencoded::serialize(params));
-        }
-
-
-
-        loop {
-            let mut req_result = {
-                let mut client = &mut *self.hub.client.borrow_mut();
-                let mut req = client.borrow_mut().request(hyper::method::Method::Get, &url)
-                    .header(UserAgent(self.hub._user_agent.clone()));
-
-                dlg.pre_request();
-                req.send()
-            };
-
-            match req_result {
-                Err(err) => {
-                    if let oauth2::Retry::After(d) = dlg.http_error(&err) {
-                        sleep(d);
-                        continue;
-                    }
-                    dlg.finished(false);
-                    return Err(Error::HttpError(err))
-                }
-                Ok(mut res) => {
-                    if !res.status.is_success() {
-                        let mut json_err = String::new();
-                        res.read_to_string(&mut json_err).unwrap();
-                        if let oauth2::Retry::After(d) = dlg.http_failure(&res,
-                                                              json::from_str(&json_err).ok(),
-                                                              json::from_str(&json_err).ok()) {
-                            sleep(d);
-                            continue;
-                        }
-                        dlg.finished(false);
-                        return match json::from_str::<ErrorResponse>(&json_err){
-                            Err(_) => Err(Error::Failure(res)),
-                            Ok(serr) => Err(Error::BadRequest(serr))
-                        }
-                    }
-                    let result_value = {
-                        let mut json_response = String::new();
-                        res.read_to_string(&mut json_response).unwrap();
-                        match json::from_str(&json_response) {
-                            Ok(decoded) => (res, decoded),
-                            Err(err) => {
-                                dlg.response_json_decode_error(&json_response, &err);
-                                return Err(Error::JsonDecodeError(json_response, err));
-                            }
-                        }
-                    };
-
-                    dlg.finished(true);
-                    return Ok(result_value)
-                }
-            }
-        }
-    }
-
-
-    /// The exam type we are requesting a token for.
-    ///
-    /// Sets the *exam type* path property to the given value.
-    ///
-    /// Even though the property as already been set when instantiating this call,
-    /// we provide this method for API completeness.
-    pub fn exam_type(mut self, new_value: &str) -> ExamGetTokenCall<'a, C, A> {
-        self._exam_type = new_value.to_string();
-        self
-    }
-    /// Logged-in user ID to impersonate instead of the user's ID.
-    ///
-    /// Sets the *request metadata.user overrides.user id* query property to the given value.
-    pub fn request_metadata_user_overrides_user_id(mut self, new_value: &str) -> ExamGetTokenCall<'a, C, A> {
-        self._request_metadata_user_overrides_user_id = Some(new_value.to_string());
-        self
-    }
-    /// IP address to use instead of the user's geo-located IP address.
-    ///
-    /// Sets the *request metadata.user overrides.ip address* query property to the given value.
-    pub fn request_metadata_user_overrides_ip_address(mut self, new_value: &str) -> ExamGetTokenCall<'a, C, A> {
-        self._request_metadata_user_overrides_ip_address = Some(new_value.to_string());
-        self
-    }
-    /// Second level identifier to indicate where the traffic comes from.
-    /// An identifier has multiple letters created by a team which redirected the
-    /// traffic to us.
-    ///
-    /// Sets the *request metadata.traffic source.traffic sub id* query property to the given value.
-    pub fn request_metadata_traffic_source_traffic_sub_id(mut self, new_value: &str) -> ExamGetTokenCall<'a, C, A> {
-        self._request_metadata_traffic_source_traffic_sub_id = Some(new_value.to_string());
-        self
-    }
-    /// Identifier to indicate where the traffic comes from.
-    /// An identifier has multiple letters created by a team which redirected the
-    /// traffic to us.
-    ///
-    /// Sets the *request metadata.traffic source.traffic source id* query property to the given value.
-    pub fn request_metadata_traffic_source_traffic_source_id(mut self, new_value: &str) -> ExamGetTokenCall<'a, C, A> {
-        self._request_metadata_traffic_source_traffic_source_id = Some(new_value.to_string());
-        self
-    }
-    /// Google Partners session ID.
-    ///
-    /// Sets the *request metadata.partners session id* query property to the given value.
-    pub fn request_metadata_partners_session_id(mut self, new_value: &str) -> ExamGetTokenCall<'a, C, A> {
-        self._request_metadata_partners_session_id = Some(new_value.to_string());
-        self
-    }
-    /// Locale to use for the current request.
-    ///
-    /// Sets the *request metadata.locale* query property to the given value.
-    pub fn request_metadata_locale(mut self, new_value: &str) -> ExamGetTokenCall<'a, C, A> {
-        self._request_metadata_locale = Some(new_value.to_string());
-        self
-    }
-    /// Experiment IDs the current request belongs to.
-    ///
-    /// Append the given value to the *request metadata.experiment ids* query property.
-    /// Each appended value will retain its original ordering and be '/'-separated in the URL's parameters.
-    pub fn add_request_metadata_experiment_ids(mut self, new_value: &str) -> ExamGetTokenCall<'a, C, A> {
-        self._request_metadata_experiment_ids.push(new_value.to_string());
-        self
-    }
-    /// The delegate implementation is consulted whenever there is an intermediate result, or if something goes wrong
-    /// while executing the actual API request.
-    /// 
-    /// It should be used to handle progress information, and to implement a certain level of resilience.
-    ///
-    /// Sets the *delegate* property to the given value.
-    pub fn delegate(mut self, new_value: &'a mut Delegate) -> ExamGetTokenCall<'a, C, A> {
-        self._delegate = Some(new_value);
-        self
-    }
-
-    /// Set any additional parameter of the query string used in the request.
-    /// It should be used to set parameters which are not yet available through their own
-    /// setters.
-    ///
-    /// Please note that this method must not be used to set any of the known paramters
-    /// which have their own setter method. If done anyway, the request will fail.
-    ///
-    /// # Additional Parameters
-    ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
-    /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
-    /// * *callback* (query-string) - JSONP
-    /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
-    /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
-    /// * *alt* (query-string) - Data format for response.
-    /// * *$.xgafv* (query-string) - V1 error format.
-    pub fn param<T>(mut self, name: T, value: T) -> ExamGetTokenCall<'a, C, A>
                                                         where T: AsRef<str> {
         self._additional_params.insert(name.as_ref().to_string(), value.as_ref().to_string());
         self
@@ -6772,13 +6355,13 @@ impl<'a, C, A> ExamGetTokenCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: 
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.user_states().list()
-///              .request_metadata_user_overrides_user_id("invidunt")
-///              .request_metadata_user_overrides_ip_address("ut")
-///              .request_metadata_traffic_source_traffic_sub_id("dolores")
-///              .request_metadata_traffic_source_traffic_source_id("eos")
-///              .request_metadata_partners_session_id("voluptua.")
-///              .request_metadata_locale("duo")
-///              .add_request_metadata_experiment_ids("sed")
+///              .request_metadata_user_overrides_user_id("est")
+///              .request_metadata_user_overrides_ip_address("amet")
+///              .request_metadata_traffic_source_traffic_sub_id("accusam")
+///              .request_metadata_traffic_source_traffic_source_id("clita")
+///              .request_metadata_partners_session_id("diam")
+///              .request_metadata_locale("justo")
+///              .add_request_metadata_experiment_ids("est")
 ///              .doit();
 /// # }
 /// ```
@@ -7000,17 +6583,15 @@ impl<'a, C, A> UserStateListCall<'a, C, A> where C: BorrowMut<hyper::Client>, A:
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> UserStateListCall<'a, C, A>
@@ -7057,13 +6638,13 @@ impl<'a, C, A> UserStateListCall<'a, C, A> where C: BorrowMut<hyper::Client>, A:
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.users().update_profile(req)
-///              .request_metadata_user_overrides_user_id("aliquyam")
-///              .request_metadata_user_overrides_ip_address("ea")
-///              .request_metadata_traffic_source_traffic_sub_id("ea")
-///              .request_metadata_traffic_source_traffic_source_id("et")
-///              .request_metadata_partners_session_id("dolor")
-///              .request_metadata_locale("diam")
-///              .add_request_metadata_experiment_ids("kasd")
+///              .request_metadata_user_overrides_user_id("clita")
+///              .request_metadata_user_overrides_ip_address("invidunt")
+///              .request_metadata_traffic_source_traffic_sub_id("ut")
+///              .request_metadata_traffic_source_traffic_source_id("dolores")
+///              .request_metadata_partners_session_id("eos")
+///              .request_metadata_locale("voluptua.")
+///              .add_request_metadata_experiment_ids("duo")
 ///              .doit();
 /// # }
 /// ```
@@ -7310,17 +6891,15 @@ impl<'a, C, A> UserUpdateProfileCall<'a, C, A> where C: BorrowMut<hyper::Client>
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> UserUpdateProfileCall<'a, C, A>
@@ -7366,13 +6945,13 @@ impl<'a, C, A> UserUpdateProfileCall<'a, C, A> where C: BorrowMut<hyper::Client>
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.users().create_company_relation(req, "userId")
-///              .request_metadata_user_overrides_user_id("rebum.")
-///              .request_metadata_user_overrides_ip_address("Lorem")
-///              .request_metadata_traffic_source_traffic_sub_id("clita")
-///              .request_metadata_traffic_source_traffic_source_id("invidunt")
-///              .request_metadata_partners_session_id("eirmod")
-///              .request_metadata_locale("At")
-///              .add_request_metadata_experiment_ids("consetetur")
+///              .request_metadata_user_overrides_user_id("aliquyam")
+///              .request_metadata_user_overrides_ip_address("ea")
+///              .request_metadata_traffic_source_traffic_sub_id("ea")
+///              .request_metadata_traffic_source_traffic_source_id("et")
+///              .request_metadata_partners_session_id("dolor")
+///              .request_metadata_locale("diam")
+///              .add_request_metadata_experiment_ids("kasd")
 ///              .doit();
 /// # }
 /// ```
@@ -7653,17 +7232,15 @@ impl<'a, C, A> UserCreateCompanyRelationCall<'a, C, A> where C: BorrowMut<hyper:
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> UserCreateCompanyRelationCall<'a, C, A>
@@ -7703,14 +7280,14 @@ impl<'a, C, A> UserCreateCompanyRelationCall<'a, C, A> where C: BorrowMut<hyper:
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.users().get("userId")
-///              .user_view("sed")
-///              .request_metadata_user_overrides_user_id("sit")
-///              .request_metadata_user_overrides_ip_address("takimata")
-///              .request_metadata_traffic_source_traffic_sub_id("elitr")
-///              .request_metadata_traffic_source_traffic_source_id("nonumy")
-///              .request_metadata_partners_session_id("rebum.")
-///              .request_metadata_locale("Lorem")
-///              .add_request_metadata_experiment_ids("Lorem")
+///              .user_view("rebum.")
+///              .request_metadata_user_overrides_user_id("Lorem")
+///              .request_metadata_user_overrides_ip_address("clita")
+///              .request_metadata_traffic_source_traffic_sub_id("invidunt")
+///              .request_metadata_traffic_source_traffic_source_id("eirmod")
+///              .request_metadata_partners_session_id("At")
+///              .request_metadata_locale("consetetur")
+///              .add_request_metadata_experiment_ids("et")
 ///              .doit();
 /// # }
 /// ```
@@ -7977,17 +7554,15 @@ impl<'a, C, A> UserGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oauth
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> UserGetCall<'a, C, A>
@@ -8027,13 +7602,13 @@ impl<'a, C, A> UserGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oauth
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.users().delete_company_relation("userId")
-///              .request_metadata_user_overrides_user_id("ut")
-///              .request_metadata_user_overrides_ip_address("ut")
-///              .request_metadata_traffic_source_traffic_sub_id("amet.")
-///              .request_metadata_traffic_source_traffic_source_id("ipsum")
-///              .request_metadata_partners_session_id("ut")
-///              .request_metadata_locale("dolor")
-///              .add_request_metadata_experiment_ids("sea")
+///              .request_metadata_user_overrides_user_id("sit")
+///              .request_metadata_user_overrides_ip_address("takimata")
+///              .request_metadata_traffic_source_traffic_sub_id("elitr")
+///              .request_metadata_traffic_source_traffic_source_id("nonumy")
+///              .request_metadata_partners_session_id("rebum.")
+///              .request_metadata_locale("Lorem")
+///              .add_request_metadata_experiment_ids("Lorem")
 ///              .doit();
 /// # }
 /// ```
@@ -8289,17 +7864,15 @@ impl<'a, C, A> UserDeleteCompanyRelationCall<'a, C, A> where C: BorrowMut<hyper:
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> UserDeleteCompanyRelationCall<'a, C, A>

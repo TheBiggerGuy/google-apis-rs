@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *BigQuery Data Transfer* crate version *1.0.7+20171208*, where *20171208* is the exact revision of the *bigquerydatatransfer:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *BigQuery Data Transfer* crate version *1.0.7+20181008*, where *20181008* is the exact revision of the *bigquerydatatransfer:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *BigQuery Data Transfer* *v1* API can be found at the
 //! [official documentation site](https://cloud.google.com/bigquery/).
@@ -475,13 +475,17 @@ impl ResponseResult for ListLocationsResponse {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Location {
+    /// The canonical id for this location. For example: `"us-east1"`.
+    #[serde(rename="locationId")]
+    pub location_id: Option<String>,
     /// Cross-service attributes for the location. For example
     /// 
     ///     {"cloud.googleapis.com/region": "us-east1"}
     pub labels: Option<HashMap<String, String>>,
-    /// The canonical id for this location. For example: `"us-east1"`.
-    #[serde(rename="locationId")]
-    pub location_id: Option<String>,
+    /// The friendly name for this location, typically a nearby city name.
+    /// For example, "Tokyo".
+    #[serde(rename="displayName")]
+    pub display_name: Option<String>,
     /// Resource name for the location, which may vary between implementations.
     /// For example: `"projects/example-project/locations/us-east1"`
     pub name: Option<String>,
@@ -676,11 +680,12 @@ pub struct TransferConfig {
     #[serde(rename="displayName")]
     pub display_name: Option<String>,
     /// The resource name of the transfer config.
-    /// Transfer config names have the form
-    /// `projects/{project_id}/transferConfigs/{config_id}`.
-    /// Where `config_id` is usually a uuid, even though it is not
-    /// guaranteed or required. The name is ignored when creating a transfer
-    /// config.
+    /// Transfer config names have the form of
+    /// `projects/{project_id}/location/{region}/transferConfigs/{config_id}`.
+    /// The name is automatically generated based on the config_id specified in
+    /// CreateTransferConfigRequest along with project_id and region. If config_id
+    /// is not provided, usually a uuid, even though it is not guaranteed or
+    /// required, will be generated for config_id.
     pub name: Option<String>,
     /// Data transfer schedule.
     /// If the data source does not support a custom schedule, this should be
@@ -744,20 +749,22 @@ pub struct DataSourceParameter {
     /// not fulfill the regex pattern or min/max values.
     #[serde(rename="validationDescription")]
     pub validation_description: Option<String>,
-    /// When parameter is a record, describes child fields.
+    /// Deprecated. This field has no effect.
     pub fields: Option<Vec<DataSourceParameter>>,
+    /// For integer and double values specifies minimum allowed value.
+    #[serde(rename="minValue")]
+    pub min_value: Option<f64>,
     /// Is parameter required.
     pub required: Option<bool>,
-    /// If set to true, schema should be taken from the parent with the same
-    /// parameter_id. Only applicable when parameter type is RECORD.
+    /// Deprecated. This field has no effect.
     pub recurse: Option<bool>,
     /// For integer and double values specifies maxminum allowed value.
     #[serde(rename="maxValue")]
     pub max_value: Option<f64>,
-    /// For integer and double values specifies minimum allowed value.
-    #[serde(rename="minValue")]
-    pub min_value: Option<f64>,
-    /// Can parameter have multiple values.
+    /// All possible values for the parameter.
+    #[serde(rename="allowedValues")]
+    pub allowed_values: Option<Vec<String>>,
+    /// Deprecated. This field has no effect.
     pub repeated: Option<bool>,
     /// Regular expression which can be used for parameter validation.
     #[serde(rename="validationRegex")]
@@ -773,9 +780,6 @@ pub struct DataSourceParameter {
     pub type_: Option<String>,
     /// Cannot be changed after initial creation.
     pub immutable: Option<bool>,
-    /// All possible values for the parameter.
-    #[serde(rename="allowedValues")]
-    pub allowed_values: Option<Vec<String>>,
 }
 
 impl Part for DataSourceParameter {}
@@ -820,12 +824,11 @@ impl ResponseResult for ListTransferConfigsResponse {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct DataSource {
-    /// Api auth scopes for which refresh token needs to be obtained. Only valid
-    /// when `client_id` is specified. Ignored otherwise. These are scopes needed
-    /// by a data source to prepare data and ingest them into BigQuery,
-    /// e.g., https://www.googleapis.com/auth/bigquery
+    /// Api auth scopes for which refresh token needs to be obtained. These are
+    /// scopes needed by a data source to prepare data and ingest them into
+    /// BigQuery, e.g., https://www.googleapis.com/auth/bigquery
     pub scopes: Option<Vec<String>>,
-    /// The minimum interval between two consecutive scheduled runs.
+    /// The minimum interval for scheduler to schedule runs.
     #[serde(rename="minimumScheduleInterval")]
     pub minimum_schedule_interval: Option<String>,
     /// Specifies whether the data source supports a user defined schedule, or
@@ -833,16 +836,13 @@ pub struct DataSource {
     /// When set to `true`, user can override default schedule.
     #[serde(rename="supportsCustomSchedule")]
     pub supports_custom_schedule: Option<bool>,
-    /// Transfer type. Currently supports only batch transfers,
-    /// which are transfers that use the BigQuery batch APIs (load or
-    /// query) to ingest the data.
-    #[serde(rename="transferType")]
-    pub transfer_type: Option<String>,
+    /// User friendly data source description string.
+    pub description: Option<String>,
     /// Indicates the type of authorization.
     #[serde(rename="authorizationType")]
     pub authorization_type: Option<String>,
     /// The number of seconds to wait for an update from the data source
-    /// before BigQuery marks the transfer as failed.
+    /// before the Data Transfer Service marks the transfer as FAILED.
     #[serde(rename="updateDeadlineSeconds")]
     pub update_deadline_seconds: Option<i32>,
     /// Default data transfer schedule.
@@ -855,31 +855,30 @@ pub struct DataSource {
     /// Data source id.
     #[serde(rename="dataSourceId")]
     pub data_source_id: Option<String>,
+    /// Data source client id which should be used to receive refresh token.
+    #[serde(rename="clientId")]
+    pub client_id: Option<String>,
+    /// Deprecated. This field has no effect.
+    #[serde(rename="transferType")]
+    pub transfer_type: Option<String>,
+    /// User friendly data source name.
+    #[serde(rename="displayName")]
+    pub display_name: Option<String>,
+    /// Output only. Data source resource name.
+    pub name: Option<String>,
+    /// Data source parameters.
+    pub parameters: Option<Vec<DataSourceParameter>>,
     /// Disables backfilling and manual run scheduling
     /// for the data source.
     #[serde(rename="manualRunsDisabled")]
     pub manual_runs_disabled: Option<bool>,
-    /// User friendly data source description string.
-    pub description: Option<String>,
-    /// User friendly data source name.
-    #[serde(rename="displayName")]
-    pub display_name: Option<String>,
     /// Specifies whether the data source supports automatic data refresh for the
     /// past few days, and how it's supported.
     /// For some data sources, data might not be complete until a few days later,
     /// so it's useful to refresh data automatically.
     #[serde(rename="dataRefreshType")]
     pub data_refresh_type: Option<String>,
-    /// Data source parameters.
-    pub parameters: Option<Vec<DataSourceParameter>>,
-    /// Data source client id which should be used to receive refresh token.
-    /// When not supplied, no offline credentials are populated for data transfer.
-    #[serde(rename="clientId")]
-    pub client_id: Option<String>,
-    /// Data source resource name.
-    pub name: Option<String>,
-    /// Indicates whether the data source supports multiple transfers
-    /// to different BigQuery targets.
+    /// Deprecated. This field has no effect.
     #[serde(rename="supportsMultipleTransfers")]
     pub supports_multiple_transfers: Option<bool>,
     /// Url for the help document for this data source.
@@ -895,7 +894,6 @@ impl ResponseResult for DataSource {}
 
 
 /// Represents a data transfer run.
-/// Next id: 25
 /// 
 /// # Activities
 /// 
@@ -910,7 +908,7 @@ pub struct TransferRun {
     /// Output only. Last time the data transfer run state was updated.
     #[serde(rename="updateTime")]
     pub update_time: Option<String>,
-    /// The BigQuery target dataset id.
+    /// Output only. The BigQuery target dataset id.
     #[serde(rename="destinationDatasetId")]
     pub destination_dataset_id: Option<String>,
     /// The resource name of the transfer run.
@@ -922,7 +920,7 @@ pub struct TransferRun {
     /// created as part of a regular schedule. For batch transfer runs that are
     /// scheduled manually, this is empty.
     /// NOTE: the system might choose to delay the schedule depending on the
-    /// current load, so `schedule_time` doesn't always matches this.
+    /// current load, so `schedule_time` doesn't always match this.
     pub schedule: Option<String>,
     /// Minimum time after which a transfer run can be started.
     #[serde(rename="scheduleTime")]
@@ -939,7 +937,7 @@ pub struct TransferRun {
     /// Status of the transfer run.
     #[serde(rename="errorStatus")]
     pub error_status: Option<Status>,
-    /// Data transfer specific parameters.
+    /// Output only. Data transfer specific parameters.
     pub params: Option<HashMap<String, String>>,
     /// Output only. Time when transfer run was started.
     /// Parameter ignored by server for input requests.
@@ -1116,7 +1114,7 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     
     /// Create a builder to help you perform the following task:
     ///
-    /// Get information about a location.
+    /// Gets information about a location.
     /// 
     /// # Arguments
     ///
@@ -1139,7 +1137,7 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     ///
     /// * `request` - No description provided.
     /// * `parent` - The BigQuery project id where the transfer configuration should be created.
-    ///              Must be in the format /projects/{project_id}/locations/{location_id}
+    ///              Must be in the format projects/{project_id}/locations/{location_id}
     ///              If specified location and location of the destination bigquery dataset
     ///              do not match - the request will fail.
     pub fn locations_transfer_configs_create(&self, request: TransferConfig, parent: &str) -> ProjectLocationTransferConfigCreateCall<'a, C, A> {
@@ -1321,11 +1319,12 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     ///
     /// * `request` - No description provided.
     /// * `name` - The resource name of the transfer config.
-    ///            Transfer config names have the form
-    ///            `projects/{project_id}/transferConfigs/{config_id}`.
-    ///            Where `config_id` is usually a uuid, even though it is not
-    ///            guaranteed or required. The name is ignored when creating a transfer
-    ///            config.
+    ///            Transfer config names have the form of
+    ///            `projects/{project_id}/location/{region}/transferConfigs/{config_id}`.
+    ///            The name is automatically generated based on the config_id specified in
+    ///            CreateTransferConfigRequest along with project_id and region. If config_id
+    ///            is not provided, usually a uuid, even though it is not guaranteed or
+    ///            required, will be generated for config_id.
     pub fn locations_transfer_configs_patch(&self, request: TransferConfig, name: &str) -> ProjectLocationTransferConfigPatchCall<'a, C, A> {
         ProjectLocationTransferConfigPatchCall {
             hub: self.hub,
@@ -1347,7 +1346,7 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     ///
     /// * `request` - No description provided.
     /// * `parent` - The BigQuery project id where the transfer configuration should be created.
-    ///              Must be in the format /projects/{project_id}/locations/{location_id}
+    ///              Must be in the format projects/{project_id}/locations/{location_id}
     ///              If specified location and location of the destination bigquery dataset
     ///              do not match - the request will fail.
     pub fn transfer_configs_create(&self, request: TransferConfig, parent: &str) -> ProjectTransferConfigCreateCall<'a, C, A> {
@@ -1495,11 +1494,12 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     ///
     /// * `request` - No description provided.
     /// * `name` - The resource name of the transfer config.
-    ///            Transfer config names have the form
-    ///            `projects/{project_id}/transferConfigs/{config_id}`.
-    ///            Where `config_id` is usually a uuid, even though it is not
-    ///            guaranteed or required. The name is ignored when creating a transfer
-    ///            config.
+    ///            Transfer config names have the form of
+    ///            `projects/{project_id}/location/{region}/transferConfigs/{config_id}`.
+    ///            The name is automatically generated based on the config_id specified in
+    ///            CreateTransferConfigRequest along with project_id and region. If config_id
+    ///            is not provided, usually a uuid, even though it is not guaranteed or
+    ///            required, will be generated for config_id.
     pub fn transfer_configs_patch(&self, request: TransferConfig, name: &str) -> ProjectTransferConfigPatchCall<'a, C, A> {
         ProjectTransferConfigPatchCall {
             hub: self.hub,
@@ -1885,9 +1885,7 @@ impl<'a, C, A> ProjectDataSourceGetCall<'a, C, A> where C: BorrowMut<hyper::Clie
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2140,9 +2138,7 @@ impl<'a, C, A> ProjectLocationTransferConfigDeleteCall<'a, C, A> where C: Borrow
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2184,7 +2180,7 @@ impl<'a, C, A> ProjectLocationTransferConfigDeleteCall<'a, C, A> where C: Borrow
 }
 
 
-/// Get information about a location.
+/// Gets information about a location.
 ///
 /// A builder for the *locations.get* method supported by a *project* resource.
 /// It is not used directly, but through a `ProjectMethods` instance.
@@ -2393,9 +2389,7 @@ impl<'a, C, A> ProjectLocationGetCall<'a, C, A> where C: BorrowMut<hyper::Client
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2523,7 +2517,7 @@ impl<'a, C, A> ProjectLocationTransferConfigCreateCall<'a, C, A> where C: Borrow
 
         let mut url = self.hub._base_url.clone() + "v1/{+parent}/transferConfigs";
         if self._scopes.len() == 0 {
-            self._scopes.insert(Scope::Bigquery.as_ref().to_string(), ());
+            self._scopes.insert(Scope::CloudPlatform.as_ref().to_string(), ());
         }
 
         for &(find_this, param_name) in [("{+parent}", "parent")].iter() {
@@ -2652,7 +2646,7 @@ impl<'a, C, A> ProjectLocationTransferConfigCreateCall<'a, C, A> where C: Borrow
         self
     }
     /// The BigQuery project id where the transfer configuration should be created.
-    /// Must be in the format /projects/{project_id}/locations/{location_id}
+    /// Must be in the format projects/{project_id}/locations/{location_id}
     /// If specified location and location of the destination bigquery dataset
     /// do not match - the request will fail.
     ///
@@ -2707,9 +2701,7 @@ impl<'a, C, A> ProjectLocationTransferConfigCreateCall<'a, C, A> where C: Borrow
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2728,7 +2720,7 @@ impl<'a, C, A> ProjectLocationTransferConfigCreateCall<'a, C, A> where C: Borrow
     /// Identifies the authorization scope for the method you are building.
     ///
     /// Use this method to actively specify which scope should be used, instead the default `Scope` variant
-    /// `Scope::Bigquery`.
+    /// `Scope::CloudPlatform`.
     ///
     /// The `scope` will be added to a set of scopes. This is important as one can maintain access
     /// tokens for more than one scope.
@@ -2961,9 +2953,7 @@ impl<'a, C, A> ProjectTransferConfigRunGetCall<'a, C, A> where C: BorrowMut<hype
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -3271,9 +3261,7 @@ impl<'a, C, A> ProjectLocationTransferConfigRunListCall<'a, C, A> where C: Borro
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -3526,9 +3514,7 @@ impl<'a, C, A> ProjectLocationDataSourceGetCall<'a, C, A> where C: BorrowMut<hyp
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -3780,9 +3766,7 @@ impl<'a, C, A> ProjectLocationTransferConfigRunGetCall<'a, C, A> where C: Borrow
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -4034,9 +4018,7 @@ impl<'a, C, A> ProjectLocationTransferConfigRunDeleteCall<'a, C, A> where C: Bor
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -4322,9 +4304,7 @@ impl<'a, C, A> ProjectLocationTransferConfigScheduleRunCall<'a, C, A> where C: B
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -4576,9 +4556,7 @@ impl<'a, C, A> ProjectTransferConfigRunDeleteCall<'a, C, A> where C: BorrowMut<h
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -4859,9 +4837,7 @@ impl<'a, C, A> ProjectDataSourceListCall<'a, C, A> where C: BorrowMut<hyper::Cli
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -4995,7 +4971,7 @@ impl<'a, C, A> ProjectLocationTransferConfigPatchCall<'a, C, A> where C: BorrowM
 
         let mut url = self.hub._base_url.clone() + "v1/{+name}";
         if self._scopes.len() == 0 {
-            self._scopes.insert(Scope::Bigquery.as_ref().to_string(), ());
+            self._scopes.insert(Scope::CloudPlatform.as_ref().to_string(), ());
         }
 
         for &(find_this, param_name) in [("{+name}", "name")].iter() {
@@ -5124,11 +5100,12 @@ impl<'a, C, A> ProjectLocationTransferConfigPatchCall<'a, C, A> where C: BorrowM
         self
     }
     /// The resource name of the transfer config.
-    /// Transfer config names have the form
-    /// `projects/{project_id}/transferConfigs/{config_id}`.
-    /// Where `config_id` is usually a uuid, even though it is not
-    /// guaranteed or required. The name is ignored when creating a transfer
-    /// config.
+    /// Transfer config names have the form of
+    /// `projects/{project_id}/location/{region}/transferConfigs/{config_id}`.
+    /// The name is automatically generated based on the config_id specified in
+    /// CreateTransferConfigRequest along with project_id and region. If config_id
+    /// is not provided, usually a uuid, even though it is not guaranteed or
+    /// required, will be generated for config_id.
     ///
     /// Sets the *name* path property to the given value.
     ///
@@ -5188,9 +5165,7 @@ impl<'a, C, A> ProjectLocationTransferConfigPatchCall<'a, C, A> where C: BorrowM
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -5209,7 +5184,7 @@ impl<'a, C, A> ProjectLocationTransferConfigPatchCall<'a, C, A> where C: BorrowM
     /// Identifies the authorization scope for the method you are building.
     ///
     /// Use this method to actively specify which scope should be used, instead the default `Scope` variant
-    /// `Scope::Bigquery`.
+    /// `Scope::CloudPlatform`.
     ///
     /// The `scope` will be added to a set of scopes. This is important as one can maintain access
     /// tokens for more than one scope.
@@ -5318,7 +5293,7 @@ impl<'a, C, A> ProjectTransferConfigCreateCall<'a, C, A> where C: BorrowMut<hype
 
         let mut url = self.hub._base_url.clone() + "v1/{+parent}/transferConfigs";
         if self._scopes.len() == 0 {
-            self._scopes.insert(Scope::Bigquery.as_ref().to_string(), ());
+            self._scopes.insert(Scope::CloudPlatform.as_ref().to_string(), ());
         }
 
         for &(find_this, param_name) in [("{+parent}", "parent")].iter() {
@@ -5447,7 +5422,7 @@ impl<'a, C, A> ProjectTransferConfigCreateCall<'a, C, A> where C: BorrowMut<hype
         self
     }
     /// The BigQuery project id where the transfer configuration should be created.
-    /// Must be in the format /projects/{project_id}/locations/{location_id}
+    /// Must be in the format projects/{project_id}/locations/{location_id}
     /// If specified location and location of the destination bigquery dataset
     /// do not match - the request will fail.
     ///
@@ -5502,9 +5477,7 @@ impl<'a, C, A> ProjectTransferConfigCreateCall<'a, C, A> where C: BorrowMut<hype
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -5523,7 +5496,7 @@ impl<'a, C, A> ProjectTransferConfigCreateCall<'a, C, A> where C: BorrowMut<hype
     /// Identifies the authorization scope for the method you are building.
     ///
     /// Use this method to actively specify which scope should be used, instead the default `Scope` variant
-    /// `Scope::Bigquery`.
+    /// `Scope::CloudPlatform`.
     ///
     /// The `scope` will be added to a set of scopes. This is important as one can maintain access
     /// tokens for more than one scope.
@@ -5792,9 +5765,7 @@ impl<'a, C, A> ProjectLocationDataSourceCheckValidCredCall<'a, C, A> where C: Bo
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -6046,9 +6017,7 @@ impl<'a, C, A> ProjectTransferConfigGetCall<'a, C, A> where C: BorrowMut<hyper::
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -6329,9 +6298,7 @@ impl<'a, C, A> ProjectLocationDataSourceListCall<'a, C, A> where C: BorrowMut<hy
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -6583,9 +6550,7 @@ impl<'a, C, A> ProjectLocationTransferConfigGetCall<'a, C, A> where C: BorrowMut
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -6881,9 +6846,7 @@ impl<'a, C, A> ProjectTransferConfigRunTransferLogListCall<'a, C, A> where C: Bo
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -7178,9 +7141,7 @@ impl<'a, C, A> ProjectTransferConfigListCall<'a, C, A> where C: BorrowMut<hyper:
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -7314,7 +7275,7 @@ impl<'a, C, A> ProjectTransferConfigPatchCall<'a, C, A> where C: BorrowMut<hyper
 
         let mut url = self.hub._base_url.clone() + "v1/{+name}";
         if self._scopes.len() == 0 {
-            self._scopes.insert(Scope::Bigquery.as_ref().to_string(), ());
+            self._scopes.insert(Scope::CloudPlatform.as_ref().to_string(), ());
         }
 
         for &(find_this, param_name) in [("{+name}", "name")].iter() {
@@ -7443,11 +7404,12 @@ impl<'a, C, A> ProjectTransferConfigPatchCall<'a, C, A> where C: BorrowMut<hyper
         self
     }
     /// The resource name of the transfer config.
-    /// Transfer config names have the form
-    /// `projects/{project_id}/transferConfigs/{config_id}`.
-    /// Where `config_id` is usually a uuid, even though it is not
-    /// guaranteed or required. The name is ignored when creating a transfer
-    /// config.
+    /// Transfer config names have the form of
+    /// `projects/{project_id}/location/{region}/transferConfigs/{config_id}`.
+    /// The name is automatically generated based on the config_id specified in
+    /// CreateTransferConfigRequest along with project_id and region. If config_id
+    /// is not provided, usually a uuid, even though it is not guaranteed or
+    /// required, will be generated for config_id.
     ///
     /// Sets the *name* path property to the given value.
     ///
@@ -7507,9 +7469,7 @@ impl<'a, C, A> ProjectTransferConfigPatchCall<'a, C, A> where C: BorrowMut<hyper
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -7528,7 +7488,7 @@ impl<'a, C, A> ProjectTransferConfigPatchCall<'a, C, A> where C: BorrowMut<hyper
     /// Identifies the authorization scope for the method you are building.
     ///
     /// Use this method to actively specify which scope should be used, instead the default `Scope` variant
-    /// `Scope::Bigquery`.
+    /// `Scope::CloudPlatform`.
     ///
     /// The `scope` will be added to a set of scopes. This is important as one can maintain access
     /// tokens for more than one scope.
@@ -7797,9 +7757,7 @@ impl<'a, C, A> ProjectDataSourceCheckValidCredCall<'a, C, A> where C: BorrowMut<
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -8085,9 +8043,7 @@ impl<'a, C, A> ProjectTransferConfigScheduleRunCall<'a, C, A> where C: BorrowMut
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -8374,9 +8330,7 @@ impl<'a, C, A> ProjectLocationListCall<'a, C, A> where C: BorrowMut<hyper::Clien
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -8684,9 +8638,7 @@ impl<'a, C, A> ProjectTransferConfigRunListCall<'a, C, A> where C: BorrowMut<hyp
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -8981,9 +8933,7 @@ impl<'a, C, A> ProjectLocationTransferConfigListCall<'a, C, A> where C: BorrowMu
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -9279,9 +9229,7 @@ impl<'a, C, A> ProjectLocationTransferConfigRunTransferLogListCall<'a, C, A> whe
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -9534,9 +9482,7 @@ impl<'a, C, A> ProjectTransferConfigDeleteCall<'a, C, A> where C: BorrowMut<hype
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.

@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *datastore* crate version *1.0.7+20171205*, where *20171205* is the exact revision of the *datastore:v1beta3* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *datastore* crate version *1.0.7+20181002*, where *20181002* is the exact revision of the *datastore:v1beta3* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *datastore* *v1_beta3* API can be found at the
 //! [official documentation site](https://cloud.google.com/datastore/).
@@ -479,6 +479,36 @@ pub struct RunQueryResponse {
 impl ResponseResult for RunQueryResponse {}
 
 
+/// The request for Datastore.RunQuery.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [run query projects](struct.ProjectRunQueryCall.html) (request)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct RunQueryRequest {
+    /// The query to run.
+    pub query: Option<Query>,
+    /// Entities are partitioned into subsets, identified by a partition ID.
+    /// Queries are scoped to a single partition.
+    /// This partition ID is normalized with the standard default context
+    /// partition ID.
+    #[serde(rename="partitionId")]
+    pub partition_id: Option<PartitionId>,
+    /// The GQL query to run.
+    #[serde(rename="gqlQuery")]
+    pub gql_query: Option<GqlQuery>,
+    /// The options for this query.
+    #[serde(rename="readOptions")]
+    pub read_options: Option<ReadOptions>,
+}
+
+impl RequestValue for RunQueryRequest {}
+
+
 /// A mutation to apply to an entity.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
@@ -513,8 +543,8 @@ impl Part for Mutation {}
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct ArrayValue {
     /// Values in the array.
-    /// The order of this array may not be preserved if it contains a mix of
-    /// indexed and unindexed values.
+    /// The order of values in an array is preserved as long as all values have
+    /// identical settings for 'exclude_from_indexes'.
     pub values: Option<Vec<Value>>,
 }
 
@@ -581,6 +611,20 @@ pub struct QueryResultBatch {
 }
 
 impl Part for QueryResultBatch {}
+
+
+/// A reference to a property relative to the kind expressions.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct PropertyReference {
+    /// The name of the property.
+    /// If name includes "."s, it may be interpreted as a property name path.
+    pub name: Option<String>,
+}
+
+impl Part for PropertyReference {}
 
 
 /// The response for Datastore.Commit.
@@ -842,6 +886,9 @@ pub struct Value {
     /// Otherwise, may be set to at least 1,000,000 bytes.
     #[serde(rename="stringValue")]
     pub string_value: Option<String>,
+    /// A null value.
+    #[serde(rename="nullValue")]
+    pub null_value: Option<String>,
     /// A double value.
     #[serde(rename="doubleValue")]
     pub double_value: Option<f64>,
@@ -875,42 +922,26 @@ pub struct Value {
     /// A geo point value representing a point on the surface of Earth.
     #[serde(rename="geoPointValue")]
     pub geo_point_value: Option<LatLng>,
-    /// A null value.
-    #[serde(rename="nullValue")]
-    pub null_value: Option<String>,
 }
 
 impl Part for Value {}
 
 
-/// A filter that merges multiple other filters using the given operator.
+/// A holder for any type of filter.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct CompositeFilter {
-    /// The list of filters to combine.
-    /// Must contain at least one filter.
-    pub filters: Option<Vec<Filter>>,
-    /// The operator for combining multiple filters.
-    pub op: Option<String>,
+pub struct Filter {
+    /// A composite filter.
+    #[serde(rename="compositeFilter")]
+    pub composite_filter: Option<CompositeFilter>,
+    /// A filter on a property.
+    #[serde(rename="propertyFilter")]
+    pub property_filter: Option<PropertyFilter>,
 }
 
-impl Part for CompositeFilter {}
-
-
-/// A reference to a property relative to the kind expressions.
-/// 
-/// This type is not used in any activity, and only used as *part* of another schema.
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct PropertyReference {
-    /// The name of the property.
-    /// If name includes "."s, it may be interpreted as a property name path.
-    pub name: Option<String>,
-}
-
-impl Part for PropertyReference {}
+impl Part for Filter {}
 
 
 /// A representation of a kind.
@@ -924,79 +955,6 @@ pub struct KindExpression {
 }
 
 impl Part for KindExpression {}
-
-
-/// A query for entities.
-/// 
-/// This type is not used in any activity, and only used as *part* of another schema.
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Query {
-    /// A starting point for the query results. Query cursors are
-    /// returned in query result batches and
-    /// [can only be used to continue the same query](https://cloud.google.com/datastore/docs/concepts/queries#cursors_limits_and_offsets).
-    #[serde(rename="startCursor")]
-    pub start_cursor: Option<String>,
-    /// The kinds to query (if empty, returns entities of all kinds).
-    /// Currently at most 1 kind may be specified.
-    pub kind: Option<Vec<KindExpression>>,
-    /// The projection to return. Defaults to returning all properties.
-    pub projection: Option<Vec<Projection>>,
-    /// The properties to make distinct. The query results will contain the first
-    /// result for each distinct combination of values for the given properties
-    /// (if empty, all results are returned).
-    #[serde(rename="distinctOn")]
-    pub distinct_on: Option<Vec<PropertyReference>>,
-    /// The filter to apply.
-    pub filter: Option<Filter>,
-    /// The maximum number of results to return. Applies after all other
-    /// constraints. Optional.
-    /// Unspecified is interpreted as no limit.
-    /// Must be >= 0 if specified.
-    pub limit: Option<i32>,
-    /// The number of results to skip. Applies before limit, but after all other
-    /// constraints. Optional. Must be >= 0 if specified.
-    pub offset: Option<i32>,
-    /// An ending point for the query results. Query cursors are
-    /// returned in query result batches and
-    /// [can only be used to limit the same query](https://cloud.google.com/datastore/docs/concepts/queries#cursors_limits_and_offsets).
-    #[serde(rename="endCursor")]
-    pub end_cursor: Option<String>,
-    /// The order to apply to the query results (if empty, order is unspecified).
-    pub order: Option<Vec<PropertyOrder>>,
-}
-
-impl Part for Query {}
-
-
-/// The request for Datastore.RunQuery.
-/// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [run query projects](struct.ProjectRunQueryCall.html) (request)
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct RunQueryRequest {
-    /// The query to run.
-    pub query: Option<Query>,
-    /// Entities are partitioned into subsets, identified by a partition ID.
-    /// Queries are scoped to a single partition.
-    /// This partition ID is normalized with the standard default context
-    /// partition ID.
-    #[serde(rename="partitionId")]
-    pub partition_id: Option<PartitionId>,
-    /// The GQL query to run.
-    #[serde(rename="gqlQuery")]
-    pub gql_query: Option<GqlQuery>,
-    /// The options for this query.
-    #[serde(rename="readOptions")]
-    pub read_options: Option<ReadOptions>,
-}
-
-impl RequestValue for RunQueryRequest {}
 
 
 /// The response for Datastore.Lookup.
@@ -1042,21 +1000,20 @@ pub struct ReserveIdsResponse { _never_set: Option<bool> }
 impl ResponseResult for ReserveIdsResponse {}
 
 
-/// A holder for any type of filter.
+/// A filter that merges multiple other filters using the given operator.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Filter {
-    /// A composite filter.
-    #[serde(rename="compositeFilter")]
-    pub composite_filter: Option<CompositeFilter>,
-    /// A filter on a property.
-    #[serde(rename="propertyFilter")]
-    pub property_filter: Option<PropertyFilter>,
+pub struct CompositeFilter {
+    /// The list of filters to combine.
+    /// Must contain at least one filter.
+    pub filters: Option<Vec<Filter>>,
+    /// The operator for combining multiple filters.
+    pub op: Option<String>,
 }
 
-impl Part for Filter {}
+impl Part for CompositeFilter {}
 
 
 /// The request for Datastore.Commit.
@@ -1074,6 +1031,8 @@ pub struct CommitRequest {
     /// transaction identifier is returned by a call to
     /// Datastore.BeginTransaction.
     pub transaction: Option<String>,
+    /// The type of commit to perform. Defaults to `TRANSACTIONAL`.
+    pub mode: Option<String>,
     /// The mutations to perform.
     /// 
     /// When mode is `TRANSACTIONAL`, mutations affecting a single entity are
@@ -1088,8 +1047,6 @@ pub struct CommitRequest {
     /// When mode is `NON_TRANSACTIONAL`, no two mutations may affect a single
     /// entity.
     pub mutations: Option<Vec<Mutation>>,
-    /// The type of commit to perform. Defaults to `TRANSACTIONAL`.
-    pub mode: Option<String>,
 }
 
 impl RequestValue for CommitRequest {}
@@ -1266,18 +1223,61 @@ pub struct PathElement {
     /// A kind must not contain more than 1500 bytes when UTF-8 encoded.
     /// Cannot be `""`.
     pub kind: Option<String>,
+    /// The auto-allocated ID of the entity.
+    /// Never equal to zero. Values less than zero are discouraged and may not
+    /// be supported in the future.
+    pub id: Option<String>,
     /// The name of the entity.
     /// A name matching regex `__.*__` is reserved/read-only.
     /// A name must not be more than 1500 bytes when UTF-8 encoded.
     /// Cannot be `""`.
     pub name: Option<String>,
-    /// The auto-allocated ID of the entity.
-    /// Never equal to zero. Values less than zero are discouraged and may not
-    /// be supported in the future.
-    pub id: Option<String>,
 }
 
 impl Part for PathElement {}
+
+
+/// A query for entities.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct Query {
+    /// A starting point for the query results. Query cursors are
+    /// returned in query result batches and
+    /// [can only be used to continue the same query](https://cloud.google.com/datastore/docs/concepts/queries#cursors_limits_and_offsets).
+    #[serde(rename="startCursor")]
+    pub start_cursor: Option<String>,
+    /// The kinds to query (if empty, returns entities of all kinds).
+    /// Currently at most 1 kind may be specified.
+    pub kind: Option<Vec<KindExpression>>,
+    /// The projection to return. Defaults to returning all properties.
+    pub projection: Option<Vec<Projection>>,
+    /// The properties to make distinct. The query results will contain the first
+    /// result for each distinct combination of values for the given properties
+    /// (if empty, all results are returned).
+    #[serde(rename="distinctOn")]
+    pub distinct_on: Option<Vec<PropertyReference>>,
+    /// The filter to apply.
+    pub filter: Option<Filter>,
+    /// The maximum number of results to return. Applies after all other
+    /// constraints. Optional.
+    /// Unspecified is interpreted as no limit.
+    /// Must be >= 0 if specified.
+    pub limit: Option<i32>,
+    /// The number of results to skip. Applies before limit, but after all other
+    /// constraints. Optional. Must be >= 0 if specified.
+    pub offset: Option<i32>,
+    /// An ending point for the query results. Query cursors are
+    /// returned in query result batches and
+    /// [can only be used to limit the same query](https://cloud.google.com/datastore/docs/concepts/queries#cursors_limits_and_offsets).
+    #[serde(rename="endCursor")]
+    pub end_cursor: Option<String>,
+    /// The order to apply to the query results (if empty, order is unspecified).
+    pub order: Option<Vec<PropertyOrder>>,
+}
+
+impl Part for Query {}
 
 
 
@@ -1704,17 +1704,15 @@ impl<'a, C, A> ProjectRunQueryCall<'a, C, A> where C: BorrowMut<hyper::Client>, 
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectRunQueryCall<'a, C, A>
@@ -1985,17 +1983,15 @@ impl<'a, C, A> ProjectReserveIdCall<'a, C, A> where C: BorrowMut<hyper::Client>,
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectReserveIdCall<'a, C, A>
@@ -2265,17 +2261,15 @@ impl<'a, C, A> ProjectLookupCall<'a, C, A> where C: BorrowMut<hyper::Client>, A:
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectLookupCall<'a, C, A>
@@ -2546,17 +2540,15 @@ impl<'a, C, A> ProjectCommitCall<'a, C, A> where C: BorrowMut<hyper::Client>, A:
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectCommitCall<'a, C, A>
@@ -2827,17 +2819,15 @@ impl<'a, C, A> ProjectAllocateIdCall<'a, C, A> where C: BorrowMut<hyper::Client>
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectAllocateIdCall<'a, C, A>
@@ -3107,17 +3097,15 @@ impl<'a, C, A> ProjectRollbackCall<'a, C, A> where C: BorrowMut<hyper::Client>, 
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectRollbackCall<'a, C, A>
@@ -3387,17 +3375,15 @@ impl<'a, C, A> ProjectBeginTransactionCall<'a, C, A> where C: BorrowMut<hyper::C
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectBeginTransactionCall<'a, C, A>

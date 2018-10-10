@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *People Service* crate version *1.0.7+20171211*, where *20171211* is the exact revision of the *people:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *People Service* crate version *1.0.7+20181009*, where *20181009* is the exact revision of the *people:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *People Service* *v1* API can be found at the
 //! [official documentation site](https://developers.google.com/people/).
@@ -469,8 +469,8 @@ pub struct RelationshipStatus {
     /// the viewer's account locale or the `Accept-Language` HTTP header locale.
     #[serde(rename="formattedValue")]
     pub formatted_value: Option<String>,
-    /// The relationship status. The value can be custom or predefined.
-    /// Possible values include, but are not limited to, the following:
+    /// The relationship status. The value can be custom or one of these
+    /// predefined values:
     /// 
     /// * `single`
     /// * `inARelationship`
@@ -524,10 +524,10 @@ impl Part for PersonResponse {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct UserDefined {
-    /// The end user specified value of the user defined data.
-    pub value: Option<String>,
     /// The end user specified key of the user defined data.
     pub key: Option<String>,
+    /// The end user specified value of the user defined data.
+    pub value: Option<String>,
     /// Metadata about the user defined data.
     pub metadata: Option<FieldMetadata>,
 }
@@ -557,8 +557,7 @@ impl Part for Tagline {}
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct ContactGroupMembership {
     /// The contact group ID for the contact group membership. The contact group
-    /// ID can be custom or predefined. Possible values include, but are not
-    /// limited to, the following:
+    /// ID can be custom or one of these predefined values:
     /// 
     /// *  `myContacts`
     /// *  `starred`
@@ -602,7 +601,6 @@ impl Part for Source {}
 
 
 /// One of the person's interests.
-/// **DEPRECATED** (Message will not be returned.)
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
@@ -617,7 +615,8 @@ pub struct Interest {
 impl Part for Interest {}
 
 
-/// A request to update an existing contact group. Only the name can be updated.
+/// A request to update an existing user contact group. All updated fields will
+/// be replaced.
 /// 
 /// # Activities
 /// 
@@ -655,28 +654,24 @@ pub struct CoverPhoto {
 impl Part for CoverPhoto {}
 
 
-/// A generic empty message that you can re-use to avoid defining duplicated
-/// empty messages in your APIs. A typical example is to use it as the request
-/// or the response type of an API method. For instance:
+/// Metadata about a field.
 /// 
-///     service Foo {
-///       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
-///     }
-/// 
-/// The JSON representation for `Empty` is empty JSON object `{}`.
-/// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [delete contact groups](struct.ContactGroupDeleteCall.html) (response)
-/// * [delete contact people](struct.PeopleDeleteContactCall.html) (response)
+/// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Empty { _never_set: Option<bool> }
+pub struct FieldMetadata {
+    /// The source of the field.
+    pub source: Option<Source>,
+    /// True if the field is verified; false if the field is unverified. A
+    /// verified field is typically a name, email address, phone number, or
+    /// website that has been confirmed to be owned by the person.
+    pub verified: Option<bool>,
+    /// True if the field is the primary field; false if the field is a secondary
+    /// field.
+    pub primary: Option<bool>,
+}
 
-impl ResponseResult for Empty {}
+impl Part for FieldMetadata {}
 
 
 /// A person's name. If the name is a mononym, the family name is empty.
@@ -688,19 +683,21 @@ pub struct Name {
     /// The middle name(s) spelled as they sound.
     #[serde(rename="phoneticMiddleName")]
     pub phonetic_middle_name: Option<String>,
-    /// The given name spelled as it sounds.
-    #[serde(rename="phoneticGivenName")]
-    pub phonetic_given_name: Option<String>,
     /// The honorific prefixes, such as `Mrs.` or `Dr.`
     #[serde(rename="honorificPrefix")]
     pub honorific_prefix: Option<String>,
-    /// The family name spelled as it sounds.
-    #[serde(rename="phoneticFamilyName")]
-    pub phonetic_family_name: Option<String>,
+    /// The read-only display name with the last name first formatted according to
+    /// the locale specified by the viewer's account or the
+    /// `Accept-Language` HTTP header.
+    #[serde(rename="displayNameLastFirst")]
+    pub display_name_last_first: Option<String>,
     /// The read-only display name formatted according to the locale specified by
     /// the viewer's account or the `Accept-Language` HTTP header.
     #[serde(rename="displayName")]
     pub display_name: Option<String>,
+    /// The family name spelled as it sounds.
+    #[serde(rename="phoneticFamilyName")]
+    pub phonetic_family_name: Option<String>,
     /// The middle name(s).
     #[serde(rename="middleName")]
     pub middle_name: Option<String>,
@@ -713,11 +710,9 @@ pub struct Name {
     /// The full name spelled as it sounds.
     #[serde(rename="phoneticFullName")]
     pub phonetic_full_name: Option<String>,
-    /// The read-only display name with the last name first formatted according to
-    /// the locale specified by the viewer's account or the
-    /// `Accept-Language` HTTP header.
-    #[serde(rename="displayNameLastFirst")]
-    pub display_name_last_first: Option<String>,
+    /// The given name spelled as it sounds.
+    #[serde(rename="phoneticGivenName")]
+    pub phonetic_given_name: Option<String>,
     /// The honorific suffixes spelled as they sound.
     #[serde(rename="phoneticHonorificSuffix")]
     pub phonetic_honorific_suffix: Option<String>,
@@ -746,8 +741,7 @@ pub struct RelationshipInterest {
     #[serde(rename="formattedValue")]
     pub formatted_value: Option<String>,
     /// The kind of relationship the person is looking for. The value can be custom
-    /// or predefined. Possible values include, but are not limited to, the
-    /// following values:
+    /// or one of these predefined values:
     /// 
     /// * `friend`
     /// * `date`
@@ -793,14 +787,14 @@ impl Part for BraggingRights {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct ContactGroup {
+    /// The read-only contact group type.
+    #[serde(rename="groupType")]
+    pub group_type: Option<String>,
     /// The read-only name translated and formatted in the viewer's account locale
     /// or the `Accept-Language` HTTP header locale for system groups names.
     /// Group names set by the owner are the same as name.
     #[serde(rename="formattedName")]
     pub formatted_name: Option<String>,
-    /// The read-only contact group type.
-    #[serde(rename="groupType")]
-    pub group_type: Option<String>,
     /// The contact group name set by the group owner or a system provided name
     /// for system groups.
     pub name: Option<String>,
@@ -867,76 +861,53 @@ pub struct Birthday {
 impl Part for Birthday {}
 
 
-/// Metadata about a field.
+/// A generic empty message that you can re-use to avoid defining duplicated
+/// empty messages in your APIs. A typical example is to use it as the request
+/// or the response type of an API method. For instance:
+/// 
+///     service Foo {
+///       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
+///     }
+/// 
+/// The JSON representation for `Empty` is empty JSON object `{}`.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [delete contact groups](struct.ContactGroupDeleteCall.html) (response)
+/// * [delete contact people](struct.PeopleDeleteContactCall.html) (response)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct Empty { _never_set: Option<bool> }
+
+impl ResponseResult for Empty {}
+
+
+/// A person's gender.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct FieldMetadata {
-    /// The source of the field.
-    pub source: Option<Source>,
-    /// True if the field is verified; false if the field is unverified. A
-    /// verified field is typically a name, email address, phone number, or
-    /// website that has been confirmed to be owned by the person.
-    pub verified: Option<bool>,
-    /// True if the field is the primary field; false if the field is a secondary
-    /// field.
-    pub primary: Option<bool>,
-}
-
-impl Part for FieldMetadata {}
-
-
-/// A person's physical address. May be a P.O. box or street address. All fields
-/// are optional.
-/// 
-/// This type is not used in any activity, and only used as *part* of another schema.
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Address {
-    /// The read-only type of the address translated and formatted in the viewer's
+pub struct Gender {
+    /// The read-only value of the gender translated and formatted in the viewer's
     /// account locale or the `Accept-Language` HTTP header locale.
-    #[serde(rename="formattedType")]
-    pub formatted_type: Option<String>,
-    /// The [ISO 3166-1 alpha-2](http://www.iso.org/iso/country_codes.htm) country
-    /// code of the address.
-    #[serde(rename="countryCode")]
-    pub country_code: Option<String>,
-    /// The city of the address.
-    pub city: Option<String>,
-    /// The unstructured value of the address. If this is not set by the user it
-    /// will be automatically constructed from structured values.
     #[serde(rename="formattedValue")]
     pub formatted_value: Option<String>,
-    /// The region of the address; for example, the state or province.
-    pub region: Option<String>,
-    /// The P.O. box of the address.
-    #[serde(rename="poBox")]
-    pub po_box: Option<String>,
-    /// The street address.
-    #[serde(rename="streetAddress")]
-    pub street_address: Option<String>,
-    /// The country of the address.
-    pub country: Option<String>,
-    /// The postal code of the address.
-    #[serde(rename="postalCode")]
-    pub postal_code: Option<String>,
-    /// The extended address of the address; for example, the apartment number.
-    #[serde(rename="extendedAddress")]
-    pub extended_address: Option<String>,
-    /// The type of the address. The type can be custom or predefined.
-    /// Possible values include, but are not limited to, the following:
+    /// The gender for the person. The gender can be custom or one of these
+    /// predefined values:
     /// 
-    /// * `home`
-    /// * `work`
+    /// * `male`
+    /// * `female`
     /// * `other`
-    #[serde(rename="type")]
-    pub type_: Option<String>,
-    /// Metadata about the address.
+    /// * `unknown`
+    pub value: Option<String>,
+    /// Metadata about the gender.
     pub metadata: Option<FieldMetadata>,
 }
 
-impl Part for Address {}
+impl Part for Gender {}
 
 
 /// Represents a whole calendar date, for example a date of birth. The time
@@ -951,47 +922,88 @@ impl Part for Address {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Date {
-    /// Month of year. Must be from 1 to 12.
-    pub month: Option<i32>,
-    /// Day of month. Must be from 1 to 31 and valid for the year and month, or 0
-    /// if specifying a year/month where the day is not significant.
-    pub day: Option<i32>,
     /// Year of date. Must be from 1 to 9999, or 0 if specifying a date without
     /// a year.
     pub year: Option<i32>,
+    /// Day of month. Must be from 1 to 31 and valid for the year and month, or 0
+    /// if specifying a year by itself or a year and month where the day is not
+    /// significant.
+    pub day: Option<i32>,
+    /// Month of year. Must be from 1 to 12, or 0 if specifying a year without a
+    /// month and day.
+    pub month: Option<i32>,
 }
 
 impl Part for Date {}
 
 
-/// A person's email address.
+/// A person's relation to another person.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct EmailAddress {
-    /// The read-only type of the email address translated and formatted in the
-    /// viewer's account locale or the `Accept-Language` HTTP header locale.
+pub struct Relation {
+    /// The name of the other person this relation refers to.
+    pub person: Option<String>,
+    /// The type of the relation translated and formatted in the viewer's account
+    /// locale or the locale specified in the Accept-Language HTTP header.
     #[serde(rename="formattedType")]
     pub formatted_type: Option<String>,
-    /// The type of the email address. The type can be custom or predefined.
-    /// Possible values include, but are not limited to, the following:
+    /// The person's relation to the other person. The type can be custom or one of
+    /// these predefined values:
     /// 
-    /// * `home`
-    /// * `work`
-    /// * `other`
+    /// * `spouse`
+    /// * `child`
+    /// * `mother`
+    /// * `father`
+    /// * `parent`
+    /// * `brother`
+    /// * `sister`
+    /// * `friend`
+    /// * `relative`
+    /// * `domesticPartner`
+    /// * `manager`
+    /// * `assistant`
+    /// * `referredBy`
+    /// * `partner`
     #[serde(rename="type")]
     pub type_: Option<String>,
-    /// The display name of the email.
-    #[serde(rename="displayName")]
-    pub display_name: Option<String>,
-    /// The email address.
-    pub value: Option<String>,
-    /// Metadata about the email address.
+    /// Metadata about the relation.
     pub metadata: Option<FieldMetadata>,
 }
 
-impl Part for EmailAddress {}
+impl Part for Relation {}
+
+
+/// A person's SIP address. Session Initial Protocol addresses are used for VoIP
+/// communications to make voice or video calls over the internet.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct SipAddress {
+    /// The read-only type of the SIP address translated and formatted in the
+    /// viewer's account locale or the `Accept-Language` HTTP header locale.
+    #[serde(rename="formattedType")]
+    pub formatted_type: Option<String>,
+    /// The type of the SIP address. The type can be custom or or one of these
+    /// predefined values:
+    /// 
+    /// * `home`
+    /// * `work`
+    /// * `mobile`
+    /// * `other`
+    #[serde(rename="type")]
+    pub type_: Option<String>,
+    /// The SIP address in the
+    /// [RFC 3261 19.1](https://tools.ietf.org/html/rfc3261#section-19.1) SIP URI
+    /// format.
+    pub value: Option<String>,
+    /// Metadata about the SIP address.
+    pub metadata: Option<FieldMetadata>,
+}
+
+impl Part for SipAddress {}
 
 
 /// A person's nickname.
@@ -1114,8 +1126,8 @@ pub struct ImClient {
     /// viewer's account locale or the `Accept-Language` HTTP header locale.
     #[serde(rename="formattedType")]
     pub formatted_type: Option<String>,
-    /// The protocol of the IM client. The protocol can be custom or predefined.
-    /// Possible values include, but are not limited to, the following:
+    /// The protocol of the IM client. The protocol can be custom or one of these
+    /// predefined values:
     /// 
     /// * `aim`
     /// * `msn`
@@ -1131,8 +1143,8 @@ pub struct ImClient {
     /// locale or the `Accept-Language` HTTP header locale.
     #[serde(rename="formattedProtocol")]
     pub formatted_protocol: Option<String>,
-    /// The type of the IM client. The type can be custom or predefined.
-    /// Possible values include, but are not limited to, the following:
+    /// The type of the IM client. The type can be custom or one of these
+    /// predefined values:
     /// 
     /// * `home`
     /// * `work`
@@ -1190,8 +1202,8 @@ pub struct Url {
     /// account locale or the `Accept-Language` HTTP header locale.
     #[serde(rename="formattedType")]
     pub formatted_type: Option<String>,
-    /// The type of the URL. The type can be custom or predefined.
-    /// Possible values include, but are not limited to, the following:
+    /// The type of the URL. The type can be custom or one of these predefined
+    /// values:
     /// 
     /// * `home`
     /// * `work`
@@ -1231,7 +1243,61 @@ pub struct Residence {
 impl Part for Residence {}
 
 
-/// A request to modify an existing contact group's members.
+/// A person's physical address. May be a P.O. box or street address. All fields
+/// are optional.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct Address {
+    /// The read-only type of the address translated and formatted in the viewer's
+    /// account locale or the `Accept-Language` HTTP header locale.
+    #[serde(rename="formattedType")]
+    pub formatted_type: Option<String>,
+    /// The [ISO 3166-1 alpha-2](http://www.iso.org/iso/country_codes.htm) country
+    /// code of the address.
+    #[serde(rename="countryCode")]
+    pub country_code: Option<String>,
+    /// The city of the address.
+    pub city: Option<String>,
+    /// The unstructured value of the address. If this is not set by the user it
+    /// will be automatically constructed from structured values.
+    #[serde(rename="formattedValue")]
+    pub formatted_value: Option<String>,
+    /// The region of the address; for example, the state or province.
+    pub region: Option<String>,
+    /// The P.O. box of the address.
+    #[serde(rename="poBox")]
+    pub po_box: Option<String>,
+    /// The street address.
+    #[serde(rename="streetAddress")]
+    pub street_address: Option<String>,
+    /// The country of the address.
+    pub country: Option<String>,
+    /// The postal code of the address.
+    #[serde(rename="postalCode")]
+    pub postal_code: Option<String>,
+    /// The extended address of the address; for example, the apartment number.
+    #[serde(rename="extendedAddress")]
+    pub extended_address: Option<String>,
+    /// The type of the address. The type can be custom or one of these predefined
+    /// values:
+    /// 
+    /// * `home`
+    /// * `work`
+    /// * `other`
+    #[serde(rename="type")]
+    pub type_: Option<String>,
+    /// Metadata about the address.
+    pub metadata: Option<FieldMetadata>,
+}
+
+impl Part for Address {}
+
+
+/// A request to modify an existing contact group's members. Contacts can be
+/// removed from any group but they can only be added to a user group or
+/// myContacts or starred system groups.
 /// 
 /// # Activities
 /// 
@@ -1291,37 +1357,54 @@ impl ResponseResult for BatchGetContactGroupsResponse {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Person {
-    /// The person's interests.
-    /// **DEPRECATED** (No values will be returned.)
-    pub interests: Option<Vec<Interest>>,
-    /// The person's phone numbers.
-    #[serde(rename="phoneNumbers")]
-    pub phone_numbers: Option<Vec<PhoneNumber>>,
+    /// The person's SIP addresses.
+    #[serde(rename="sipAddresses")]
+    pub sip_addresses: Option<Vec<SipAddress>>,
+    /// The person's bragging rights.
+    #[serde(rename="braggingRights")]
+    pub bragging_rights: Option<Vec<BraggingRights>>,
     /// The person's street addresses.
     pub addresses: Option<Vec<Address>>,
     /// The person's nicknames.
     pub nicknames: Option<Vec<Nickname>>,
     /// The person's occupations.
     pub occupations: Option<Vec<Occupation>>,
-    /// The person's bragging rights.
-    #[serde(rename="braggingRights")]
-    pub bragging_rights: Option<Vec<BraggingRights>>,
-    /// The person's read-only photos.
-    pub photos: Option<Vec<Photo>>,
+    /// The person's phone numbers.
+    #[serde(rename="phoneNumbers")]
+    pub phone_numbers: Option<Vec<PhoneNumber>>,
     /// The person's names.
     pub names: Option<Vec<Name>>,
-    /// **DEPRECATED** (Please use `person.ageRanges` instead)**
-    /// 
-    /// The person's read-only age range.
-    #[serde(rename="ageRange")]
-    pub age_range: Option<String>,
-    /// The person's residences.
-    pub residences: Option<Vec<Residence>>,
     /// The resource name for the person, assigned by the server. An ASCII string
     /// with a max length of 27 characters, in the form of
     /// `people/`<var>person_id</var>.
     #[serde(rename="resourceName")]
     pub resource_name: Option<String>,
+    /// The person's read-only age ranges.
+    #[serde(rename="ageRanges")]
+    pub age_ranges: Option<Vec<AgeRangeType>>,
+    /// The person's birthdays.
+    pub birthdays: Option<Vec<Birthday>>,
+    /// The person's relations.
+    pub relations: Option<Vec<Relation>>,
+    /// The [HTTP entity tag](https://en.wikipedia.org/wiki/HTTP_ETag) of the
+    /// resource. Used for web cache validation.
+    pub etag: Option<String>,
+    /// The person's read-only relationship statuses.
+    #[serde(rename="relationshipStatuses")]
+    pub relationship_statuses: Option<Vec<RelationshipStatus>>,
+    /// The person's instant messaging clients.
+    #[serde(rename="imClients")]
+    pub im_clients: Option<Vec<ImClient>>,
+    /// The person's events.
+    pub events: Option<Vec<Event>>,
+    /// Read-only metadata about the person.
+    pub metadata: Option<PersonMetadata>,
+    /// The person's interests.
+    pub interests: Option<Vec<Interest>>,
+    /// The person's read-only photos.
+    pub photos: Option<Vec<Photo>>,
+    /// The person's residences.
+    pub residences: Option<Vec<Residence>>,
     /// The person's read-only relationship interests.
     #[serde(rename="relationshipInterests")]
     pub relationship_interests: Option<Vec<RelationshipInterest>>,
@@ -1337,69 +1420,46 @@ pub struct Person {
     pub user_defined: Option<Vec<UserDefined>>,
     /// The person's skills.
     pub skills: Option<Vec<Skill>>,
-    /// The person's read-only age ranges.
-    #[serde(rename="ageRanges")]
-    pub age_ranges: Option<Vec<AgeRangeType>>,
-    /// The person's birthdays.
-    pub birthdays: Option<Vec<Birthday>>,
-    /// The person's relations.
-    pub relations: Option<Vec<Relation>>,
     /// The person's read-only group memberships.
     pub memberships: Option<Vec<Membership>>,
     /// The person's read-only taglines.
     pub taglines: Option<Vec<Tagline>>,
-    /// The [HTTP entity tag](https://en.wikipedia.org/wiki/HTTP_ETag) of the
-    /// resource. Used for web cache validation.
-    pub etag: Option<String>,
-    /// The person's biographies.
-    pub biographies: Option<Vec<Biography>>,
     /// The person's associated URLs.
     pub urls: Option<Vec<Url>>,
-    /// The person's read-only relationship statuses.
-    #[serde(rename="relationshipStatuses")]
-    pub relationship_statuses: Option<Vec<RelationshipStatus>>,
+    /// **DEPRECATED** (Please use `person.ageRanges` instead)**
+    /// 
+    /// The person's read-only age range.
+    #[serde(rename="ageRange")]
+    pub age_range: Option<String>,
     /// The person's genders.
     pub genders: Option<Vec<Gender>>,
     /// The person's email addresses.
     #[serde(rename="emailAddresses")]
     pub email_addresses: Option<Vec<EmailAddress>>,
-    /// The person's instant messaging clients.
-    #[serde(rename="imClients")]
-    pub im_clients: Option<Vec<ImClient>>,
-    /// The person's events.
-    pub events: Option<Vec<Event>>,
-    /// Read-only metadata about the person.
-    pub metadata: Option<PersonMetadata>,
+    /// The person's biographies.
+    pub biographies: Option<Vec<Biography>>,
 }
 
 impl RequestValue for Person {}
 impl ResponseResult for Person {}
 
 
-/// A person's gender.
+/// The read-only metadata about a contact group.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Gender {
-    /// The read-only value of the gender translated and formatted in the viewer's
-    /// account locale or the `Accept-Language` HTTP header locale.
-    #[serde(rename="formattedValue")]
-    pub formatted_value: Option<String>,
-    /// The gender for the person. The gender can be custom or predefined.
-    /// Possible values include, but are not limited to, the
-    /// following:
-    /// 
-    /// * `male`
-    /// * `female`
-    /// * `other`
-    /// * `unknown`
-    pub value: Option<String>,
-    /// Metadata about the gender.
-    pub metadata: Option<FieldMetadata>,
+pub struct ContactGroupMetadata {
+    /// True if the contact group resource has been deleted. Populated only for
+    /// [`ListContactGroups`](/people/api/rest/v1/contactgroups/list) requests
+    /// that include a sync token.
+    pub deleted: Option<bool>,
+    /// The time the group was last updated.
+    #[serde(rename="updateTime")]
+    pub update_time: Option<String>,
 }
 
-impl Part for Gender {}
+impl Part for ContactGroupMetadata {}
 
 
 /// A person's phone number.
@@ -1412,10 +1472,12 @@ pub struct PhoneNumber {
     /// viewer's account locale or the `Accept-Language` HTTP header locale.
     #[serde(rename="formattedType")]
     pub formatted_type: Option<String>,
-    /// Metadata about the phone number.
-    pub metadata: Option<FieldMetadata>,
-    /// The type of the phone number. The type can be custom or predefined.
-    /// Possible values include, but are not limited to, the following:
+    /// The read-only canonicalized [ITU-T E.164](https://law.resource.org/pub/us/cfr/ibr/004/itu-t.E.164.1.2008.pdf)
+    /// form of the phone number.
+    #[serde(rename="canonicalForm")]
+    pub canonical_form: Option<String>,
+    /// The type of the phone number. The type can be custom or one of these
+    /// predefined values:
     /// 
     /// * `home`
     /// * `work`
@@ -1433,10 +1495,8 @@ pub struct PhoneNumber {
     pub type_: Option<String>,
     /// The phone number.
     pub value: Option<String>,
-    /// The read-only canonicalized [ITU-T E.164](https://law.resource.org/pub/us/cfr/ibr/004/itu-t.E.164.1.2008.pdf)
-    /// form of the phone number.
-    #[serde(rename="canonicalForm")]
-    pub canonical_form: Option<String>,
+    /// Metadata about the phone number.
+    pub metadata: Option<FieldMetadata>,
 }
 
 impl Part for PhoneNumber {}
@@ -1449,10 +1509,9 @@ impl Part for PhoneNumber {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Organization {
-    /// The read-only type of the organization translated and formatted in the
-    /// viewer's account locale or the `Accept-Language` HTTP header locale.
-    #[serde(rename="formattedType")]
-    pub formatted_type: Option<String>,
+    /// The start date when the person joined the organization.
+    #[serde(rename="startDate")]
+    pub start_date: Option<Date>,
     /// The domain name associated with the organization; for example, `google.com`.
     pub domain: Option<String>,
     /// The end date when the person left the organization.
@@ -1465,9 +1524,6 @@ pub struct Organization {
     /// The symbol associated with the organization; for example, a stock ticker
     /// symbol, abbreviation, or acronym.
     pub symbol: Option<String>,
-    /// The start date when the person joined the organization.
-    #[serde(rename="startDate")]
-    pub start_date: Option<Date>,
     /// True if the organization is the person's current organization;
     /// false if the organization is a past organization.
     pub current: Option<bool>,
@@ -1478,8 +1534,12 @@ pub struct Organization {
     pub location: Option<String>,
     /// The person's department at the organization.
     pub department: Option<String>,
-    /// The type of the organization. The type can be custom or predefined.
-    /// Possible values include, but are not limited to, the following:
+    /// The read-only type of the organization translated and formatted in the
+    /// viewer's account locale or the `Accept-Language` HTTP header locale.
+    #[serde(rename="formattedType")]
+    pub formatted_type: Option<String>,
+    /// The type of the organization. The type can be custom or  one of these
+    /// predefined values:
     /// 
     /// * `work`
     /// * `school`
@@ -1537,36 +1597,18 @@ impl Part for Locale {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Photo {
+    /// True if the photo is a default photo;
+    /// false if the photo is a user-provided photo.
+    pub default: Option<bool>,
     /// The URL of the photo. You can change the desired size by appending a query
     /// parameter `sz=`<var>size</var> at the end of the url. Example:
     /// `https://lh3.googleusercontent.com/-T_wVWLlmg7w/AAAAAAAAAAI/AAAAAAAABa8/00gzXvDBYqw/s100/photo.jpg?sz=50`
     pub url: Option<String>,
-    /// True if the photo is a default photo;
-    /// false if the photo is a user-provided photo.
-    pub default: Option<bool>,
     /// Metadata about the photo.
     pub metadata: Option<FieldMetadata>,
 }
 
 impl Part for Photo {}
-
-
-/// The read-only metadata about a contact group.
-/// 
-/// This type is not used in any activity, and only used as *part* of another schema.
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct ContactGroupMetadata {
-    /// True if the contact group resource has been deleted. Populated only for
-    /// [`ListContactGroups`](/people/api/rest/v1/contactgroups/list) requests
-    /// that include a sync token.
-    pub deleted: Option<bool>,
-    /// The time the group was last updated.
-    #[serde(rename="updateTime")]
-    pub update_time: Option<String>,
-}
-
-impl Part for ContactGroupMetadata {}
 
 
 /// The read-only metadata about a person.
@@ -1623,42 +1665,34 @@ pub struct ModifyContactGroupMembersResponse {
 impl ResponseResult for ModifyContactGroupMembersResponse {}
 
 
-/// A person's relation to another person.
+/// A person's email address.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Relation {
-    /// The name of the other person this relation refers to.
-    pub person: Option<String>,
-    /// The type of the relation translated and formatted in the viewer's account
-    /// locale or the locale specified in the Accept-Language HTTP header.
+pub struct EmailAddress {
+    /// The read-only type of the email address translated and formatted in the
+    /// viewer's account locale or the `Accept-Language` HTTP header locale.
     #[serde(rename="formattedType")]
     pub formatted_type: Option<String>,
-    /// The person's relation to the other person. The type can be custom or predefined.
-    /// Possible values include, but are not limited to, the following values:
+    /// The type of the email address. The type can be custom or one of these
+    /// predefined values:
     /// 
-    /// * `spouse`
-    /// * `child`
-    /// * `mother`
-    /// * `father`
-    /// * `parent`
-    /// * `brother`
-    /// * `sister`
-    /// * `friend`
-    /// * `relative`
-    /// * `domesticPartner`
-    /// * `manager`
-    /// * `assistant`
-    /// * `referredBy`
-    /// * `partner`
+    /// * `home`
+    /// * `work`
+    /// * `other`
     #[serde(rename="type")]
     pub type_: Option<String>,
-    /// Metadata about the relation.
+    /// The display name of the email.
+    #[serde(rename="displayName")]
+    pub display_name: Option<String>,
+    /// The email address.
+    pub value: Option<String>,
+    /// Metadata about the email address.
     pub metadata: Option<FieldMetadata>,
 }
 
-impl Part for Relation {}
+impl Part for EmailAddress {}
 
 
 /// A skill that the person has.
@@ -1676,19 +1710,21 @@ pub struct Skill {
 impl Part for Skill {}
 
 
-/// A person's occupation.
+/// The read-only metadata about a profile.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Occupation {
-    /// The occupation; for example, `carpenter`.
-    pub value: Option<String>,
-    /// Metadata about the occupation.
-    pub metadata: Option<FieldMetadata>,
+pub struct ProfileMetadata {
+    /// The user types.
+    #[serde(rename="userTypes")]
+    pub user_types: Option<Vec<String>>,
+    /// The profile object type.
+    #[serde(rename="objectType")]
+    pub object_type: Option<String>,
 }
 
-impl Part for Occupation {}
+impl Part for ProfileMetadata {}
 
 
 /// A Google Apps Domain membership.
@@ -1717,8 +1753,8 @@ pub struct Event {
     /// viewer's account locale or the `Accept-Language` HTTP header locale.
     #[serde(rename="formattedType")]
     pub formatted_type: Option<String>,
-    /// The type of the event. The type can be custom or predefined.
-    /// Possible values include, but are not limited to, the following:
+    /// The type of the event. The type can be custom or one of these predefined
+    /// values:
     /// 
     /// * `anniversary`
     /// * `other`
@@ -1749,21 +1785,19 @@ pub struct Biography {
 impl Part for Biography {}
 
 
-/// The read-only metadata about a profile.
+/// A person's occupation.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct ProfileMetadata {
-    /// The user types.
-    #[serde(rename="userTypes")]
-    pub user_types: Option<Vec<String>>,
-    /// The profile object type.
-    #[serde(rename="objectType")]
-    pub object_type: Option<String>,
+pub struct Occupation {
+    /// The occupation; for example, `carpenter`.
+    pub value: Option<String>,
+    /// Metadata about the occupation.
+    pub metadata: Option<FieldMetadata>,
 }
 
-impl Part for ProfileMetadata {}
+impl Part for Occupation {}
 
 
 
@@ -2329,16 +2363,14 @@ impl<'a, C, A> ContactGroupBatchGetCall<'a, C, A> where C: BorrowMut<hyper::Clie
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ContactGroupBatchGetCall<'a, C, A>
@@ -2585,16 +2617,14 @@ impl<'a, C, A> ContactGroupListCall<'a, C, A> where C: BorrowMut<hyper::Client>,
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ContactGroupListCall<'a, C, A>
@@ -2832,16 +2862,14 @@ impl<'a, C, A> ContactGroupCreateCall<'a, C, A> where C: BorrowMut<hyper::Client
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ContactGroupCreateCall<'a, C, A>
@@ -3118,16 +3146,14 @@ impl<'a, C, A> ContactGroupUpdateCall<'a, C, A> where C: BorrowMut<hyper::Client
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ContactGroupUpdateCall<'a, C, A>
@@ -3384,16 +3410,14 @@ impl<'a, C, A> ContactGroupDeleteCall<'a, C, A> where C: BorrowMut<hyper::Client
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ContactGroupDeleteCall<'a, C, A>
@@ -3668,16 +3692,14 @@ impl<'a, C, A> ContactGroupMemberModifyCall<'a, C, A> where C: BorrowMut<hyper::
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ContactGroupMemberModifyCall<'a, C, A>
@@ -3934,16 +3956,14 @@ impl<'a, C, A> ContactGroupGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, 
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ContactGroupGetCall<'a, C, A>
@@ -4204,8 +4224,9 @@ impl<'a, C, A> PeopleConnectionListCall<'a, C, A> where C: BorrowMut<hyper::Clie
         self._resource_name = new_value.to_string();
         self
     }
-    /// A sync token, returned by a previous call to `people.connections.list`.
+    /// A sync token returned by a previous call to `people.connections.list`.
     /// Only resources changed since the sync token was created will be returned.
+    /// Sync requests that specify `sync_token` have an additional rate limit.
     ///
     /// Sets the *sync token* query property to the given value.
     pub fn sync_token(mut self, new_value: &str) -> PeopleConnectionListCall<'a, C, A> {
@@ -4221,7 +4242,9 @@ impl<'a, C, A> PeopleConnectionListCall<'a, C, A> where C: BorrowMut<hyper::Clie
         self
     }
     /// Whether the response should include a sync token, which can be used to get
-    /// all changes since the last request.
+    /// all changes since the last request. For subsequent sync requests use the
+    /// `sync_token` param instead. Initial sync requests that specify
+    /// `request_sync_token` have an additional rate limit.
     ///
     /// Sets the *request sync token* query property to the given value.
     pub fn request_sync_token(mut self, new_value: bool) -> PeopleConnectionListCall<'a, C, A> {
@@ -4238,7 +4261,8 @@ impl<'a, C, A> PeopleConnectionListCall<'a, C, A> where C: BorrowMut<hyper::Clie
         self
     }
     /// **Required.** A field mask to restrict which fields on each person are
-    /// returned. Valid values are:
+    /// returned. Multiple fields can be specified by separating them with commas.
+    /// Valid values are:
     /// 
     /// * addresses
     /// * ageRanges
@@ -4250,6 +4274,7 @@ impl<'a, C, A> PeopleConnectionListCall<'a, C, A> where C: BorrowMut<hyper::Clie
     /// * events
     /// * genders
     /// * imClients
+    /// * interests
     /// * locales
     /// * memberships
     /// * metadata
@@ -4263,9 +4288,11 @@ impl<'a, C, A> PeopleConnectionListCall<'a, C, A> where C: BorrowMut<hyper::Clie
     /// * relationshipInterests
     /// * relationshipStatuses
     /// * residences
+    /// * sipAddresses
     /// * skills
     /// * taglines
     /// * urls
+    /// * userDefined
     ///
     /// Sets the *person fields* query property to the given value.
     pub fn person_fields(mut self, new_value: &str) -> PeopleConnectionListCall<'a, C, A> {
@@ -4308,16 +4335,14 @@ impl<'a, C, A> PeopleConnectionListCall<'a, C, A> where C: BorrowMut<hyper::Clie
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> PeopleConnectionListCall<'a, C, A>
@@ -4567,16 +4592,14 @@ impl<'a, C, A> PeopleCreateContactCall<'a, C, A> where C: BorrowMut<hyper::Clien
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> PeopleCreateContactCall<'a, C, A>
@@ -4820,16 +4843,14 @@ impl<'a, C, A> PeopleDeleteContactCall<'a, C, A> where C: BorrowMut<hyper::Clien
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> PeopleDeleteContactCall<'a, C, A>
@@ -5082,7 +5103,8 @@ impl<'a, C, A> PeopleGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oau
         self
     }
     /// **Required.** A field mask to restrict which fields on the person are
-    /// returned. Valid values are:
+    /// returned. Multiple fields can be specified by separating them with commas.
+    /// Valid values are:
     /// 
     /// * addresses
     /// * ageRanges
@@ -5094,6 +5116,7 @@ impl<'a, C, A> PeopleGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oau
     /// * events
     /// * genders
     /// * imClients
+    /// * interests
     /// * locales
     /// * memberships
     /// * metadata
@@ -5107,9 +5130,11 @@ impl<'a, C, A> PeopleGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oau
     /// * relationshipInterests
     /// * relationshipStatuses
     /// * residences
+    /// * sipAddresses
     /// * skills
     /// * taglines
     /// * urls
+    /// * userDefined
     ///
     /// Sets the *person fields* query property to the given value.
     pub fn person_fields(mut self, new_value: &str) -> PeopleGetCall<'a, C, A> {
@@ -5137,16 +5162,14 @@ impl<'a, C, A> PeopleGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oau
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> PeopleGetCall<'a, C, A>
@@ -5419,16 +5442,17 @@ impl<'a, C, A> PeopleUpdateContactCall<'a, C, A> where C: BorrowMut<hyper::Clien
         self
     }
     /// **Required.** A field mask to restrict which fields on the person are
-    /// updated. Valid values are:
+    /// updated. Multiple fields can be specified by separating them with commas.
+    /// All updated fields will be replaced. Valid values are:
     /// 
     /// * addresses
     /// * biographies
     /// * birthdays
-    /// * braggingRights
     /// * emailAddresses
     /// * events
     /// * genders
     /// * imClients
+    /// * interests
     /// * locales
     /// * names
     /// * nicknames
@@ -5437,8 +5461,9 @@ impl<'a, C, A> PeopleUpdateContactCall<'a, C, A> where C: BorrowMut<hyper::Clien
     /// * phoneNumbers
     /// * relations
     /// * residences
-    /// * skills
+    /// * sipAddresses
     /// * urls
+    /// * userDefined
     ///
     /// Sets the *update person fields* query property to the given value.
     pub fn update_person_fields(mut self, new_value: &str) -> PeopleUpdateContactCall<'a, C, A> {
@@ -5466,16 +5491,14 @@ impl<'a, C, A> PeopleUpdateContactCall<'a, C, A> where C: BorrowMut<hyper::Clien
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> PeopleUpdateContactCall<'a, C, A>
@@ -5709,7 +5732,8 @@ impl<'a, C, A> PeopleGetBatchGetCall<'a, C, A> where C: BorrowMut<hyper::Client>
         self
     }
     /// **Required.** A field mask to restrict which fields on each person are
-    /// returned. Valid values are:
+    /// returned. Multiple fields can be specified by separating them with commas.
+    /// Valid values are:
     /// 
     /// * addresses
     /// * ageRanges
@@ -5721,6 +5745,7 @@ impl<'a, C, A> PeopleGetBatchGetCall<'a, C, A> where C: BorrowMut<hyper::Client>
     /// * events
     /// * genders
     /// * imClients
+    /// * interests
     /// * locales
     /// * memberships
     /// * metadata
@@ -5734,9 +5759,11 @@ impl<'a, C, A> PeopleGetBatchGetCall<'a, C, A> where C: BorrowMut<hyper::Client>
     /// * relationshipInterests
     /// * relationshipStatuses
     /// * residences
+    /// * sipAddresses
     /// * skills
     /// * taglines
     /// * urls
+    /// * userDefined
     ///
     /// Sets the *person fields* query property to the given value.
     pub fn person_fields(mut self, new_value: &str) -> PeopleGetBatchGetCall<'a, C, A> {
@@ -5764,16 +5791,14 @@ impl<'a, C, A> PeopleGetBatchGetCall<'a, C, A> where C: BorrowMut<hyper::Client>
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> PeopleGetBatchGetCall<'a, C, A>

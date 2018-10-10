@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *storagetransfer* crate version *1.0.7+20171202*, where *20171202* is the exact revision of the *storagetransfer:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *storagetransfer* crate version *1.0.7+20181008*, where *20181008* is the exact revision of the *storagetransfer:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *storagetransfer* *v1* API can be found at the
 //! [official documentation site](https://cloud.google.com/storage/transfer).
@@ -535,20 +535,21 @@ pub struct TransferCounters {
     /// Bytes that are copied to the data sink.
     #[serde(rename="bytesCopiedToSink")]
     pub bytes_copied_to_sink: Option<String>,
-    /// Bytes in the data source that failed during the transfer.
-    #[serde(rename="bytesFromSourceFailed")]
-    pub bytes_from_source_failed: Option<String>,
+    /// Bytes found in the data source that are scheduled to be transferred,
+    /// excluding any that are filtered based on object conditions or skipped due
+    /// to sync.
+    #[serde(rename="bytesFoundFromSource")]
+    pub bytes_found_from_source: Option<String>,
     /// Objects that are deleted from the data source.
     #[serde(rename="objectsDeletedFromSource")]
     pub objects_deleted_from_source: Option<String>,
     /// Bytes found only in the data sink that are scheduled to be deleted.
     #[serde(rename="bytesFoundOnlyFromSink")]
     pub bytes_found_only_from_sink: Option<String>,
-    /// Bytes found in the data source that are scheduled to be transferred,
-    /// excluding any that are filtered based on object conditions or skipped due
-    /// to sync.
-    #[serde(rename="bytesFoundFromSource")]
-    pub bytes_found_from_source: Option<String>,
+    /// Bytes in the data source that failed to be transferred or that failed to
+    /// be deleted after being transferred.
+    #[serde(rename="bytesFromSourceFailed")]
+    pub bytes_from_source_failed: Option<String>,
     /// Bytes that are deleted from the data source.
     #[serde(rename="bytesDeletedFromSource")]
     pub bytes_deleted_from_source: Option<String>,
@@ -561,7 +562,8 @@ pub struct TransferCounters {
     /// Objects that are deleted from the data sink.
     #[serde(rename="objectsDeletedFromSink")]
     pub objects_deleted_from_sink: Option<String>,
-    /// Objects in the data source that failed during the transfer.
+    /// Objects in the data source that failed to be transferred or that failed
+    /// to be deleted after being transferred.
     #[serde(rename="objectsFromSourceFailed")]
     pub objects_from_source_failed: Option<String>,
 }
@@ -616,8 +618,8 @@ pub struct TransferOperation {
 impl Resource for TransferOperation {}
 
 
-/// An AwsS3Data can be a data source, but not a data sink.
-/// In an AwsS3Data, an object's name is the S3 object's key name.
+/// An AwsS3Data resource can be a data source, but not a data sink.
+/// In an AwsS3Data resource, an object's name is the S3 object's key name.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
@@ -657,16 +659,17 @@ pub struct ErrorLogEntry {
 impl Part for ErrorLogEntry {}
 
 
-/// In a GcsData, an object's name is the Google Cloud Storage object's name and
-/// its `lastModificationTime` refers to the object's updated time, which changes
-/// when the content or the metadata of the object is updated.
+/// In a GcsData resource, an object's name is the Google Cloud Storage object's
+/// name and its `lastModificationTime` refers to the object's updated time,
+/// which changes when the content or the metadata of the object is updated.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct GcsData {
     /// Google Cloud Storage bucket name (see
-    /// [Bucket Name Requirements](https://cloud.google.com/storage/docs/bucket-naming#requirements)).
+    /// [Bucket Name
+    /// Requirements](https://cloud.google.com/storage/docs/naming#requirements)).
     /// Required.
     #[serde(rename="bucketName")]
     pub bucket_name: Option<String>,
@@ -675,9 +678,9 @@ pub struct GcsData {
 impl Part for GcsData {}
 
 
-/// An HttpData specifies a list of objects on the web to be transferred over
-/// HTTP.  The information of the objects to be transferred is contained in a
-/// file referenced by a URL. The first line in the file must be
+/// An HttpData resource specifies a list of objects on the web to be transferred
+/// over HTTP.  The information of the objects to be transferred is contained in
+/// a file referenced by a URL. The first line in the file must be
 /// "TsvHttpData-1.0", which specifies the format of the file.  Subsequent lines
 /// specify the information of the list of objects, one object per list entry.
 /// Each entry has the following tab-delimited fields:
@@ -689,12 +692,13 @@ impl Part for GcsData {}
 /// * MD5 - The base64-encoded MD5 hash of the object.
 /// 
 /// For an example of a valid TSV file, see
-/// [Transferring data from URLs](https://cloud.google.com/storage/transfer/create-url-list).
+/// [Transferring data from
+/// URLs](https://cloud.google.com/storage/transfer/create-url-list).
 /// 
 /// When transferring data based on a URL list, keep the following in mind:
 /// 
-/// * When an object located at `http(s)://hostname:port/<URL-path>` is transferred
-/// to a data sink, the name of the object at the data sink is
+/// * When an object located at `http(s)://hostname:port/<URL-path>` is
+/// transferred to a data sink, the name of the object at the data sink is
 /// `<hostname>/<URL-path>`.
 /// 
 /// * If the specified size of an object does not match the actual size of the
@@ -740,14 +744,14 @@ impl Part for HttpData {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct TimeOfDay {
+    /// Hours of day in 24 hour format. Should be from 0 to 23. An API may choose
+    /// to allow the value "24:00:00" for scenarios like business closing time.
+    pub hours: Option<i32>,
     /// Fractions of seconds in nanoseconds. Must be from 0 to 999,999,999.
     pub nanos: Option<i32>,
     /// Seconds of minutes of the time. Must normally be from 0 to 59. An API may
     /// allow the value 60 if it allows leap-seconds.
     pub seconds: Option<i32>,
-    /// Hours of day in 24 hour format. Should be from 0 to 23. An API may choose
-    /// to allow the value "24:00:00" for scenarios like business closing time.
-    pub hours: Option<i32>,
     /// Minutes of hour of day. Must be from 0 to 59.
     pub minutes: Option<i32>,
 }
@@ -1072,6 +1076,9 @@ pub struct TransferJob {
     /// This field cannot be changed by user requests.
     #[serde(rename="deletionTime")]
     pub deletion_time: Option<String>,
+    /// A description provided by the user for the job. Its max length is 1024
+    /// bytes when Unicode-encoded.
+    pub description: Option<String>,
     /// Schedule specification.
     pub schedule: Option<Schedule>,
     /// The ID of the Google Cloud Platform Console project that owns the job.
@@ -1088,9 +1095,6 @@ pub struct TransferJob {
     /// transfer job; otherwise, the requests result in an `INVALID_ARGUMENT`
     /// error.
     pub name: Option<String>,
-    /// A description provided by the user for the job. Its max length is 1024
-    /// bytes when Unicode-encoded.
-    pub description: Option<String>,
 }
 
 impl RequestValue for TransferJob {}
@@ -1098,13 +1102,16 @@ impl Resource for TransferJob {}
 impl ResponseResult for TransferJob {}
 
 
-/// Represents a whole calendar date, e.g. date of birth. The time of day and
-/// time zone are either specified elsewhere or are not significant. The date
-/// is relative to the Proleptic Gregorian Calendar. The day may be 0 to
-/// represent a year and month where the day is not significant, e.g. credit card
-/// expiration date. The year may be 0 to represent a month and day independent
-/// of year, e.g. anniversary date. Related types are google.type.TimeOfDay
-/// and `google.protobuf.Timestamp`.
+/// Represents a whole or partial calendar date, e.g. a birthday. The time of day
+/// and time zone are either specified elsewhere or are not significant. The date
+/// is relative to the Proleptic Gregorian Calendar. This can represent:
+/// 
+/// * A full date, with non-zero year, month and day values
+/// * A month and day value, with a zero year, e.g. an anniversary
+/// * A year on its own, with zero month and day values
+/// * A year and month value, with a zero day, e.g. a credit card expiration date
+/// 
+/// Related types are google.type.TimeOfDay and `google.protobuf.Timestamp`.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
@@ -1114,9 +1121,11 @@ pub struct Date {
     /// a year.
     pub year: Option<i32>,
     /// Day of month. Must be from 1 to 31 and valid for the year and month, or 0
-    /// if specifying a year/month where the day is not significant.
+    /// if specifying a year by itself or a year and month where the day is not
+    /// significant.
     pub day: Option<i32>,
-    /// Month of year. Must be from 1 to 12.
+    /// Month of year. Must be from 1 to 12, or 0 if specifying a year without a
+    /// month and day.
     pub month: Option<i32>,
 }
 
@@ -1757,10 +1766,8 @@ impl<'a, C, A> TransferOperationPauseCall<'a, C, A> where C: BorrowMut<hyper::Cl
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2042,10 +2049,8 @@ impl<'a, C, A> TransferOperationResumeCall<'a, C, A> where C: BorrowMut<hyper::C
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2295,10 +2300,8 @@ impl<'a, C, A> TransferOperationDeleteCall<'a, C, A> where C: BorrowMut<hyper::C
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2550,10 +2553,8 @@ impl<'a, C, A> TransferOperationGetCall<'a, C, A> where C: BorrowMut<hyper::Clie
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2848,10 +2849,8 @@ impl<'a, C, A> TransferOperationListCall<'a, C, A> where C: BorrowMut<hyper::Cli
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -3101,10 +3100,8 @@ impl<'a, C, A> TransferOperationCancelCall<'a, C, A> where C: BorrowMut<hyper::C
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -3359,10 +3356,8 @@ impl<'a, C, A> GoogleServiceAccountGetCall<'a, C, A> where C: BorrowMut<hyper::C
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -3618,10 +3613,8 @@ impl<'a, C, A> TransferJobListCall<'a, C, A> where C: BorrowMut<hyper::Client>, 
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -3865,10 +3858,8 @@ impl<'a, C, A> TransferJobCreateCall<'a, C, A> where C: BorrowMut<hyper::Client>
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -4132,10 +4123,8 @@ impl<'a, C, A> TransferJobGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, A
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -4419,10 +4408,8 @@ impl<'a, C, A> TransferJobPatchCall<'a, C, A> where C: BorrowMut<hyper::Client>,
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.

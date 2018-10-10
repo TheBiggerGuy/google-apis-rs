@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *Cloud Natural Language* crate version *1.0.7+20171204*, where *20171204* is the exact revision of the *language:v1beta1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *Cloud Natural Language* crate version *1.0.7+20180930*, where *20180930* is the exact revision of the *language:v1beta1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *Cloud Natural Language* *v1_beta1* API can be found at the
 //! [official documentation site](https://cloud.google.com/natural-language/).
@@ -369,39 +369,29 @@ impl<'a, C, A> CloudNaturalLanguage<C, A>
 // ############
 // SCHEMAS ###
 // ##########
-/// Represents part of speech information for a token.
+/// The sentiment analysis response message.
 /// 
-/// This type is not used in any activity, and only used as *part* of another schema.
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [analyze sentiment documents](struct.DocumentAnalyzeSentimentCall.html) (response)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct PartOfSpeech {
-    /// The grammatical case.
-    pub case: Option<String>,
-    /// The grammatical mood.
-    pub mood: Option<String>,
-    /// The grammatical form.
-    pub form: Option<String>,
-    /// The grammatical gender.
-    pub gender: Option<String>,
-    /// The grammatical aspect.
-    pub aspect: Option<String>,
-    /// The grammatical number.
-    pub number: Option<String>,
-    /// The grammatical person.
-    pub person: Option<String>,
-    /// The part of speech tag.
-    pub tag: Option<String>,
-    /// The grammatical tense.
-    pub tense: Option<String>,
-    /// The grammatical reciprocity.
-    pub reciprocity: Option<String>,
-    /// The grammatical properness.
-    pub proper: Option<String>,
-    /// The grammatical voice.
-    pub voice: Option<String>,
+pub struct AnalyzeSentimentResponse {
+    /// The overall sentiment of the input document.
+    #[serde(rename="documentSentiment")]
+    pub document_sentiment: Option<Sentiment>,
+    /// The language of the text, which will be the same as the language specified
+    /// in the request or, if not specified, the automatically-detected language.
+    /// See Document.language field for more details.
+    pub language: Option<String>,
+    /// The sentiment for all the sentences in the document.
+    pub sentences: Option<Vec<Sentence>>,
 }
 
-impl Part for PartOfSpeech {}
+impl ResponseResult for AnalyzeSentimentResponse {}
 
 
 /// Represents the feeling associated with the entire text or entities in
@@ -500,6 +490,7 @@ impl Part for Token {}
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Document {
     /// The content of the input in string format.
+    /// Cloud audit logging exempt since it is based on user data.
     pub content: Option<String>,
     /// Required. If the type is not set or is `TYPE_UNSPECIFIED`,
     /// returns an `INVALID_ARGUMENT` error.
@@ -564,10 +555,10 @@ pub struct AnnotateTextRequest {
     /// The encoding type used by the API to calculate offsets.
     #[serde(rename="encodingType")]
     pub encoding_type: Option<String>,
-    /// The enabled features.
-    pub features: Option<Features>,
     /// Input document.
     pub document: Option<Document>,
+    /// The enabled features.
+    pub features: Option<Features>,
 }
 
 impl RequestValue for AnnotateTextRequest {}
@@ -681,25 +672,21 @@ pub struct Entity {
 impl Part for Entity {}
 
 
-/// The syntax analysis request message.
+/// Represents a mention for an entity in the text. Currently, proper noun
+/// mentions are supported.
 /// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [analyze syntax documents](struct.DocumentAnalyzeSyntaxCall.html) (request)
+/// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct AnalyzeSyntaxRequest {
-    /// The encoding type used by the API to calculate offsets.
-    #[serde(rename="encodingType")]
-    pub encoding_type: Option<String>,
-    /// Input document.
-    pub document: Option<Document>,
+pub struct EntityMention {
+    /// The mention text.
+    pub text: Option<TextSpan>,
+    /// The type of the entity mention.
+    #[serde(rename="type")]
+    pub type_: Option<String>,
 }
 
-impl RequestValue for AnalyzeSyntaxRequest {}
+impl Part for EntityMention {}
 
 
 /// The sentiment analysis request message.
@@ -724,46 +711,60 @@ pub struct AnalyzeSentimentRequest {
 impl RequestValue for AnalyzeSentimentRequest {}
 
 
-/// The sentiment analysis response message.
+/// Represents part of speech information for a token.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct PartOfSpeech {
+    /// The grammatical case.
+    pub case: Option<String>,
+    /// The grammatical mood.
+    pub mood: Option<String>,
+    /// The grammatical form.
+    pub form: Option<String>,
+    /// The grammatical gender.
+    pub gender: Option<String>,
+    /// The grammatical aspect.
+    pub aspect: Option<String>,
+    /// The grammatical number.
+    pub number: Option<String>,
+    /// The grammatical person.
+    pub person: Option<String>,
+    /// The part of speech tag.
+    pub tag: Option<String>,
+    /// The grammatical tense.
+    pub tense: Option<String>,
+    /// The grammatical reciprocity.
+    pub reciprocity: Option<String>,
+    /// The grammatical properness.
+    pub proper: Option<String>,
+    /// The grammatical voice.
+    pub voice: Option<String>,
+}
+
+impl Part for PartOfSpeech {}
+
+
+/// The syntax analysis request message.
 /// 
 /// # Activities
 /// 
 /// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
 /// The list links the activity name, along with information about where it is used (one of *request* and *response*).
 /// 
-/// * [analyze sentiment documents](struct.DocumentAnalyzeSentimentCall.html) (response)
+/// * [analyze syntax documents](struct.DocumentAnalyzeSyntaxCall.html) (request)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct AnalyzeSentimentResponse {
-    /// The overall sentiment of the input document.
-    #[serde(rename="documentSentiment")]
-    pub document_sentiment: Option<Sentiment>,
-    /// The language of the text, which will be the same as the language specified
-    /// in the request or, if not specified, the automatically-detected language.
-    /// See Document.language field for more details.
-    pub language: Option<String>,
-    /// The sentiment for all the sentences in the document.
-    pub sentences: Option<Vec<Sentence>>,
+pub struct AnalyzeSyntaxRequest {
+    /// The encoding type used by the API to calculate offsets.
+    #[serde(rename="encodingType")]
+    pub encoding_type: Option<String>,
+    /// Input document.
+    pub document: Option<Document>,
 }
 
-impl ResponseResult for AnalyzeSentimentResponse {}
-
-
-/// Represents a mention for an entity in the text. Currently, proper noun
-/// mentions are supported.
-/// 
-/// This type is not used in any activity, and only used as *part* of another schema.
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct EntityMention {
-    /// The mention text.
-    pub text: Option<TextSpan>,
-    /// The type of the entity mention.
-    #[serde(rename="type")]
-    pub type_: Option<String>,
-}
-
-impl Part for EntityMention {}
+impl RequestValue for AnalyzeSyntaxRequest {}
 
 
 /// The entity analysis response message.
@@ -1139,10 +1140,8 @@ impl<'a, C, A> DocumentAnalyzeSyntaxCall<'a, C, A> where C: BorrowMut<hyper::Cli
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -1388,10 +1387,8 @@ impl<'a, C, A> DocumentAnalyzeEntityCall<'a, C, A> where C: BorrowMut<hyper::Cli
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -1635,10 +1632,8 @@ impl<'a, C, A> DocumentAnalyzeSentimentCall<'a, C, A> where C: BorrowMut<hyper::
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -1883,10 +1878,8 @@ impl<'a, C, A> DocumentAnnotateTextCall<'a, C, A> where C: BorrowMut<hyper::Clie
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.

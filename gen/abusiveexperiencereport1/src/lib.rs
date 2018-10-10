@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *Abusive Experience Report* crate version *1.0.7+20171129*, where *20171129* is the exact revision of the *abusiveexperiencereport:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *Abusive Experience Report* crate version *1.0.7+20180904*, where *20180904* is the exact revision of the *abusiveexperiencereport:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *Abusive Experience Report* *v1* API can be found at the
 //! [official documentation site](https://developers.google.com/abusive-experience-report/).
@@ -356,6 +356,7 @@ impl<'a, C, A> AbusiveExperienceReport<C, A>
 // SCHEMAS ###
 // ##########
 /// Response message for GetSiteSummary.
+/// Do not confuse with same message in google.ads.experiencereport.v1
 /// 
 /// # Activities
 /// 
@@ -378,15 +379,15 @@ pub struct SiteSummaryResponse {
     /// The name of the site reviewed.
     #[serde(rename="reviewedSite")]
     pub reviewed_site: Option<String>,
-    /// A link that leads to a full abusive experience report.
-    #[serde(rename="reportUrl")]
-    pub report_url: Option<String>,
-    /// The status of the site reviewed for the abusive experiences.
-    #[serde(rename="abusiveStatus")]
-    pub abusive_status: Option<String>,
     /// The abusive experience enforcement status of the site.
     #[serde(rename="filterStatus")]
     pub filter_status: Option<String>,
+    /// The status of the site reviewed for the abusive experiences.
+    #[serde(rename="abusiveStatus")]
+    pub abusive_status: Option<String>,
+    /// A link that leads to a full abusive experience report.
+    #[serde(rename="reportUrl")]
+    pub report_url: Option<String>,
 }
 
 impl ResponseResult for SiteSummaryResponse {}
@@ -757,17 +758,15 @@ impl<'a, C, A> SiteGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oauth
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> SiteGetCall<'a, C, A>
@@ -973,17 +972,15 @@ impl<'a, C, A> ViolatingSiteListCall<'a, C, A> where C: BorrowMut<hyper::Client>
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ViolatingSiteListCall<'a, C, A>

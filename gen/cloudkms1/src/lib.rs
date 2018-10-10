@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *Cloud KMS* crate version *1.0.7+20171201*, where *20171201* is the exact revision of the *cloudkms:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *Cloud KMS* crate version *1.0.7+20180928*, where *20180928* is the exact revision of the *cloudkms:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *Cloud KMS* *v1* API can be found at the
 //! [official documentation site](https://cloud.google.com/kms/).
@@ -12,7 +12,7 @@
 //! Handle the following *Resources* with ease from the central [hub](struct.CloudKMS.html) ... 
 //! 
 //! * projects
-//!  * [*locations get*](struct.ProjectLocationGetCall.html), [*locations key rings create*](struct.ProjectLocationKeyRingCreateCall.html), [*locations key rings crypto keys create*](struct.ProjectLocationKeyRingCryptoKeyCreateCall.html), [*locations key rings crypto keys crypto key versions create*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionCreateCall.html), [*locations key rings crypto keys crypto key versions destroy*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionDestroyCall.html), [*locations key rings crypto keys crypto key versions get*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetCall.html), [*locations key rings crypto keys crypto key versions list*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionListCall.html), [*locations key rings crypto keys crypto key versions patch*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionPatchCall.html), [*locations key rings crypto keys crypto key versions restore*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionRestoreCall.html), [*locations key rings crypto keys decrypt*](struct.ProjectLocationKeyRingCryptoKeyDecryptCall.html), [*locations key rings crypto keys encrypt*](struct.ProjectLocationKeyRingCryptoKeyEncryptCall.html), [*locations key rings crypto keys get*](struct.ProjectLocationKeyRingCryptoKeyGetCall.html), [*locations key rings crypto keys get iam policy*](struct.ProjectLocationKeyRingCryptoKeyGetIamPolicyCall.html), [*locations key rings crypto keys list*](struct.ProjectLocationKeyRingCryptoKeyListCall.html), [*locations key rings crypto keys patch*](struct.ProjectLocationKeyRingCryptoKeyPatchCall.html), [*locations key rings crypto keys set iam policy*](struct.ProjectLocationKeyRingCryptoKeySetIamPolicyCall.html), [*locations key rings crypto keys test iam permissions*](struct.ProjectLocationKeyRingCryptoKeyTestIamPermissionCall.html), [*locations key rings crypto keys update primary version*](struct.ProjectLocationKeyRingCryptoKeyUpdatePrimaryVersionCall.html), [*locations key rings get*](struct.ProjectLocationKeyRingGetCall.html), [*locations key rings get iam policy*](struct.ProjectLocationKeyRingGetIamPolicyCall.html), [*locations key rings list*](struct.ProjectLocationKeyRingListCall.html), [*locations key rings set iam policy*](struct.ProjectLocationKeyRingSetIamPolicyCall.html), [*locations key rings test iam permissions*](struct.ProjectLocationKeyRingTestIamPermissionCall.html) and [*locations list*](struct.ProjectLocationListCall.html)
+//!  * [*locations get*](struct.ProjectLocationGetCall.html), [*locations key rings create*](struct.ProjectLocationKeyRingCreateCall.html), [*locations key rings crypto keys create*](struct.ProjectLocationKeyRingCryptoKeyCreateCall.html), [*locations key rings crypto keys crypto key versions asymmetric decrypt*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall.html), [*locations key rings crypto keys crypto key versions asymmetric sign*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall.html), [*locations key rings crypto keys crypto key versions create*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionCreateCall.html), [*locations key rings crypto keys crypto key versions destroy*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionDestroyCall.html), [*locations key rings crypto keys crypto key versions get*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetCall.html), [*locations key rings crypto keys crypto key versions get public key*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetPublicKeyCall.html), [*locations key rings crypto keys crypto key versions list*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionListCall.html), [*locations key rings crypto keys crypto key versions patch*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionPatchCall.html), [*locations key rings crypto keys crypto key versions restore*](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionRestoreCall.html), [*locations key rings crypto keys decrypt*](struct.ProjectLocationKeyRingCryptoKeyDecryptCall.html), [*locations key rings crypto keys encrypt*](struct.ProjectLocationKeyRingCryptoKeyEncryptCall.html), [*locations key rings crypto keys get*](struct.ProjectLocationKeyRingCryptoKeyGetCall.html), [*locations key rings crypto keys get iam policy*](struct.ProjectLocationKeyRingCryptoKeyGetIamPolicyCall.html), [*locations key rings crypto keys list*](struct.ProjectLocationKeyRingCryptoKeyListCall.html), [*locations key rings crypto keys patch*](struct.ProjectLocationKeyRingCryptoKeyPatchCall.html), [*locations key rings crypto keys set iam policy*](struct.ProjectLocationKeyRingCryptoKeySetIamPolicyCall.html), [*locations key rings crypto keys test iam permissions*](struct.ProjectLocationKeyRingCryptoKeyTestIamPermissionCall.html), [*locations key rings crypto keys update primary version*](struct.ProjectLocationKeyRingCryptoKeyUpdatePrimaryVersionCall.html), [*locations key rings get*](struct.ProjectLocationKeyRingGetCall.html), [*locations key rings get iam policy*](struct.ProjectLocationKeyRingGetIamPolicyCall.html), [*locations key rings list*](struct.ProjectLocationKeyRingListCall.html), [*locations key rings set iam policy*](struct.ProjectLocationKeyRingSetIamPolicyCall.html), [*locations key rings test iam permissions*](struct.ProjectLocationKeyRingTestIamPermissionCall.html) and [*locations list*](struct.ProjectLocationListCall.html)
 //! 
 //! 
 //! 
@@ -394,86 +394,22 @@ pub struct ListCryptoKeysResponse {
 impl ResponseResult for ListCryptoKeysResponse {}
 
 
-/// Provides the configuration for logging a type of permissions.
-/// Example:
-/// 
-///     {
-///       "audit_log_configs": [
-///         {
-///           "log_type": "DATA_READ",
-///           "exempted_members": [
-///             "user:foo@gmail.com"
-///           ]
-///         },
-///         {
-///           "log_type": "DATA_WRITE",
-///         }
-///       ]
-///     }
-/// 
-/// This enables 'DATA_READ' and 'DATA_WRITE' logging, while exempting
-/// foo@gmail.com from DATA_READ logging.
-/// 
-/// This type is not used in any activity, and only used as *part* of another schema.
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct AuditLogConfig {
-    /// Specifies the identities that do not cause logging for this type of
-    /// permission.
-    /// Follows the same format of Binding.members.
-    #[serde(rename="exemptedMembers")]
-    pub exempted_members: Option<Vec<String>>,
-    /// The log type that this config enables.
-    #[serde(rename="logType")]
-    pub log_type: Option<String>,
-}
-
-impl Part for AuditLogConfig {}
-
-
-/// Request message for KeyManagementService.Encrypt.
+/// Response message for KeyManagementService.AsymmetricSign.
 /// 
 /// # Activities
 /// 
 /// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
 /// The list links the activity name, along with information about where it is used (one of *request* and *response*).
 /// 
-/// * [locations key rings crypto keys encrypt projects](struct.ProjectLocationKeyRingCryptoKeyEncryptCall.html) (request)
+/// * [locations key rings crypto keys crypto key versions asymmetric sign projects](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall.html) (response)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct EncryptRequest {
-    /// Required. The data to encrypt. Must be no larger than 64KiB.
-    pub plaintext: Option<String>,
-    /// Optional data that, if specified, must also be provided during decryption
-    /// through DecryptRequest.additional_authenticated_data.  Must be no
-    /// larger than 64KiB.
-    #[serde(rename="additionalAuthenticatedData")]
-    pub additional_authenticated_data: Option<String>,
+pub struct AsymmetricSignResponse {
+    /// The created signature.
+    pub signature: Option<String>,
 }
 
-impl RequestValue for EncryptRequest {}
-
-
-/// Request message for `TestIamPermissions` method.
-/// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [locations key rings test iam permissions projects](struct.ProjectLocationKeyRingTestIamPermissionCall.html) (request)
-/// * [locations key rings crypto keys test iam permissions projects](struct.ProjectLocationKeyRingCryptoKeyTestIamPermissionCall.html) (request)
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct TestIamPermissionsRequest {
-    /// The set of permissions to check for the `resource`. Permissions with
-    /// wildcards (such as '*' or 'storage.*') are not allowed. For more
-    /// information see
-    /// [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
-    pub permissions: Option<Vec<String>>,
-}
-
-impl RequestValue for TestIamPermissionsRequest {}
+impl ResponseResult for AsymmetricSignResponse {}
 
 
 /// Request message for `SetIamPolicy` method.
@@ -505,41 +441,39 @@ pub struct SetIamPolicyRequest {
 impl RequestValue for SetIamPolicyRequest {}
 
 
-/// A KeyRing is a toplevel logical grouping of CryptoKeys.
+/// Request message for KeyManagementService.Decrypt.
 /// 
 /// # Activities
 /// 
 /// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
 /// The list links the activity name, along with information about where it is used (one of *request* and *response*).
 /// 
-/// * [locations key rings create projects](struct.ProjectLocationKeyRingCreateCall.html) (request|response)
-/// * [locations key rings get projects](struct.ProjectLocationKeyRingGetCall.html) (response)
+/// * [locations key rings crypto keys decrypt projects](struct.ProjectLocationKeyRingCryptoKeyDecryptCall.html) (request)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct KeyRing {
-    /// Output only. The resource name for the KeyRing in the format
-    /// `projects/*/locations/*/keyRings/*`.
-    pub name: Option<String>,
-    /// Output only. The time at which this KeyRing was created.
-    #[serde(rename="createTime")]
-    pub create_time: Option<String>,
+pub struct DecryptRequest {
+    /// Required. The encrypted data originally returned in
+    /// EncryptResponse.ciphertext.
+    pub ciphertext: Option<String>,
+    /// Optional data that must match the data originally supplied in
+    /// EncryptRequest.additional_authenticated_data.
+    #[serde(rename="additionalAuthenticatedData")]
+    pub additional_authenticated_data: Option<String>,
 }
 
-impl RequestValue for KeyRing {}
-impl ResponseResult for KeyRing {}
+impl RequestValue for DecryptRequest {}
 
 
 /// A CryptoKeyVersion represents an individual cryptographic key, and the
 /// associated key material.
 /// 
-/// It can be used for cryptographic operations either directly, or via its
-/// parent CryptoKey, in which case the server will choose the appropriate
-/// version for the operation.
+/// An ENABLED version can be
+/// used for cryptographic operations.
 /// 
 /// For security reasons, the raw cryptographic key material represented by a
 /// CryptoKeyVersion can never be viewed or exported. It can only be used to
-/// encrypt or decrypt data when an authorized user or application invokes Cloud
-/// KMS.
+/// encrypt, decrypt, or sign data when an authorized user or application invokes
+/// Cloud KMS.
 /// 
 /// # Activities
 /// 
@@ -554,24 +488,40 @@ impl ResponseResult for KeyRing {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct CryptoKeyVersion {
-    /// The current state of the CryptoKeyVersion.
-    pub state: Option<String>,
-    /// Output only. The time at which this CryptoKeyVersion was created.
-    #[serde(rename="createTime")]
-    pub create_time: Option<String>,
-    /// Output only. The resource name for this CryptoKeyVersion in the format
-    /// `projects/*/locations/*/keyRings/*/cryptoKeys/*/cryptoKeyVersions/*`.
-    pub name: Option<String>,
     /// Output only. The time this CryptoKeyVersion's key material is scheduled
     /// for destruction. Only present if state is
     /// DESTROY_SCHEDULED.
     #[serde(rename="destroyTime")]
     pub destroy_time: Option<String>,
+    /// Output only. The resource name for this CryptoKeyVersion in the format
+    /// `projects/*/locations/*/keyRings/*/cryptoKeys/*/cryptoKeyVersions/*`.
+    pub name: Option<String>,
+    /// Output only. The CryptoKeyVersionAlgorithm that this
+    /// CryptoKeyVersion supports.
+    pub algorithm: Option<String>,
+    /// Output only. The ProtectionLevel describing how crypto operations are
+    /// performed with this CryptoKeyVersion.
+    #[serde(rename="protectionLevel")]
+    pub protection_level: Option<String>,
+    /// Output only. Statement that was generated and signed by the HSM at key
+    /// creation time. Use this statement to verify attributes of the key as stored
+    /// on the HSM, independently of Google. Only provided for key versions with
+    /// protection_level HSM.
+    pub attestation: Option<KeyOperationAttestation>,
+    /// The current state of the CryptoKeyVersion.
+    pub state: Option<String>,
     /// Output only. The time this CryptoKeyVersion's key material was
     /// destroyed. Only present if state is
     /// DESTROYED.
     #[serde(rename="destroyEventTime")]
     pub destroy_event_time: Option<String>,
+    /// Output only. The time this CryptoKeyVersion's key material was
+    /// generated.
+    #[serde(rename="generateTime")]
+    pub generate_time: Option<String>,
+    /// Output only. The time at which this CryptoKeyVersion was created.
+    #[serde(rename="createTime")]
+    pub create_time: Option<String>,
 }
 
 impl RequestValue for CryptoKeyVersion {}
@@ -636,13 +586,17 @@ impl ResponseResult for ListLocationsResponse {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Location {
+    /// The canonical id for this location. For example: `"us-east1"`.
+    #[serde(rename="locationId")]
+    pub location_id: Option<String>,
     /// Cross-service attributes for the location. For example
     /// 
     ///     {"cloud.googleapis.com/region": "us-east1"}
     pub labels: Option<HashMap<String, String>>,
-    /// The canonical id for this location. For example: `"us-east1"`.
-    #[serde(rename="locationId")]
-    pub location_id: Option<String>,
+    /// The friendly name for this location, typically a nearby city name.
+    /// For example, "Tokyo".
+    #[serde(rename="displayName")]
+    pub display_name: Option<String>,
     /// Resource name for the location, which may vary between implementations.
     /// For example: `"projects/example-project/locations/us-east1"`
     pub name: Option<String>,
@@ -658,12 +612,12 @@ impl ResponseResult for Location {}
 /// specify access control policies for Cloud Platform resources.
 /// 
 /// 
-/// A `Policy` consists of a list of `bindings`. A `Binding` binds a list of
+/// A `Policy` consists of a list of `bindings`. A `binding` binds a list of
 /// `members` to a `role`, where the members can be user accounts, Google groups,
 /// Google domains, and service accounts. A `role` is a named list of permissions
 /// defined by IAM.
 /// 
-/// **Example**
+/// **JSON Example**
 /// 
 ///     {
 ///       "bindings": [
@@ -673,7 +627,7 @@ impl ResponseResult for Location {}
 ///             "user:mike@example.com",
 ///             "group:admins@example.com",
 ///             "domain:google.com",
-///             "serviceAccount:my-other-app@appspot.gserviceaccount.com",
+///             "serviceAccount:my-other-app@appspot.gserviceaccount.com"
 ///           ]
 ///         },
 ///         {
@@ -683,8 +637,22 @@ impl ResponseResult for Location {}
 ///       ]
 ///     }
 /// 
+/// **YAML Example**
+/// 
+///     bindings:
+///     - members:
+///       - user:mike@example.com
+///       - group:admins@example.com
+///       - domain:google.com
+///       - serviceAccount:my-other-app@appspot.gserviceaccount.com
+///       role: roles/owner
+///     - members:
+///       - user:sean@example.com
+///       role: roles/viewer
+/// 
+/// 
 /// For a description of IAM and its features, see the
-/// [IAM developer's guide](https://cloud.google.com/iam).
+/// [IAM developer's guide](https://cloud.google.com/iam/docs).
 /// 
 /// # Activities
 /// 
@@ -698,9 +666,9 @@ impl ResponseResult for Location {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Policy {
-    /// Associates a list of `members` to a `role`.
-    /// `bindings` with no members will result in an error.
-    pub bindings: Option<Vec<Binding>>,
+    /// Specifies cloud audit logging configuration for this policy.
+    #[serde(rename="auditConfigs")]
+    pub audit_configs: Option<Vec<AuditConfig>>,
     /// `etag` is used for optimistic concurrency control as a way to help
     /// prevent simultaneous updates of a policy from overwriting each other.
     /// It is strongly suggested that systems make use of the `etag` in the
@@ -712,35 +680,33 @@ pub struct Policy {
     /// If no `etag` is provided in the call to `setIamPolicy`, then the existing
     /// policy is overwritten blindly.
     pub etag: Option<String>,
-    /// Version of the `Policy`. The default version is 0.
+    /// Associates a list of `members` to a `role`.
+    /// `bindings` with no members will result in an error.
+    pub bindings: Option<Vec<Binding>>,
+    /// Deprecated.
     pub version: Option<i32>,
-    /// no description provided
-    #[serde(rename="iamOwned")]
-    pub iam_owned: Option<bool>,
-    /// Specifies cloud audit logging configuration for this policy.
-    #[serde(rename="auditConfigs")]
-    pub audit_configs: Option<Vec<AuditConfig>>,
 }
 
 impl ResponseResult for Policy {}
 
 
-/// Response message for KeyManagementService.Decrypt.
+/// Request message for KeyManagementService.AsymmetricDecrypt.
 /// 
 /// # Activities
 /// 
 /// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
 /// The list links the activity name, along with information about where it is used (one of *request* and *response*).
 /// 
-/// * [locations key rings crypto keys decrypt projects](struct.ProjectLocationKeyRingCryptoKeyDecryptCall.html) (response)
+/// * [locations key rings crypto keys crypto key versions asymmetric decrypt projects](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall.html) (request)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct DecryptResponse {
-    /// The decrypted data originally supplied in EncryptRequest.plaintext.
-    pub plaintext: Option<String>,
+pub struct AsymmetricDecryptRequest {
+    /// Required. The data encrypted with the named CryptoKeyVersion's public
+    /// key using OAEP.
+    pub ciphertext: Option<String>,
 }
 
-impl ResponseResult for DecryptResponse {}
+impl RequestValue for AsymmetricDecryptRequest {}
 
 
 /// Response message for KeyManagementService.ListCryptoKeyVersions.
@@ -771,64 +737,22 @@ pub struct ListCryptoKeyVersionsResponse {
 impl ResponseResult for ListCryptoKeyVersionsResponse {}
 
 
-/// A CryptoKey represents a logical key that can be used for cryptographic
-/// operations.
-/// 
-/// A CryptoKey is made up of one or more versions, which
-/// represent the actual key material used in cryptographic operations.
+/// Response message for KeyManagementService.Decrypt.
 /// 
 /// # Activities
 /// 
 /// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
 /// The list links the activity name, along with information about where it is used (one of *request* and *response*).
 /// 
-/// * [locations key rings crypto keys get projects](struct.ProjectLocationKeyRingCryptoKeyGetCall.html) (response)
-/// * [locations key rings crypto keys update primary version projects](struct.ProjectLocationKeyRingCryptoKeyUpdatePrimaryVersionCall.html) (response)
-/// * [locations key rings crypto keys create projects](struct.ProjectLocationKeyRingCryptoKeyCreateCall.html) (request|response)
-/// * [locations key rings crypto keys patch projects](struct.ProjectLocationKeyRingCryptoKeyPatchCall.html) (request|response)
+/// * [locations key rings crypto keys decrypt projects](struct.ProjectLocationKeyRingCryptoKeyDecryptCall.html) (response)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct CryptoKey {
-    /// Labels with user-defined metadata. For more information, see
-    /// [Labeling Keys](/kms/docs/labeling-keys).
-    pub labels: Option<HashMap<String, String>>,
-    /// Output only. The resource name for this CryptoKey in the format
-    /// `projects/*/locations/*/keyRings/*/cryptoKeys/*`.
-    pub name: Option<String>,
-    /// At next_rotation_time, the Key Management Service will automatically:
-    /// 
-    /// 1. Create a new version of this CryptoKey.
-    /// 2. Mark the new version as primary.
-    /// 
-    /// Key rotations performed manually via
-    /// CreateCryptoKeyVersion and
-    /// UpdateCryptoKeyPrimaryVersion
-    /// do not affect next_rotation_time.
-    #[serde(rename="nextRotationTime")]
-    pub next_rotation_time: Option<String>,
-    /// next_rotation_time will be advanced by this period when the service
-    /// automatically rotates a key. Must be at least one day.
-    /// 
-    /// If rotation_period is set, next_rotation_time must also be set.
-    #[serde(rename="rotationPeriod")]
-    pub rotation_period: Option<String>,
-    /// Output only. A copy of the "primary" CryptoKeyVersion that will be used
-    /// by Encrypt when this CryptoKey is given
-    /// in EncryptRequest.name.
-    /// 
-    /// The CryptoKey's primary version can be updated via
-    /// UpdateCryptoKeyPrimaryVersion.
-    pub primary: Option<CryptoKeyVersion>,
-    /// Output only. The time at which this CryptoKey was created.
-    #[serde(rename="createTime")]
-    pub create_time: Option<String>,
-    /// The immutable purpose of this CryptoKey. Currently, the only acceptable
-    /// purpose is ENCRYPT_DECRYPT.
-    pub purpose: Option<String>,
+pub struct DecryptResponse {
+    /// The decrypted data originally supplied in EncryptRequest.plaintext.
+    pub plaintext: Option<String>,
 }
 
-impl RequestValue for CryptoKey {}
-impl ResponseResult for CryptoKey {}
+impl ResponseResult for DecryptResponse {}
 
 
 /// Response message for `TestIamPermissions` method.
@@ -866,24 +790,42 @@ pub struct RestoreCryptoKeyVersionRequest { _never_set: Option<bool> }
 impl RequestValue for RestoreCryptoKeyVersionRequest {}
 
 
-/// Response message for KeyManagementService.Encrypt.
+/// Request message for KeyManagementService.AsymmetricSign.
 /// 
 /// # Activities
 /// 
 /// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
 /// The list links the activity name, along with information about where it is used (one of *request* and *response*).
 /// 
-/// * [locations key rings crypto keys encrypt projects](struct.ProjectLocationKeyRingCryptoKeyEncryptCall.html) (response)
+/// * [locations key rings crypto keys crypto key versions asymmetric sign projects](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall.html) (request)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct EncryptResponse {
-    /// The encrypted data.
-    pub ciphertext: Option<String>,
-    /// The resource name of the CryptoKeyVersion used in encryption.
-    pub name: Option<String>,
+pub struct AsymmetricSignRequest {
+    /// Required. The digest of the data to sign. The digest must be produced with
+    /// the same digest algorithm as specified by the key version's
+    /// algorithm.
+    pub digest: Option<Digest>,
 }
 
-impl ResponseResult for EncryptResponse {}
+impl RequestValue for AsymmetricSignRequest {}
+
+
+/// Response message for KeyManagementService.AsymmetricDecrypt.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [locations key rings crypto keys crypto key versions asymmetric decrypt projects](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall.html) (response)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct AsymmetricDecryptResponse {
+    /// The decrypted data originally encrypted with the matching public key.
+    pub plaintext: Option<String>,
+}
+
+impl ResponseResult for AsymmetricDecryptResponse {}
 
 
 /// Request message for KeyManagementService.DestroyCryptoKeyVersion.
@@ -901,50 +843,28 @@ pub struct DestroyCryptoKeyVersionRequest { _never_set: Option<bool> }
 impl RequestValue for DestroyCryptoKeyVersionRequest {}
 
 
-/// Associates `members` with a `role`.
+/// A KeyRing is a toplevel logical grouping of CryptoKeys.
 /// 
-/// This type is not used in any activity, and only used as *part* of another schema.
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [locations key rings create projects](struct.ProjectLocationKeyRingCreateCall.html) (request|response)
+/// * [locations key rings get projects](struct.ProjectLocationKeyRingGetCall.html) (response)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Binding {
-    /// Role that is assigned to `members`.
-    /// For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
-    /// Required
-    pub role: Option<String>,
-    /// The condition that is associated with this binding.
-    /// NOTE: an unsatisfied condition will not allow user access via current
-    /// binding. Different bindings, including their conditions, are examined
-    /// independently.
-    /// This field is GOOGLE_INTERNAL.
-    pub condition: Option<Expr>,
-    /// Specifies the identities requesting access for a Cloud Platform resource.
-    /// `members` can have the following values:
-    /// 
-    /// * `allUsers`: A special identifier that represents anyone who is
-    ///    on the internet; with or without a Google account.
-    /// 
-    /// * `allAuthenticatedUsers`: A special identifier that represents anyone
-    ///    who is authenticated with a Google account or a service account.
-    /// 
-    /// * `user:{emailid}`: An email address that represents a specific Google
-    ///    account. For example, `alice@gmail.com` or `joe@example.com`.
-    /// 
-    /// 
-    /// * `serviceAccount:{emailid}`: An email address that represents a service
-    ///    account. For example, `my-other-app@appspot.gserviceaccount.com`.
-    /// 
-    /// * `group:{emailid}`: An email address that represents a Google group.
-    ///    For example, `admins@example.com`.
-    /// 
-    /// 
-    /// * `domain:{domain}`: A Google Apps domain name that represents all the
-    ///    users of that domain. For example, `google.com` or `example.com`.
-    /// 
-    /// 
-    pub members: Option<Vec<String>>,
+pub struct KeyRing {
+    /// Output only. The time at which this KeyRing was created.
+    #[serde(rename="createTime")]
+    pub create_time: Option<String>,
+    /// Output only. The resource name for the KeyRing in the format
+    /// `projects/*/locations/*/keyRings/*`.
+    pub name: Option<String>,
 }
 
-impl Part for Binding {}
+impl RequestValue for KeyRing {}
+impl ResponseResult for KeyRing {}
 
 
 /// Request message for KeyManagementService.UpdateCryptoKeyPrimaryVersion.
@@ -966,27 +886,201 @@ pub struct UpdateCryptoKeyPrimaryVersionRequest {
 impl RequestValue for UpdateCryptoKeyPrimaryVersionRequest {}
 
 
-/// Request message for KeyManagementService.Decrypt.
+/// Provides the configuration for logging a type of permissions.
+/// Example:
+/// 
+///     {
+///       "audit_log_configs": [
+///         {
+///           "log_type": "DATA_READ",
+///           "exempted_members": [
+///             "user:foo@gmail.com"
+///           ]
+///         },
+///         {
+///           "log_type": "DATA_WRITE",
+///         }
+///       ]
+///     }
+/// 
+/// This enables 'DATA_READ' and 'DATA_WRITE' logging, while exempting
+/// foo@gmail.com from DATA_READ logging.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct AuditLogConfig {
+    /// Specifies the identities that do not cause logging for this type of
+    /// permission.
+    /// Follows the same format of Binding.members.
+    #[serde(rename="exemptedMembers")]
+    pub exempted_members: Option<Vec<String>>,
+    /// The log type that this config enables.
+    #[serde(rename="logType")]
+    pub log_type: Option<String>,
+}
+
+impl Part for AuditLogConfig {}
+
+
+/// A CryptoKeyVersionTemplate specifies the properties to use when creating
+/// a new CryptoKeyVersion, either manually with
+/// CreateCryptoKeyVersion or
+/// automatically as a result of auto-rotation.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct CryptoKeyVersionTemplate {
+    /// Required. Algorithm to use
+    /// when creating a CryptoKeyVersion based on this template.
+    /// 
+    /// For backwards compatibility, GOOGLE_SYMMETRIC_ENCRYPTION is implied if both
+    /// this field is omitted and CryptoKey.purpose is
+    /// ENCRYPT_DECRYPT.
+    pub algorithm: Option<String>,
+    /// ProtectionLevel to use when creating a CryptoKeyVersion based on
+    /// this template. Immutable. Defaults to SOFTWARE.
+    #[serde(rename="protectionLevel")]
+    pub protection_level: Option<String>,
+}
+
+impl Part for CryptoKeyVersionTemplate {}
+
+
+/// Request message for KeyManagementService.Encrypt.
 /// 
 /// # Activities
 /// 
 /// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
 /// The list links the activity name, along with information about where it is used (one of *request* and *response*).
 /// 
-/// * [locations key rings crypto keys decrypt projects](struct.ProjectLocationKeyRingCryptoKeyDecryptCall.html) (request)
+/// * [locations key rings crypto keys encrypt projects](struct.ProjectLocationKeyRingCryptoKeyEncryptCall.html) (request)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct DecryptRequest {
-    /// Required. The encrypted data originally returned in
-    /// EncryptResponse.ciphertext.
-    pub ciphertext: Option<String>,
-    /// Optional data that must match the data originally supplied in
-    /// EncryptRequest.additional_authenticated_data.
+pub struct EncryptRequest {
+    /// Required. The data to encrypt. Must be no larger than 64KiB.
+    /// 
+    /// The maximum size depends on the key version's
+    /// protection_level. For
+    /// SOFTWARE keys, the plaintext must be no larger
+    /// than 64KiB. For HSM keys, the combined length of the
+    /// plaintext and additional_authenticated_data fields must be no larger than
+    /// 8KiB.
+    pub plaintext: Option<String>,
+    /// Optional data that, if specified, must also be provided during decryption
+    /// through DecryptRequest.additional_authenticated_data.
+    /// 
+    /// The maximum size depends on the key version's
+    /// protection_level. For
+    /// SOFTWARE keys, the AAD must be no larger than
+    /// 64KiB. For HSM keys, the combined length of the
+    /// plaintext and additional_authenticated_data fields must be no larger than
+    /// 8KiB.
     #[serde(rename="additionalAuthenticatedData")]
     pub additional_authenticated_data: Option<String>,
 }
 
-impl RequestValue for DecryptRequest {}
+impl RequestValue for EncryptRequest {}
+
+
+/// Request message for `TestIamPermissions` method.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [locations key rings test iam permissions projects](struct.ProjectLocationKeyRingTestIamPermissionCall.html) (request)
+/// * [locations key rings crypto keys test iam permissions projects](struct.ProjectLocationKeyRingCryptoKeyTestIamPermissionCall.html) (request)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct TestIamPermissionsRequest {
+    /// The set of permissions to check for the `resource`. Permissions with
+    /// wildcards (such as '*' or 'storage.*') are not allowed. For more
+    /// information see
+    /// [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
+    pub permissions: Option<Vec<String>>,
+}
+
+impl RequestValue for TestIamPermissionsRequest {}
+
+
+/// A CryptoKey represents a logical key that can be used for cryptographic
+/// operations.
+/// 
+/// A CryptoKey is made up of one or more versions, which
+/// represent the actual key material used in cryptographic operations.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [locations key rings crypto keys get projects](struct.ProjectLocationKeyRingCryptoKeyGetCall.html) (response)
+/// * [locations key rings crypto keys update primary version projects](struct.ProjectLocationKeyRingCryptoKeyUpdatePrimaryVersionCall.html) (response)
+/// * [locations key rings crypto keys create projects](struct.ProjectLocationKeyRingCryptoKeyCreateCall.html) (request|response)
+/// * [locations key rings crypto keys patch projects](struct.ProjectLocationKeyRingCryptoKeyPatchCall.html) (request|response)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct CryptoKey {
+    /// Labels with user-defined metadata. For more information, see
+    /// [Labeling Keys](/kms/docs/labeling-keys).
+    pub labels: Option<HashMap<String, String>>,
+    /// Output only. The resource name for this CryptoKey in the format
+    /// `projects/*/locations/*/keyRings/*/cryptoKeys/*`.
+    pub name: Option<String>,
+    /// next_rotation_time will be advanced by this period when the service
+    /// automatically rotates a key. Must be at least one day.
+    /// 
+    /// If rotation_period is set, next_rotation_time must also be set.
+    /// 
+    /// Keys with purpose
+    /// ENCRYPT_DECRYPT support
+    /// automatic rotation. For other keys, this field must be omitted.
+    #[serde(rename="rotationPeriod")]
+    pub rotation_period: Option<String>,
+    /// Output only. A copy of the "primary" CryptoKeyVersion that will be used
+    /// by Encrypt when this CryptoKey is given
+    /// in EncryptRequest.name.
+    /// 
+    /// The CryptoKey's primary version can be updated via
+    /// UpdateCryptoKeyPrimaryVersion.
+    /// 
+    /// All keys with purpose
+    /// ENCRYPT_DECRYPT have a
+    /// primary. For other keys, this field will be omitted.
+    pub primary: Option<CryptoKeyVersion>,
+    /// A template describing settings for new CryptoKeyVersion instances.
+    /// The properties of new CryptoKeyVersion instances created by either
+    /// CreateCryptoKeyVersion or
+    /// auto-rotation are controlled by this template.
+    #[serde(rename="versionTemplate")]
+    pub version_template: Option<CryptoKeyVersionTemplate>,
+    /// The immutable purpose of this CryptoKey.
+    pub purpose: Option<String>,
+    /// Output only. The time at which this CryptoKey was created.
+    #[serde(rename="createTime")]
+    pub create_time: Option<String>,
+    /// At next_rotation_time, the Key Management Service will automatically:
+    /// 
+    /// 1. Create a new version of this CryptoKey.
+    /// 2. Mark the new version as primary.
+    /// 
+    /// Key rotations performed manually via
+    /// CreateCryptoKeyVersion and
+    /// UpdateCryptoKeyPrimaryVersion
+    /// do not affect next_rotation_time.
+    /// 
+    /// Keys with purpose
+    /// ENCRYPT_DECRYPT support
+    /// automatic rotation. For other keys, this field must be omitted.
+    #[serde(rename="nextRotationTime")]
+    pub next_rotation_time: Option<String>,
+}
+
+impl RequestValue for CryptoKey {}
+impl ResponseResult for CryptoKey {}
 
 
 /// Represents an expression text. Example:
@@ -1020,6 +1114,92 @@ pub struct Expr {
 impl Part for Expr {}
 
 
+/// Contains an HSM-generated attestation about a key operation.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct KeyOperationAttestation {
+    /// Output only. The attestation data provided by the HSM when the key
+    /// operation was performed.
+    pub content: Option<String>,
+    /// Output only. The format of the attestation data.
+    pub format: Option<String>,
+}
+
+impl Part for KeyOperationAttestation {}
+
+
+/// Associates `members` with a `role`.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct Binding {
+    /// Role that is assigned to `members`.
+    /// For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
+    pub role: Option<String>,
+    /// Unimplemented. The condition that is associated with this binding.
+    /// NOTE: an unsatisfied condition will not allow user access via current
+    /// binding. Different bindings, including their conditions, are examined
+    /// independently.
+    pub condition: Option<Expr>,
+    /// Specifies the identities requesting access for a Cloud Platform resource.
+    /// `members` can have the following values:
+    /// 
+    /// * `allUsers`: A special identifier that represents anyone who is
+    ///    on the internet; with or without a Google account.
+    /// 
+    /// * `allAuthenticatedUsers`: A special identifier that represents anyone
+    ///    who is authenticated with a Google account or a service account.
+    /// 
+    /// * `user:{emailid}`: An email address that represents a specific Google
+    ///    account. For example, `alice@gmail.com` .
+    /// 
+    /// 
+    /// * `serviceAccount:{emailid}`: An email address that represents a service
+    ///    account. For example, `my-other-app@appspot.gserviceaccount.com`.
+    /// 
+    /// * `group:{emailid}`: An email address that represents a Google group.
+    ///    For example, `admins@example.com`.
+    /// 
+    /// 
+    /// * `domain:{domain}`: A Google Apps domain name that represents all the
+    ///    users of that domain. For example, `google.com` or `example.com`.
+    /// 
+    /// 
+    pub members: Option<Vec<String>>,
+}
+
+impl Part for Binding {}
+
+
+/// The public key for a given CryptoKeyVersion. Obtained via
+/// GetPublicKey.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [locations key rings crypto keys crypto key versions get public key projects](struct.ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetPublicKeyCall.html) (response)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct PublicKey {
+    /// The public key, encoded in PEM format. For more information, see the
+    /// [RFC 7468](https://tools.ietf.org/html/rfc7468) sections for
+    /// [General Considerations](https://tools.ietf.org/html/rfc7468#section-2) and
+    /// [Textual Encoding of Subject Public Key Info]
+    /// (https://tools.ietf.org/html/rfc7468#section-13).
+    pub pem: Option<String>,
+    /// The Algorithm associated
+    /// with this key.
+    pub algorithm: Option<String>,
+}
+
+impl ResponseResult for PublicKey {}
+
+
 /// Specifies the audit configuration for a service.
 /// The configuration determines which permission types are logged, and what
 /// identities, if any, are exempted from logging.
@@ -1028,7 +1208,7 @@ impl Part for Expr {}
 /// If there are AuditConfigs for both `allServices` and a specific service,
 /// the union of the two AuditConfigs is used for that service: the log_types
 /// specified in each AuditConfig are enabled, and the exempted_members in each
-/// AuditConfig are exempted.
+/// AuditLogConfig are exempted.
 /// 
 /// Example Policy with multiple AuditConfigs:
 /// 
@@ -1076,11 +1256,7 @@ impl Part for Expr {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct AuditConfig {
-    /// no description provided
-    #[serde(rename="exemptedMembers")]
-    pub exempted_members: Option<Vec<String>>,
     /// The configuration for logging of each type of permission.
-    /// Next ID: 4
     #[serde(rename="auditLogConfigs")]
     pub audit_log_configs: Option<Vec<AuditLogConfig>>,
     /// Specifies a service that will be enabled for audit logging.
@@ -1090,6 +1266,43 @@ pub struct AuditConfig {
 }
 
 impl Part for AuditConfig {}
+
+
+/// Response message for KeyManagementService.Encrypt.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [locations key rings crypto keys encrypt projects](struct.ProjectLocationKeyRingCryptoKeyEncryptCall.html) (response)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct EncryptResponse {
+    /// The encrypted data.
+    pub ciphertext: Option<String>,
+    /// The resource name of the CryptoKeyVersion used in encryption.
+    pub name: Option<String>,
+}
+
+impl ResponseResult for EncryptResponse {}
+
+
+/// A Digest holds a cryptographic message digest.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct Digest {
+    /// A message digest produced with the SHA-256 algorithm.
+    pub sha256: Option<String>,
+    /// A message digest produced with the SHA-512 algorithm.
+    pub sha512: Option<String>,
+    /// A message digest produced with the SHA-384 algorithm.
+    pub sha384: Option<String>,
+}
+
+impl Part for Digest {}
 
 
 
@@ -1121,7 +1334,7 @@ impl Part for AuditConfig {}
 ///                               <MemoryStorage as Default>::default(), None);
 /// let mut hub = CloudKMS::new(hyper::Client::with_connector(hyper::net::HttpsConnector::new(hyper_rustls::TlsClient::new())), auth);
 /// // Usually you wouldn't bind this to a variable, but keep calling *CallBuilders*
-/// // like `locations_get(...)`, `locations_key_rings_create(...)`, `locations_key_rings_crypto_keys_create(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_create(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_destroy(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_get(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_list(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_patch(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_restore(...)`, `locations_key_rings_crypto_keys_decrypt(...)`, `locations_key_rings_crypto_keys_encrypt(...)`, `locations_key_rings_crypto_keys_get(...)`, `locations_key_rings_crypto_keys_get_iam_policy(...)`, `locations_key_rings_crypto_keys_list(...)`, `locations_key_rings_crypto_keys_patch(...)`, `locations_key_rings_crypto_keys_set_iam_policy(...)`, `locations_key_rings_crypto_keys_test_iam_permissions(...)`, `locations_key_rings_crypto_keys_update_primary_version(...)`, `locations_key_rings_get(...)`, `locations_key_rings_get_iam_policy(...)`, `locations_key_rings_list(...)`, `locations_key_rings_set_iam_policy(...)`, `locations_key_rings_test_iam_permissions(...)` and `locations_list(...)`
+/// // like `locations_get(...)`, `locations_key_rings_create(...)`, `locations_key_rings_crypto_keys_create(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_asymmetric_decrypt(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_asymmetric_sign(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_create(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_destroy(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_get(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_get_public_key(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_list(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_patch(...)`, `locations_key_rings_crypto_keys_crypto_key_versions_restore(...)`, `locations_key_rings_crypto_keys_decrypt(...)`, `locations_key_rings_crypto_keys_encrypt(...)`, `locations_key_rings_crypto_keys_get(...)`, `locations_key_rings_crypto_keys_get_iam_policy(...)`, `locations_key_rings_crypto_keys_list(...)`, `locations_key_rings_crypto_keys_patch(...)`, `locations_key_rings_crypto_keys_set_iam_policy(...)`, `locations_key_rings_crypto_keys_test_iam_permissions(...)`, `locations_key_rings_crypto_keys_update_primary_version(...)`, `locations_key_rings_get(...)`, `locations_key_rings_get_iam_policy(...)`, `locations_key_rings_list(...)`, `locations_key_rings_set_iam_policy(...)`, `locations_key_rings_test_iam_permissions(...)` and `locations_list(...)`
 /// // to build up your call.
 /// let rb = hub.projects();
 /// # }
@@ -1157,6 +1370,27 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
             _request: request,
             _name: name.to_string(),
             _update_mask: Default::default(),
+            _delegate: Default::default(),
+            _scopes: Default::default(),
+            _additional_params: Default::default(),
+        }
+    }
+    
+    /// Create a builder to help you perform the following task:
+    ///
+    /// Returns the public key for the given CryptoKeyVersion. The
+    /// CryptoKey.purpose must be
+    /// ASYMMETRIC_SIGN or
+    /// ASYMMETRIC_DECRYPT.
+    /// 
+    /// # Arguments
+    ///
+    /// * `name` - The name of the CryptoKeyVersion public key to
+    ///            get.
+    pub fn locations_key_rings_crypto_keys_crypto_key_versions_get_public_key(&self, name: &str) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetPublicKeyCall<'a, C, A> {
+        ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetPublicKeyCall {
+            hub: self.hub,
+            _name: name.to_string(),
             _delegate: Default::default(),
             _scopes: Default::default(),
             _additional_params: Default::default(),
@@ -1237,6 +1471,8 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     /// Create a builder to help you perform the following task:
     ///
     /// Encrypts data, so that it can only be recovered by a call to Decrypt.
+    /// The CryptoKey.purpose must be
+    /// ENCRYPT_DECRYPT.
     /// 
     /// # Arguments
     ///
@@ -1313,6 +1549,49 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     
     /// Create a builder to help you perform the following task:
     ///
+    /// Decrypts data that was encrypted with a public key retrieved from
+    /// GetPublicKey corresponding to a CryptoKeyVersion with
+    /// CryptoKey.purpose ASYMMETRIC_DECRYPT.
+    /// 
+    /// # Arguments
+    ///
+    /// * `request` - No description provided.
+    /// * `name` - Required. The resource name of the CryptoKeyVersion to use for
+    ///            decryption.
+    pub fn locations_key_rings_crypto_keys_crypto_key_versions_asymmetric_decrypt(&self, request: AsymmetricDecryptRequest, name: &str) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall<'a, C, A> {
+        ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall {
+            hub: self.hub,
+            _request: request,
+            _name: name.to_string(),
+            _delegate: Default::default(),
+            _scopes: Default::default(),
+            _additional_params: Default::default(),
+        }
+    }
+    
+    /// Create a builder to help you perform the following task:
+    ///
+    /// Signs data using a CryptoKeyVersion with CryptoKey.purpose
+    /// ASYMMETRIC_SIGN, producing a signature that can be verified with the public
+    /// key retrieved from GetPublicKey.
+    /// 
+    /// # Arguments
+    ///
+    /// * `request` - No description provided.
+    /// * `name` - Required. The resource name of the CryptoKeyVersion to use for signing.
+    pub fn locations_key_rings_crypto_keys_crypto_key_versions_asymmetric_sign(&self, request: AsymmetricSignRequest, name: &str) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall<'a, C, A> {
+        ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall {
+            hub: self.hub,
+            _request: request,
+            _name: name.to_string(),
+            _delegate: Default::default(),
+            _scopes: Default::default(),
+            _additional_params: Default::default(),
+        }
+    }
+    
+    /// Create a builder to help you perform the following task:
+    ///
     /// Returns permissions that a caller has on the specified resource.
     /// If the resource does not exist, this will return an empty set of
     /// permissions, not a NOT_FOUND error.
@@ -1359,7 +1638,9 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     
     /// Create a builder to help you perform the following task:
     ///
-    /// Update the version of a CryptoKey that will be used in Encrypt
+    /// Update the version of a CryptoKey that will be used in Encrypt.
+    /// 
+    /// Returns an error if called on an asymmetric key.
     /// 
     /// # Arguments
     ///
@@ -1399,7 +1680,8 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     
     /// Create a builder to help you perform the following task:
     ///
-    /// Decrypts data that was protected by Encrypt.
+    /// Decrypts data that was protected by Encrypt. The CryptoKey.purpose
+    /// must be ENCRYPT_DECRYPT.
     /// 
     /// # Arguments
     ///
@@ -1460,7 +1742,7 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     
     /// Create a builder to help you perform the following task:
     ///
-    /// Get information about a location.
+    /// Gets information about a location.
     /// 
     /// # Arguments
     ///
@@ -1513,6 +1795,7 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
         ProjectLocationKeyRingCryptoKeyCryptoKeyVersionListCall {
             hub: self.hub,
             _parent: parent.to_string(),
+            _view: Default::default(),
             _page_token: Default::default(),
             _page_size: Default::default(),
             _delegate: Default::default(),
@@ -1533,6 +1816,7 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
         ProjectLocationKeyRingCryptoKeyListCall {
             hub: self.hub,
             _parent: parent.to_string(),
+            _version_view: Default::default(),
             _page_token: Default::default(),
             _page_size: Default::default(),
             _delegate: Default::default(),
@@ -1606,7 +1890,7 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     /// Create a builder to help you perform the following task:
     ///
     /// Restore a CryptoKeyVersion in the
-    /// DESTROY_SCHEDULED,
+    /// DESTROY_SCHEDULED
     /// state.
     /// 
     /// Upon restoration of the CryptoKeyVersion, state
@@ -1632,7 +1916,9 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     ///
     /// Create a new CryptoKey within a KeyRing.
     /// 
-    /// CryptoKey.purpose is required.
+    /// CryptoKey.purpose and
+    /// CryptoKey.version_template.algorithm
+    /// are required.
     /// 
     /// # Arguments
     ///
@@ -1919,9 +2205,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionPatchCall<'a, C, A
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -1952,6 +2236,261 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionPatchCall<'a, C, A
     /// encompass more rights than others. For example, for listing resources, a *read-only* scope will be
     /// sufficient, a read-write scope will do as well.
     pub fn add_scope<T, S>(mut self, scope: T) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionPatchCall<'a, C, A>
+                                                        where T: Into<Option<S>>,
+                                                              S: AsRef<str> {
+        match scope.into() {
+          Some(scope) => self._scopes.insert(scope.as_ref().to_string(), ()),
+          None => None,
+        };
+        self
+    }
+}
+
+
+/// Returns the public key for the given CryptoKeyVersion. The
+/// CryptoKey.purpose must be
+/// ASYMMETRIC_SIGN or
+/// ASYMMETRIC_DECRYPT.
+///
+/// A builder for the *locations.keyRings.cryptoKeys.cryptoKeyVersions.getPublicKey* method supported by a *project* resource.
+/// It is not used directly, but through a `ProjectMethods` instance.
+///
+/// # Example
+///
+/// Instantiate a resource method builder
+///
+/// ```test_harness,no_run
+/// # extern crate hyper;
+/// # extern crate hyper_rustls;
+/// # extern crate yup_oauth2 as oauth2;
+/// # extern crate google_cloudkms1 as cloudkms1;
+/// # #[test] fn egal() {
+/// # use std::default::Default;
+/// # use oauth2::{Authenticator, DefaultAuthenticatorDelegate, ApplicationSecret, MemoryStorage};
+/// # use cloudkms1::CloudKMS;
+/// 
+/// # let secret: ApplicationSecret = Default::default();
+/// # let auth = Authenticator::new(&secret, DefaultAuthenticatorDelegate,
+/// #                               hyper::Client::with_connector(hyper::net::HttpsConnector::new(hyper_rustls::TlsClient::new())),
+/// #                               <MemoryStorage as Default>::default(), None);
+/// # let mut hub = CloudKMS::new(hyper::Client::with_connector(hyper::net::HttpsConnector::new(hyper_rustls::TlsClient::new())), auth);
+/// // You can configure optional parameters by calling the respective setters at will, and
+/// // execute the final call using `doit()`.
+/// // Values shown here are possibly random and not representative !
+/// let result = hub.projects().locations_key_rings_crypto_keys_crypto_key_versions_get_public_key("name")
+///              .doit();
+/// # }
+/// ```
+pub struct ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetPublicKeyCall<'a, C, A>
+    where C: 'a, A: 'a {
+
+    hub: &'a CloudKMS<C, A>,
+    _name: String,
+    _delegate: Option<&'a mut Delegate>,
+    _additional_params: HashMap<String, String>,
+    _scopes: BTreeMap<String, ()>
+}
+
+impl<'a, C, A> CallBuilder for ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetPublicKeyCall<'a, C, A> {}
+
+impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetPublicKeyCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oauth2::GetToken {
+
+
+    /// Perform the operation you have build so far.
+    pub fn doit(mut self) -> Result<(hyper::client::Response, PublicKey)> {
+        use url::percent_encoding::{percent_encode, DEFAULT_ENCODE_SET};
+        use std::io::{Read, Seek};
+        use hyper::header::{ContentType, ContentLength, Authorization, Bearer, UserAgent, Location};
+        let mut dd = DefaultDelegate;
+        let mut dlg: &mut Delegate = match self._delegate {
+            Some(d) => d,
+            None => &mut dd
+        };
+        dlg.begin(MethodInfo { id: "cloudkms.projects.locations.keyRings.cryptoKeys.cryptoKeyVersions.getPublicKey",
+                               http_method: hyper::method::Method::Get });
+        let mut params: Vec<(&str, String)> = Vec::with_capacity((3 + self._additional_params.len()));
+        params.push(("name", self._name.to_string()));
+        for &field in ["alt", "name"].iter() {
+            if self._additional_params.contains_key(field) {
+                dlg.finished(false);
+                return Err(Error::FieldClash(field));
+            }
+        }
+        for (name, value) in self._additional_params.iter() {
+            params.push((&name, value.clone()));
+        }
+
+        params.push(("alt", "json".to_string()));
+
+        let mut url = self.hub._base_url.clone() + "v1/{+name}/publicKey";
+        if self._scopes.len() == 0 {
+            self._scopes.insert(Scope::CloudPlatform.as_ref().to_string(), ());
+        }
+
+        for &(find_this, param_name) in [("{+name}", "name")].iter() {
+            let mut replace_with = String::new();
+            for &(name, ref value) in params.iter() {
+                if name == param_name {
+                    replace_with = value.to_string();
+                    break;
+                }
+            }
+            if find_this.as_bytes()[1] == '+' as u8 {
+                replace_with = percent_encode(replace_with.as_bytes(), DEFAULT_ENCODE_SET);
+            }
+            url = url.replace(find_this, &replace_with);
+        }
+        {
+            let mut indices_for_removal: Vec<usize> = Vec::with_capacity(1);
+            for param_name in ["name"].iter() {
+                if let Some(index) = params.iter().position(|t| &t.0 == param_name) {
+                    indices_for_removal.push(index);
+                }
+            }
+            for &index in indices_for_removal.iter() {
+                params.remove(index);
+            }
+        }
+
+        if params.len() > 0 {
+            url.push('?');
+            url.push_str(&url::form_urlencoded::serialize(params));
+        }
+
+
+
+        loop {
+            let token = match self.hub.auth.borrow_mut().token(self._scopes.keys()) {
+                Ok(token) => token,
+                Err(err) => {
+                    match  dlg.token(&*err) {
+                        Some(token) => token,
+                        None => {
+                            dlg.finished(false);
+                            return Err(Error::MissingToken(err))
+                        }
+                    }
+                }
+            };
+            let auth_header = Authorization(Bearer { token: token.access_token });
+            let mut req_result = {
+                let mut client = &mut *self.hub.client.borrow_mut();
+                let mut req = client.borrow_mut().request(hyper::method::Method::Get, &url)
+                    .header(UserAgent(self.hub._user_agent.clone()))
+                    .header(auth_header.clone());
+
+                dlg.pre_request();
+                req.send()
+            };
+
+            match req_result {
+                Err(err) => {
+                    if let oauth2::Retry::After(d) = dlg.http_error(&err) {
+                        sleep(d);
+                        continue;
+                    }
+                    dlg.finished(false);
+                    return Err(Error::HttpError(err))
+                }
+                Ok(mut res) => {
+                    if !res.status.is_success() {
+                        let mut json_err = String::new();
+                        res.read_to_string(&mut json_err).unwrap();
+                        if let oauth2::Retry::After(d) = dlg.http_failure(&res,
+                                                              json::from_str(&json_err).ok(),
+                                                              json::from_str(&json_err).ok()) {
+                            sleep(d);
+                            continue;
+                        }
+                        dlg.finished(false);
+                        return match json::from_str::<ErrorResponse>(&json_err){
+                            Err(_) => Err(Error::Failure(res)),
+                            Ok(serr) => Err(Error::BadRequest(serr))
+                        }
+                    }
+                    let result_value = {
+                        let mut json_response = String::new();
+                        res.read_to_string(&mut json_response).unwrap();
+                        match json::from_str(&json_response) {
+                            Ok(decoded) => (res, decoded),
+                            Err(err) => {
+                                dlg.response_json_decode_error(&json_response, &err);
+                                return Err(Error::JsonDecodeError(json_response, err));
+                            }
+                        }
+                    };
+
+                    dlg.finished(true);
+                    return Ok(result_value)
+                }
+            }
+        }
+    }
+
+
+    /// The name of the CryptoKeyVersion public key to
+    /// get.
+    ///
+    /// Sets the *name* path property to the given value.
+    ///
+    /// Even though the property as already been set when instantiating this call,
+    /// we provide this method for API completeness.
+    pub fn name(mut self, new_value: &str) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetPublicKeyCall<'a, C, A> {
+        self._name = new_value.to_string();
+        self
+    }
+    /// The delegate implementation is consulted whenever there is an intermediate result, or if something goes wrong
+    /// while executing the actual API request.
+    /// 
+    /// It should be used to handle progress information, and to implement a certain level of resilience.
+    ///
+    /// Sets the *delegate* property to the given value.
+    pub fn delegate(mut self, new_value: &'a mut Delegate) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetPublicKeyCall<'a, C, A> {
+        self._delegate = Some(new_value);
+        self
+    }
+
+    /// Set any additional parameter of the query string used in the request.
+    /// It should be used to set parameters which are not yet available through their own
+    /// setters.
+    ///
+    /// Please note that this method must not be used to set any of the known paramters
+    /// which have their own setter method. If done anyway, the request will fail.
+    ///
+    /// # Additional Parameters
+    ///
+    /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
+    /// * *access_token* (query-string) - OAuth access token.
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+    /// * *callback* (query-string) - JSONP
+    /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
+    /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *alt* (query-string) - Data format for response.
+    /// * *$.xgafv* (query-string) - V1 error format.
+    pub fn param<T>(mut self, name: T, value: T) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetPublicKeyCall<'a, C, A>
+                                                        where T: AsRef<str> {
+        self._additional_params.insert(name.as_ref().to_string(), value.as_ref().to_string());
+        self
+    }
+
+    /// Identifies the authorization scope for the method you are building.
+    ///
+    /// Use this method to actively specify which scope should be used, instead the default `Scope` variant
+    /// `Scope::CloudPlatform`.
+    ///
+    /// The `scope` will be added to a set of scopes. This is important as one can maintain access
+    /// tokens for more than one scope.
+    /// If `None` is specified, then all scopes will be removed and no default scope will be used either.
+    /// In that case, you have to specify your API-key using the `key` parameter (see the `param()`
+    /// function for details).
+    ///
+    /// Usually there is more than one suitable scope to authorize an operation, some of which may
+    /// encompass more rights than others. For example, for listing resources, a *read-only* scope will be
+    /// sufficient, a read-write scope will do as well.
+    pub fn add_scope<T, S>(mut self, scope: T) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetPublicKeyCall<'a, C, A>
                                                         where T: Into<Option<S>>,
                                                               S: AsRef<str> {
         match scope.into() {
@@ -1997,7 +2536,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionPatchCall<'a, C, A
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.projects().locations_key_rings_create(req, "parent")
-///              .key_ring_id("justo")
+///              .key_ring_id("amet.")
 ///              .doit();
 /// # }
 /// ```
@@ -2217,9 +2756,7 @@ impl<'a, C, A> ProjectLocationKeyRingCreateCall<'a, C, A> where C: BorrowMut<hyp
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2289,8 +2826,8 @@ impl<'a, C, A> ProjectLocationKeyRingCreateCall<'a, C, A> where C: BorrowMut<hyp
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.projects().locations_key_rings_list("parent")
-///              .page_token("erat")
-///              .page_size(-35)
+///              .page_token("labore")
+///              .page_size(-9)
 ///              .doit();
 /// # }
 /// ```
@@ -2499,9 +3036,7 @@ impl<'a, C, A> ProjectLocationKeyRingListCall<'a, C, A> where C: BorrowMut<hyper
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2794,9 +3329,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionDestroyCall<'a, C,
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2839,6 +3372,8 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionDestroyCall<'a, C,
 
 
 /// Encrypts data, so that it can only be recovered by a call to Decrypt.
+/// The CryptoKey.purpose must be
+/// ENCRYPT_DECRYPT.
 ///
 /// A builder for the *locations.keyRings.cryptoKeys.encrypt* method supported by a *project* resource.
 /// It is not used directly, but through a `ProjectMethods` instance.
@@ -3082,9 +3617,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyEncryptCall<'a, C, A> where C: Bor
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -3335,9 +3868,7 @@ impl<'a, C, A> ProjectLocationKeyRingGetCall<'a, C, A> where C: BorrowMut<hyper:
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -3589,9 +4120,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyGetCall<'a, C, A> where C: BorrowM
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -3661,9 +4190,9 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyGetCall<'a, C, A> where C: BorrowM
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.projects().locations_list("name")
-///              .page_token("aliquyam")
-///              .page_size(-66)
-///              .filter("no")
+///              .page_token("ea")
+///              .page_size(-61)
+///              .filter("justo")
 ///              .doit();
 /// # }
 /// ```
@@ -3878,9 +4407,7 @@ impl<'a, C, A> ProjectLocationListCall<'a, C, A> where C: BorrowMut<hyper::Clien
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -3911,6 +4438,575 @@ impl<'a, C, A> ProjectLocationListCall<'a, C, A> where C: BorrowMut<hyper::Clien
     /// encompass more rights than others. For example, for listing resources, a *read-only* scope will be
     /// sufficient, a read-write scope will do as well.
     pub fn add_scope<T, S>(mut self, scope: T) -> ProjectLocationListCall<'a, C, A>
+                                                        where T: Into<Option<S>>,
+                                                              S: AsRef<str> {
+        match scope.into() {
+          Some(scope) => self._scopes.insert(scope.as_ref().to_string(), ()),
+          None => None,
+        };
+        self
+    }
+}
+
+
+/// Decrypts data that was encrypted with a public key retrieved from
+/// GetPublicKey corresponding to a CryptoKeyVersion with
+/// CryptoKey.purpose ASYMMETRIC_DECRYPT.
+///
+/// A builder for the *locations.keyRings.cryptoKeys.cryptoKeyVersions.asymmetricDecrypt* method supported by a *project* resource.
+/// It is not used directly, but through a `ProjectMethods` instance.
+///
+/// # Example
+///
+/// Instantiate a resource method builder
+///
+/// ```test_harness,no_run
+/// # extern crate hyper;
+/// # extern crate hyper_rustls;
+/// # extern crate yup_oauth2 as oauth2;
+/// # extern crate google_cloudkms1 as cloudkms1;
+/// use cloudkms1::AsymmetricDecryptRequest;
+/// # #[test] fn egal() {
+/// # use std::default::Default;
+/// # use oauth2::{Authenticator, DefaultAuthenticatorDelegate, ApplicationSecret, MemoryStorage};
+/// # use cloudkms1::CloudKMS;
+/// 
+/// # let secret: ApplicationSecret = Default::default();
+/// # let auth = Authenticator::new(&secret, DefaultAuthenticatorDelegate,
+/// #                               hyper::Client::with_connector(hyper::net::HttpsConnector::new(hyper_rustls::TlsClient::new())),
+/// #                               <MemoryStorage as Default>::default(), None);
+/// # let mut hub = CloudKMS::new(hyper::Client::with_connector(hyper::net::HttpsConnector::new(hyper_rustls::TlsClient::new())), auth);
+/// // As the method needs a request, you would usually fill it with the desired information
+/// // into the respective structure. Some of the parts shown here might not be applicable !
+/// // Values shown here are possibly random and not representative !
+/// let mut req = AsymmetricDecryptRequest::default();
+/// 
+/// // You can configure optional parameters by calling the respective setters at will, and
+/// // execute the final call using `doit()`.
+/// // Values shown here are possibly random and not representative !
+/// let result = hub.projects().locations_key_rings_crypto_keys_crypto_key_versions_asymmetric_decrypt(req, "name")
+///              .doit();
+/// # }
+/// ```
+pub struct ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall<'a, C, A>
+    where C: 'a, A: 'a {
+
+    hub: &'a CloudKMS<C, A>,
+    _request: AsymmetricDecryptRequest,
+    _name: String,
+    _delegate: Option<&'a mut Delegate>,
+    _additional_params: HashMap<String, String>,
+    _scopes: BTreeMap<String, ()>
+}
+
+impl<'a, C, A> CallBuilder for ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall<'a, C, A> {}
+
+impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oauth2::GetToken {
+
+
+    /// Perform the operation you have build so far.
+    pub fn doit(mut self) -> Result<(hyper::client::Response, AsymmetricDecryptResponse)> {
+        use url::percent_encoding::{percent_encode, DEFAULT_ENCODE_SET};
+        use std::io::{Read, Seek};
+        use hyper::header::{ContentType, ContentLength, Authorization, Bearer, UserAgent, Location};
+        let mut dd = DefaultDelegate;
+        let mut dlg: &mut Delegate = match self._delegate {
+            Some(d) => d,
+            None => &mut dd
+        };
+        dlg.begin(MethodInfo { id: "cloudkms.projects.locations.keyRings.cryptoKeys.cryptoKeyVersions.asymmetricDecrypt",
+                               http_method: hyper::method::Method::Post });
+        let mut params: Vec<(&str, String)> = Vec::with_capacity((4 + self._additional_params.len()));
+        params.push(("name", self._name.to_string()));
+        for &field in ["alt", "name"].iter() {
+            if self._additional_params.contains_key(field) {
+                dlg.finished(false);
+                return Err(Error::FieldClash(field));
+            }
+        }
+        for (name, value) in self._additional_params.iter() {
+            params.push((&name, value.clone()));
+        }
+
+        params.push(("alt", "json".to_string()));
+
+        let mut url = self.hub._base_url.clone() + "v1/{+name}:asymmetricDecrypt";
+        if self._scopes.len() == 0 {
+            self._scopes.insert(Scope::CloudPlatform.as_ref().to_string(), ());
+        }
+
+        for &(find_this, param_name) in [("{+name}", "name")].iter() {
+            let mut replace_with = String::new();
+            for &(name, ref value) in params.iter() {
+                if name == param_name {
+                    replace_with = value.to_string();
+                    break;
+                }
+            }
+            if find_this.as_bytes()[1] == '+' as u8 {
+                replace_with = percent_encode(replace_with.as_bytes(), DEFAULT_ENCODE_SET);
+            }
+            url = url.replace(find_this, &replace_with);
+        }
+        {
+            let mut indices_for_removal: Vec<usize> = Vec::with_capacity(1);
+            for param_name in ["name"].iter() {
+                if let Some(index) = params.iter().position(|t| &t.0 == param_name) {
+                    indices_for_removal.push(index);
+                }
+            }
+            for &index in indices_for_removal.iter() {
+                params.remove(index);
+            }
+        }
+
+        if params.len() > 0 {
+            url.push('?');
+            url.push_str(&url::form_urlencoded::serialize(params));
+        }
+
+        let mut json_mime_type = mime::Mime(mime::TopLevel::Application, mime::SubLevel::Json, Default::default());
+        let mut request_value_reader =
+            {
+                let mut value = json::value::to_value(&self._request).expect("serde to work");
+                remove_json_null_values(&mut value);
+                let mut dst = io::Cursor::new(Vec::with_capacity(128));
+                json::to_writer(&mut dst, &value).unwrap();
+                dst
+            };
+        let request_size = request_value_reader.seek(io::SeekFrom::End(0)).unwrap();
+        request_value_reader.seek(io::SeekFrom::Start(0)).unwrap();
+
+
+        loop {
+            let token = match self.hub.auth.borrow_mut().token(self._scopes.keys()) {
+                Ok(token) => token,
+                Err(err) => {
+                    match  dlg.token(&*err) {
+                        Some(token) => token,
+                        None => {
+                            dlg.finished(false);
+                            return Err(Error::MissingToken(err))
+                        }
+                    }
+                }
+            };
+            let auth_header = Authorization(Bearer { token: token.access_token });
+            request_value_reader.seek(io::SeekFrom::Start(0)).unwrap();
+            let mut req_result = {
+                let mut client = &mut *self.hub.client.borrow_mut();
+                let mut req = client.borrow_mut().request(hyper::method::Method::Post, &url)
+                    .header(UserAgent(self.hub._user_agent.clone()))
+                    .header(auth_header.clone())
+                    .header(ContentType(json_mime_type.clone()))
+                    .header(ContentLength(request_size as u64))
+                    .body(&mut request_value_reader);
+
+                dlg.pre_request();
+                req.send()
+            };
+
+            match req_result {
+                Err(err) => {
+                    if let oauth2::Retry::After(d) = dlg.http_error(&err) {
+                        sleep(d);
+                        continue;
+                    }
+                    dlg.finished(false);
+                    return Err(Error::HttpError(err))
+                }
+                Ok(mut res) => {
+                    if !res.status.is_success() {
+                        let mut json_err = String::new();
+                        res.read_to_string(&mut json_err).unwrap();
+                        if let oauth2::Retry::After(d) = dlg.http_failure(&res,
+                                                              json::from_str(&json_err).ok(),
+                                                              json::from_str(&json_err).ok()) {
+                            sleep(d);
+                            continue;
+                        }
+                        dlg.finished(false);
+                        return match json::from_str::<ErrorResponse>(&json_err){
+                            Err(_) => Err(Error::Failure(res)),
+                            Ok(serr) => Err(Error::BadRequest(serr))
+                        }
+                    }
+                    let result_value = {
+                        let mut json_response = String::new();
+                        res.read_to_string(&mut json_response).unwrap();
+                        match json::from_str(&json_response) {
+                            Ok(decoded) => (res, decoded),
+                            Err(err) => {
+                                dlg.response_json_decode_error(&json_response, &err);
+                                return Err(Error::JsonDecodeError(json_response, err));
+                            }
+                        }
+                    };
+
+                    dlg.finished(true);
+                    return Ok(result_value)
+                }
+            }
+        }
+    }
+
+
+    ///
+    /// Sets the *request* property to the given value.
+    ///
+    /// Even though the property as already been set when instantiating this call,
+    /// we provide this method for API completeness.
+    pub fn request(mut self, new_value: AsymmetricDecryptRequest) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall<'a, C, A> {
+        self._request = new_value;
+        self
+    }
+    /// Required. The resource name of the CryptoKeyVersion to use for
+    /// decryption.
+    ///
+    /// Sets the *name* path property to the given value.
+    ///
+    /// Even though the property as already been set when instantiating this call,
+    /// we provide this method for API completeness.
+    pub fn name(mut self, new_value: &str) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall<'a, C, A> {
+        self._name = new_value.to_string();
+        self
+    }
+    /// The delegate implementation is consulted whenever there is an intermediate result, or if something goes wrong
+    /// while executing the actual API request.
+    /// 
+    /// It should be used to handle progress information, and to implement a certain level of resilience.
+    ///
+    /// Sets the *delegate* property to the given value.
+    pub fn delegate(mut self, new_value: &'a mut Delegate) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall<'a, C, A> {
+        self._delegate = Some(new_value);
+        self
+    }
+
+    /// Set any additional parameter of the query string used in the request.
+    /// It should be used to set parameters which are not yet available through their own
+    /// setters.
+    ///
+    /// Please note that this method must not be used to set any of the known paramters
+    /// which have their own setter method. If done anyway, the request will fail.
+    ///
+    /// # Additional Parameters
+    ///
+    /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
+    /// * *access_token* (query-string) - OAuth access token.
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+    /// * *callback* (query-string) - JSONP
+    /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
+    /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *alt* (query-string) - Data format for response.
+    /// * *$.xgafv* (query-string) - V1 error format.
+    pub fn param<T>(mut self, name: T, value: T) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall<'a, C, A>
+                                                        where T: AsRef<str> {
+        self._additional_params.insert(name.as_ref().to_string(), value.as_ref().to_string());
+        self
+    }
+
+    /// Identifies the authorization scope for the method you are building.
+    ///
+    /// Use this method to actively specify which scope should be used, instead the default `Scope` variant
+    /// `Scope::CloudPlatform`.
+    ///
+    /// The `scope` will be added to a set of scopes. This is important as one can maintain access
+    /// tokens for more than one scope.
+    /// If `None` is specified, then all scopes will be removed and no default scope will be used either.
+    /// In that case, you have to specify your API-key using the `key` parameter (see the `param()`
+    /// function for details).
+    ///
+    /// Usually there is more than one suitable scope to authorize an operation, some of which may
+    /// encompass more rights than others. For example, for listing resources, a *read-only* scope will be
+    /// sufficient, a read-write scope will do as well.
+    pub fn add_scope<T, S>(mut self, scope: T) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricDecryptCall<'a, C, A>
+                                                        where T: Into<Option<S>>,
+                                                              S: AsRef<str> {
+        match scope.into() {
+          Some(scope) => self._scopes.insert(scope.as_ref().to_string(), ()),
+          None => None,
+        };
+        self
+    }
+}
+
+
+/// Signs data using a CryptoKeyVersion with CryptoKey.purpose
+/// ASYMMETRIC_SIGN, producing a signature that can be verified with the public
+/// key retrieved from GetPublicKey.
+///
+/// A builder for the *locations.keyRings.cryptoKeys.cryptoKeyVersions.asymmetricSign* method supported by a *project* resource.
+/// It is not used directly, but through a `ProjectMethods` instance.
+///
+/// # Example
+///
+/// Instantiate a resource method builder
+///
+/// ```test_harness,no_run
+/// # extern crate hyper;
+/// # extern crate hyper_rustls;
+/// # extern crate yup_oauth2 as oauth2;
+/// # extern crate google_cloudkms1 as cloudkms1;
+/// use cloudkms1::AsymmetricSignRequest;
+/// # #[test] fn egal() {
+/// # use std::default::Default;
+/// # use oauth2::{Authenticator, DefaultAuthenticatorDelegate, ApplicationSecret, MemoryStorage};
+/// # use cloudkms1::CloudKMS;
+/// 
+/// # let secret: ApplicationSecret = Default::default();
+/// # let auth = Authenticator::new(&secret, DefaultAuthenticatorDelegate,
+/// #                               hyper::Client::with_connector(hyper::net::HttpsConnector::new(hyper_rustls::TlsClient::new())),
+/// #                               <MemoryStorage as Default>::default(), None);
+/// # let mut hub = CloudKMS::new(hyper::Client::with_connector(hyper::net::HttpsConnector::new(hyper_rustls::TlsClient::new())), auth);
+/// // As the method needs a request, you would usually fill it with the desired information
+/// // into the respective structure. Some of the parts shown here might not be applicable !
+/// // Values shown here are possibly random and not representative !
+/// let mut req = AsymmetricSignRequest::default();
+/// 
+/// // You can configure optional parameters by calling the respective setters at will, and
+/// // execute the final call using `doit()`.
+/// // Values shown here are possibly random and not representative !
+/// let result = hub.projects().locations_key_rings_crypto_keys_crypto_key_versions_asymmetric_sign(req, "name")
+///              .doit();
+/// # }
+/// ```
+pub struct ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall<'a, C, A>
+    where C: 'a, A: 'a {
+
+    hub: &'a CloudKMS<C, A>,
+    _request: AsymmetricSignRequest,
+    _name: String,
+    _delegate: Option<&'a mut Delegate>,
+    _additional_params: HashMap<String, String>,
+    _scopes: BTreeMap<String, ()>
+}
+
+impl<'a, C, A> CallBuilder for ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall<'a, C, A> {}
+
+impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oauth2::GetToken {
+
+
+    /// Perform the operation you have build so far.
+    pub fn doit(mut self) -> Result<(hyper::client::Response, AsymmetricSignResponse)> {
+        use url::percent_encoding::{percent_encode, DEFAULT_ENCODE_SET};
+        use std::io::{Read, Seek};
+        use hyper::header::{ContentType, ContentLength, Authorization, Bearer, UserAgent, Location};
+        let mut dd = DefaultDelegate;
+        let mut dlg: &mut Delegate = match self._delegate {
+            Some(d) => d,
+            None => &mut dd
+        };
+        dlg.begin(MethodInfo { id: "cloudkms.projects.locations.keyRings.cryptoKeys.cryptoKeyVersions.asymmetricSign",
+                               http_method: hyper::method::Method::Post });
+        let mut params: Vec<(&str, String)> = Vec::with_capacity((4 + self._additional_params.len()));
+        params.push(("name", self._name.to_string()));
+        for &field in ["alt", "name"].iter() {
+            if self._additional_params.contains_key(field) {
+                dlg.finished(false);
+                return Err(Error::FieldClash(field));
+            }
+        }
+        for (name, value) in self._additional_params.iter() {
+            params.push((&name, value.clone()));
+        }
+
+        params.push(("alt", "json".to_string()));
+
+        let mut url = self.hub._base_url.clone() + "v1/{+name}:asymmetricSign";
+        if self._scopes.len() == 0 {
+            self._scopes.insert(Scope::CloudPlatform.as_ref().to_string(), ());
+        }
+
+        for &(find_this, param_name) in [("{+name}", "name")].iter() {
+            let mut replace_with = String::new();
+            for &(name, ref value) in params.iter() {
+                if name == param_name {
+                    replace_with = value.to_string();
+                    break;
+                }
+            }
+            if find_this.as_bytes()[1] == '+' as u8 {
+                replace_with = percent_encode(replace_with.as_bytes(), DEFAULT_ENCODE_SET);
+            }
+            url = url.replace(find_this, &replace_with);
+        }
+        {
+            let mut indices_for_removal: Vec<usize> = Vec::with_capacity(1);
+            for param_name in ["name"].iter() {
+                if let Some(index) = params.iter().position(|t| &t.0 == param_name) {
+                    indices_for_removal.push(index);
+                }
+            }
+            for &index in indices_for_removal.iter() {
+                params.remove(index);
+            }
+        }
+
+        if params.len() > 0 {
+            url.push('?');
+            url.push_str(&url::form_urlencoded::serialize(params));
+        }
+
+        let mut json_mime_type = mime::Mime(mime::TopLevel::Application, mime::SubLevel::Json, Default::default());
+        let mut request_value_reader =
+            {
+                let mut value = json::value::to_value(&self._request).expect("serde to work");
+                remove_json_null_values(&mut value);
+                let mut dst = io::Cursor::new(Vec::with_capacity(128));
+                json::to_writer(&mut dst, &value).unwrap();
+                dst
+            };
+        let request_size = request_value_reader.seek(io::SeekFrom::End(0)).unwrap();
+        request_value_reader.seek(io::SeekFrom::Start(0)).unwrap();
+
+
+        loop {
+            let token = match self.hub.auth.borrow_mut().token(self._scopes.keys()) {
+                Ok(token) => token,
+                Err(err) => {
+                    match  dlg.token(&*err) {
+                        Some(token) => token,
+                        None => {
+                            dlg.finished(false);
+                            return Err(Error::MissingToken(err))
+                        }
+                    }
+                }
+            };
+            let auth_header = Authorization(Bearer { token: token.access_token });
+            request_value_reader.seek(io::SeekFrom::Start(0)).unwrap();
+            let mut req_result = {
+                let mut client = &mut *self.hub.client.borrow_mut();
+                let mut req = client.borrow_mut().request(hyper::method::Method::Post, &url)
+                    .header(UserAgent(self.hub._user_agent.clone()))
+                    .header(auth_header.clone())
+                    .header(ContentType(json_mime_type.clone()))
+                    .header(ContentLength(request_size as u64))
+                    .body(&mut request_value_reader);
+
+                dlg.pre_request();
+                req.send()
+            };
+
+            match req_result {
+                Err(err) => {
+                    if let oauth2::Retry::After(d) = dlg.http_error(&err) {
+                        sleep(d);
+                        continue;
+                    }
+                    dlg.finished(false);
+                    return Err(Error::HttpError(err))
+                }
+                Ok(mut res) => {
+                    if !res.status.is_success() {
+                        let mut json_err = String::new();
+                        res.read_to_string(&mut json_err).unwrap();
+                        if let oauth2::Retry::After(d) = dlg.http_failure(&res,
+                                                              json::from_str(&json_err).ok(),
+                                                              json::from_str(&json_err).ok()) {
+                            sleep(d);
+                            continue;
+                        }
+                        dlg.finished(false);
+                        return match json::from_str::<ErrorResponse>(&json_err){
+                            Err(_) => Err(Error::Failure(res)),
+                            Ok(serr) => Err(Error::BadRequest(serr))
+                        }
+                    }
+                    let result_value = {
+                        let mut json_response = String::new();
+                        res.read_to_string(&mut json_response).unwrap();
+                        match json::from_str(&json_response) {
+                            Ok(decoded) => (res, decoded),
+                            Err(err) => {
+                                dlg.response_json_decode_error(&json_response, &err);
+                                return Err(Error::JsonDecodeError(json_response, err));
+                            }
+                        }
+                    };
+
+                    dlg.finished(true);
+                    return Ok(result_value)
+                }
+            }
+        }
+    }
+
+
+    ///
+    /// Sets the *request* property to the given value.
+    ///
+    /// Even though the property as already been set when instantiating this call,
+    /// we provide this method for API completeness.
+    pub fn request(mut self, new_value: AsymmetricSignRequest) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall<'a, C, A> {
+        self._request = new_value;
+        self
+    }
+    /// Required. The resource name of the CryptoKeyVersion to use for signing.
+    ///
+    /// Sets the *name* path property to the given value.
+    ///
+    /// Even though the property as already been set when instantiating this call,
+    /// we provide this method for API completeness.
+    pub fn name(mut self, new_value: &str) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall<'a, C, A> {
+        self._name = new_value.to_string();
+        self
+    }
+    /// The delegate implementation is consulted whenever there is an intermediate result, or if something goes wrong
+    /// while executing the actual API request.
+    /// 
+    /// It should be used to handle progress information, and to implement a certain level of resilience.
+    ///
+    /// Sets the *delegate* property to the given value.
+    pub fn delegate(mut self, new_value: &'a mut Delegate) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall<'a, C, A> {
+        self._delegate = Some(new_value);
+        self
+    }
+
+    /// Set any additional parameter of the query string used in the request.
+    /// It should be used to set parameters which are not yet available through their own
+    /// setters.
+    ///
+    /// Please note that this method must not be used to set any of the known paramters
+    /// which have their own setter method. If done anyway, the request will fail.
+    ///
+    /// # Additional Parameters
+    ///
+    /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
+    /// * *access_token* (query-string) - OAuth access token.
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
+    /// * *callback* (query-string) - JSONP
+    /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
+    /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *alt* (query-string) - Data format for response.
+    /// * *$.xgafv* (query-string) - V1 error format.
+    pub fn param<T>(mut self, name: T, value: T) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall<'a, C, A>
+                                                        where T: AsRef<str> {
+        self._additional_params.insert(name.as_ref().to_string(), value.as_ref().to_string());
+        self
+    }
+
+    /// Identifies the authorization scope for the method you are building.
+    ///
+    /// Use this method to actively specify which scope should be used, instead the default `Scope` variant
+    /// `Scope::CloudPlatform`.
+    ///
+    /// The `scope` will be added to a set of scopes. This is important as one can maintain access
+    /// tokens for more than one scope.
+    /// If `None` is specified, then all scopes will be removed and no default scope will be used either.
+    /// In that case, you have to specify your API-key using the `key` parameter (see the `param()`
+    /// function for details).
+    ///
+    /// Usually there is more than one suitable scope to authorize an operation, some of which may
+    /// encompass more rights than others. For example, for listing resources, a *read-only* scope will be
+    /// sufficient, a read-write scope will do as well.
+    pub fn add_scope<T, S>(mut self, scope: T) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionAsymmetricSignCall<'a, C, A>
                                                         where T: Into<Option<S>>,
                                                               S: AsRef<str> {
         match scope.into() {
@@ -4169,9 +5265,7 @@ impl<'a, C, A> ProjectLocationKeyRingTestIamPermissionCall<'a, C, A> where C: Bo
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -4425,9 +5519,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyGetIamPolicyCall<'a, C, A> where C
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -4469,7 +5561,9 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyGetIamPolicyCall<'a, C, A> where C
 }
 
 
-/// Update the version of a CryptoKey that will be used in Encrypt
+/// Update the version of a CryptoKey that will be used in Encrypt.
+/// 
+/// Returns an error if called on an asymmetric key.
 ///
 /// A builder for the *locations.keyRings.cryptoKeys.updatePrimaryVersion* method supported by a *project* resource.
 /// It is not used directly, but through a `ProjectMethods` instance.
@@ -4709,9 +5803,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyUpdatePrimaryVersionCall<'a, C, A>
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -4787,7 +5879,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyUpdatePrimaryVersionCall<'a, C, A>
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.projects().locations_key_rings_crypto_keys_patch(req, "name")
-///              .update_mask("diam")
+///              .update_mask("et")
 ///              .doit();
 /// # }
 /// ```
@@ -5006,9 +6098,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyPatchCall<'a, C, A> where C: Borro
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -5050,7 +6140,8 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyPatchCall<'a, C, A> where C: Borro
 }
 
 
-/// Decrypts data that was protected by Encrypt.
+/// Decrypts data that was protected by Encrypt. The CryptoKey.purpose
+/// must be ENCRYPT_DECRYPT.
 ///
 /// A builder for the *locations.keyRings.cryptoKeys.decrypt* method supported by a *project* resource.
 /// It is not used directly, but through a `ProjectMethods` instance.
@@ -5291,9 +6382,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyDecryptCall<'a, C, A> where C: Bor
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -5547,9 +6636,7 @@ impl<'a, C, A> ProjectLocationKeyRingGetIamPolicyCall<'a, C, A> where C: BorrowM
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -5833,9 +6920,7 @@ impl<'a, C, A> ProjectLocationKeyRingSetIamPolicyCall<'a, C, A> where C: BorrowM
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -5877,7 +6962,7 @@ impl<'a, C, A> ProjectLocationKeyRingSetIamPolicyCall<'a, C, A> where C: BorrowM
 }
 
 
-/// Get information about a location.
+/// Gets information about a location.
 ///
 /// A builder for the *locations.get* method supported by a *project* resource.
 /// It is not used directly, but through a `ProjectMethods` instance.
@@ -6086,9 +7171,7 @@ impl<'a, C, A> ProjectLocationGetCall<'a, C, A> where C: BorrowMut<hyper::Client
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -6377,9 +7460,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyTestIamPermissionCall<'a, C, A> wh
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -6449,8 +7530,9 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyTestIamPermissionCall<'a, C, A> wh
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.projects().locations_key_rings_crypto_keys_crypto_key_versions_list("parent")
-///              .page_token("Lorem")
-///              .page_size(-75)
+///              .view("sadipscing")
+///              .page_token("dolor")
+///              .page_size(-39)
 ///              .doit();
 /// # }
 /// ```
@@ -6459,6 +7541,7 @@ pub struct ProjectLocationKeyRingCryptoKeyCryptoKeyVersionListCall<'a, C, A>
 
     hub: &'a CloudKMS<C, A>,
     _parent: String,
+    _view: Option<String>,
     _page_token: Option<String>,
     _page_size: Option<i32>,
     _delegate: Option<&'a mut Delegate>,
@@ -6483,15 +7566,18 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionListCall<'a, C, A>
         };
         dlg.begin(MethodInfo { id: "cloudkms.projects.locations.keyRings.cryptoKeys.cryptoKeyVersions.list",
                                http_method: hyper::method::Method::Get });
-        let mut params: Vec<(&str, String)> = Vec::with_capacity((5 + self._additional_params.len()));
+        let mut params: Vec<(&str, String)> = Vec::with_capacity((6 + self._additional_params.len()));
         params.push(("parent", self._parent.to_string()));
+        if let Some(value) = self._view {
+            params.push(("view", value.to_string()));
+        }
         if let Some(value) = self._page_token {
             params.push(("pageToken", value.to_string()));
         }
         if let Some(value) = self._page_size {
             params.push(("pageSize", value.to_string()));
         }
-        for &field in ["alt", "parent", "pageToken", "pageSize"].iter() {
+        for &field in ["alt", "parent", "view", "pageToken", "pageSize"].iter() {
             if self._additional_params.contains_key(field) {
                 dlg.finished(false);
                 return Err(Error::FieldClash(field));
@@ -6620,6 +7706,13 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionListCall<'a, C, A>
         self._parent = new_value.to_string();
         self
     }
+    /// The fields to include in the response.
+    ///
+    /// Sets the *view* query property to the given value.
+    pub fn view(mut self, new_value: &str) -> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionListCall<'a, C, A> {
+        self._view = Some(new_value.to_string());
+        self
+    }
     /// Optional pagination token, returned earlier via
     /// ListCryptoKeyVersionsResponse.next_page_token.
     ///
@@ -6660,9 +7753,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionListCall<'a, C, A>
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -6732,8 +7823,9 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionListCall<'a, C, A>
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.projects().locations_key_rings_crypto_keys_list("parent")
-///              .page_token("sadipscing")
-///              .page_size(-48)
+///              .version_view("amet")
+///              .page_token("no")
+///              .page_size(-36)
 ///              .doit();
 /// # }
 /// ```
@@ -6742,6 +7834,7 @@ pub struct ProjectLocationKeyRingCryptoKeyListCall<'a, C, A>
 
     hub: &'a CloudKMS<C, A>,
     _parent: String,
+    _version_view: Option<String>,
     _page_token: Option<String>,
     _page_size: Option<i32>,
     _delegate: Option<&'a mut Delegate>,
@@ -6766,15 +7859,18 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyListCall<'a, C, A> where C: Borrow
         };
         dlg.begin(MethodInfo { id: "cloudkms.projects.locations.keyRings.cryptoKeys.list",
                                http_method: hyper::method::Method::Get });
-        let mut params: Vec<(&str, String)> = Vec::with_capacity((5 + self._additional_params.len()));
+        let mut params: Vec<(&str, String)> = Vec::with_capacity((6 + self._additional_params.len()));
         params.push(("parent", self._parent.to_string()));
+        if let Some(value) = self._version_view {
+            params.push(("versionView", value.to_string()));
+        }
         if let Some(value) = self._page_token {
             params.push(("pageToken", value.to_string()));
         }
         if let Some(value) = self._page_size {
             params.push(("pageSize", value.to_string()));
         }
-        for &field in ["alt", "parent", "pageToken", "pageSize"].iter() {
+        for &field in ["alt", "parent", "versionView", "pageToken", "pageSize"].iter() {
             if self._additional_params.contains_key(field) {
                 dlg.finished(false);
                 return Err(Error::FieldClash(field));
@@ -6903,6 +7999,13 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyListCall<'a, C, A> where C: Borrow
         self._parent = new_value.to_string();
         self
     }
+    /// The fields of the primary version to include in the response.
+    ///
+    /// Sets the *version view* query property to the given value.
+    pub fn version_view(mut self, new_value: &str) -> ProjectLocationKeyRingCryptoKeyListCall<'a, C, A> {
+        self._version_view = Some(new_value.to_string());
+        self
+    }
     /// Optional pagination token, returned earlier via
     /// ListCryptoKeysResponse.next_page_token.
     ///
@@ -6942,9 +8045,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyListCall<'a, C, A> where C: Borrow
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -7231,9 +8332,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionCreateCall<'a, C, 
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -7484,9 +8583,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionGetCall<'a, C, A> 
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -7770,9 +8867,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeySetIamPolicyCall<'a, C, A> where C
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -7815,7 +8910,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeySetIamPolicyCall<'a, C, A> where C
 
 
 /// Restore a CryptoKeyVersion in the
-/// DESTROY_SCHEDULED,
+/// DESTROY_SCHEDULED
 /// state.
 /// 
 /// Upon restoration of the CryptoKeyVersion, state
@@ -8060,9 +9155,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionRestoreCall<'a, C,
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -8106,7 +9199,9 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionRestoreCall<'a, C,
 
 /// Create a new CryptoKey within a KeyRing.
 /// 
-/// CryptoKey.purpose is required.
+/// CryptoKey.purpose and
+/// CryptoKey.version_template.algorithm
+/// are required.
 ///
 /// A builder for the *locations.keyRings.cryptoKeys.create* method supported by a *project* resource.
 /// It is not used directly, but through a `ProjectMethods` instance.
@@ -8140,7 +9235,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCryptoKeyVersionRestoreCall<'a, C,
 /// // execute the final call using `doit()`.
 /// // Values shown here are possibly random and not representative !
 /// let result = hub.projects().locations_key_rings_crypto_keys_create(req, "parent")
-///              .crypto_key_id("eirmod")
+///              .crypto_key_id("Lorem")
 ///              .doit();
 /// # }
 /// ```
@@ -8360,9 +9455,7 @@ impl<'a, C, A> ProjectLocationKeyRingCryptoKeyCreateCall<'a, C, A> where C: Borr
     /// # Additional Parameters
     ///
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
-    /// * *pp* (query-boolean) - Pretty-print response.
     /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
-    /// * *bearer_token* (query-string) - OAuth bearer token.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.

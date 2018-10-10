@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *Cloud Functions* crate version *1.0.7+20171206*, where *20171206* is the exact revision of the *cloudfunctions:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *Cloud Functions* crate version *1.0.7+20181002*, where *20181002* is the exact revision of the *cloudfunctions:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *Cloud Functions* *v1* API can be found at the
 //! [official documentation site](https://cloud.google.com/functions).
@@ -385,213 +385,6 @@ pub struct CallFunctionRequest {
 impl RequestValue for CallFunctionRequest {}
 
 
-/// Describes EventTrigger, used to request events be sent from another
-/// service.
-/// 
-/// This type is not used in any activity, and only used as *part* of another schema.
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct EventTrigger {
-    /// Required. The type of event to observe. For example:
-    /// `providers/cloud.storage/eventTypes/object.change` and
-    /// `providers/cloud.pubsub/eventTypes/topic.publish`.
-    /// 
-    /// Event types match pattern `providers/*/eventTypes/*.*`.
-    /// The pattern contains:
-    ///  1. namespace: For example, `cloud.storage` and
-    ///     `google.firebase.analytics`.
-    ///  2. resource type: The type of resource on which event occurs. For
-    ///     example, the Google Cloud Storage API includes the type `object`.
-    ///  3. action: The action that generates the event. For example, action for
-    ///     a Google Cloud Storage Object is 'change'.
-    /// These parts are lower case.
-    #[serde(rename="eventType")]
-    pub event_type: Option<String>,
-    /// Required. The resource(s) from which to observe events, for example,
-    /// `projects/_/buckets/myBucket`.
-    /// 
-    /// Not all syntactically correct values are accepted by all services. For
-    /// example:
-    /// 
-    /// 1. The authorization model must support it. Google Cloud Functions
-    ///    only allows EventTriggers to be deployed that observe resources in the
-    ///    same project as the `CloudFunction`.
-    /// 2. The resource type must match the pattern expected for an
-    ///    `event_type`. For example, an `EventTrigger` that has an
-    ///    `event_type` of "google.pubsub.topic.publish" should have a resource
-    ///    that matches Google Cloud Pub/Sub topics.
-    /// 
-    /// Additionally, some services may support short names when creating an
-    /// `EventTrigger`. These will always be returned in the normalized "long"
-    /// format.
-    /// 
-    /// See each *service's* documentation for supported formats.
-    pub resource: Option<String>,
-    /// The hostname of the service that should be observed.
-    /// 
-    /// If no string is provided, the default service implementing the API will
-    /// be used. For example, `storage.googleapis.com` is the default for all
-    /// event types in the `google.storage` namespace.
-    pub service: Option<String>,
-    /// Specifies policy for failed executions.
-    #[serde(rename="failurePolicy")]
-    pub failure_policy: Option<FailurePolicy>,
-}
-
-impl Part for EventTrigger {}
-
-
-/// Describes the retry policy in case of function's execution failure.
-/// A function execution will be retried on any failure.
-/// A failed execution will be retried up to 7 days with an exponential backoff
-/// (capped at 10 seconds).
-/// Retried execution is charged as any other execution.
-/// 
-/// This type is not used in any activity, and only used as *part* of another schema.
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Retry { _never_set: Option<bool> }
-
-impl Part for Retry {}
-
-
-/// Response of `GenerateSourceUploadUrl` method.
-/// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [locations functions generate upload url projects](struct.ProjectLocationFunctionGenerateUploadUrlCall.html) (response)
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct GenerateUploadUrlResponse {
-    /// The generated Google Cloud Storage signed URL that should be used for a
-    /// function source code upload. The uploaded file should be a zip archive
-    /// which contains a function.
-    #[serde(rename="uploadUrl")]
-    pub upload_url: Option<String>,
-}
-
-impl ResponseResult for GenerateUploadUrlResponse {}
-
-
-/// The response message for Locations.ListLocations.
-/// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [locations list projects](struct.ProjectLocationListCall.html) (response)
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct ListLocationsResponse {
-    /// The standard List next-page token.
-    #[serde(rename="nextPageToken")]
-    pub next_page_token: Option<String>,
-    /// A list of locations that matches the specified filter in the request.
-    pub locations: Option<Vec<Location>>,
-}
-
-impl ResponseResult for ListLocationsResponse {}
-
-
-/// A resource that represents Google Cloud Platform location.
-/// 
-/// This type is not used in any activity, and only used as *part* of another schema.
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Location {
-    /// Cross-service attributes for the location. For example
-    /// 
-    ///     {"cloud.googleapis.com/region": "us-east1"}
-    pub labels: Option<HashMap<String, String>>,
-    /// The canonical id for this location. For example: `"us-east1"`.
-    #[serde(rename="locationId")]
-    pub location_id: Option<String>,
-    /// Resource name for the location, which may vary between implementations.
-    /// For example: `"projects/example-project/locations/us-east1"`
-    pub name: Option<String>,
-    /// Service-specific metadata. For example the available capacity at the given
-    /// location.
-    pub metadata: Option<HashMap<String, String>>,
-}
-
-impl Part for Location {}
-
-
-/// Response of `CallFunction` method.
-/// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [locations functions call projects](struct.ProjectLocationFunctionCallCall.html) (response)
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct CallFunctionResponse {
-    /// Execution id of function invocation.
-    #[serde(rename="executionId")]
-    pub execution_id: Option<String>,
-    /// Result populated for successful execution of synchronous function. Will
-    /// not be populated if function does not return a result through context.
-    pub result: Option<String>,
-    /// Either system or user-function generated error. Set if execution
-    /// was not successful.
-    pub error: Option<String>,
-}
-
-impl ResponseResult for CallFunctionResponse {}
-
-
-/// This resource represents a long-running operation that is the result of a
-/// network API call.
-/// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [locations functions patch projects](struct.ProjectLocationFunctionPatchCall.html) (response)
-/// * [list operations](struct.OperationListCall.html) (none)
-/// * [get operations](struct.OperationGetCall.html) (response)
-/// * [locations functions delete projects](struct.ProjectLocationFunctionDeleteCall.html) (response)
-/// * [locations functions create projects](struct.ProjectLocationFunctionCreateCall.html) (response)
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct Operation {
-    /// The error result of the operation in case of failure or cancellation.
-    pub error: Option<Status>,
-    /// If the value is `false`, it means the operation is still in progress.
-    /// If `true`, the operation is completed, and either `error` or `response` is
-    /// available.
-    pub done: Option<bool>,
-    /// The normal response of the operation in case of success.  If the original
-    /// method returns no data on success, such as `Delete`, the response is
-    /// `google.protobuf.Empty`.  If the original method is standard
-    /// `Get`/`Create`/`Update`, the response should be the resource.  For other
-    /// methods, the response should have the type `XxxResponse`, where `Xxx`
-    /// is the original method name.  For example, if the original method name
-    /// is `TakeSnapshot()`, the inferred response type is
-    /// `TakeSnapshotResponse`.
-    pub response: Option<HashMap<String, String>>,
-    /// The server-assigned name, which is only unique within the same service that
-    /// originally returns it. If you use the default HTTP mapping, the
-    /// `name` should have the format of `operations/some/unique/name`.
-    pub name: Option<String>,
-    /// Service-specific metadata associated with the operation.  It typically
-    /// contains progress information and common metadata such as create time.
-    /// Some services might not provide such metadata.  Any method that returns a
-    /// long-running operation should document the metadata type, if any.
-    pub metadata: Option<HashMap<String, String>>,
-}
-
-impl Resource for Operation {}
-impl ResponseResult for Operation {}
-
-
 /// The `Status` type defines a logical error model that is suitable for different
 /// programming environments, including REST APIs and RPC APIs. It is used by
 /// [gRPC](https://github.com/grpc). The error model is designed to be:
@@ -661,6 +454,274 @@ pub struct Status {
 }
 
 impl Part for Status {}
+
+
+/// Describes the retry policy in case of function's execution failure.
+/// A function execution will be retried on any failure.
+/// A failed execution will be retried up to 7 days with an exponential backoff
+/// (capped at 10 seconds).
+/// Retried execution is charged as any other execution.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct Retry { _never_set: Option<bool> }
+
+impl Part for Retry {}
+
+
+/// Response of `GenerateSourceUploadUrl` method.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [locations functions generate upload url projects](struct.ProjectLocationFunctionGenerateUploadUrlCall.html) (response)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct GenerateUploadUrlResponse {
+    /// The generated Google Cloud Storage signed URL that should be used for a
+    /// function source code upload. The uploaded file should be a zip archive
+    /// which contains a function.
+    #[serde(rename="uploadUrl")]
+    pub upload_url: Option<String>,
+}
+
+impl ResponseResult for GenerateUploadUrlResponse {}
+
+
+/// The response message for Locations.ListLocations.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [locations list projects](struct.ProjectLocationListCall.html) (response)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct ListLocationsResponse {
+    /// The standard List next-page token.
+    #[serde(rename="nextPageToken")]
+    pub next_page_token: Option<String>,
+    /// A list of locations that matches the specified filter in the request.
+    pub locations: Option<Vec<Location>>,
+}
+
+impl ResponseResult for ListLocationsResponse {}
+
+
+/// A resource that represents Google Cloud Platform location.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct Location {
+    /// The canonical id for this location. For example: `"us-east1"`.
+    #[serde(rename="locationId")]
+    pub location_id: Option<String>,
+    /// Cross-service attributes for the location. For example
+    /// 
+    ///     {"cloud.googleapis.com/region": "us-east1"}
+    pub labels: Option<HashMap<String, String>>,
+    /// The friendly name for this location, typically a nearby city name.
+    /// For example, "Tokyo".
+    #[serde(rename="displayName")]
+    pub display_name: Option<String>,
+    /// Resource name for the location, which may vary between implementations.
+    /// For example: `"projects/example-project/locations/us-east1"`
+    pub name: Option<String>,
+    /// Service-specific metadata. For example the available capacity at the given
+    /// location.
+    pub metadata: Option<HashMap<String, String>>,
+}
+
+impl Part for Location {}
+
+
+/// Response of `CallFunction` method.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [locations functions call projects](struct.ProjectLocationFunctionCallCall.html) (response)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct CallFunctionResponse {
+    /// Execution id of function invocation.
+    #[serde(rename="executionId")]
+    pub execution_id: Option<String>,
+    /// Result populated for successful execution of synchronous function. Will
+    /// not be populated if function does not return a result through context.
+    pub result: Option<String>,
+    /// Either system or user-function generated error. Set if execution
+    /// was not successful.
+    pub error: Option<String>,
+}
+
+impl ResponseResult for CallFunctionResponse {}
+
+
+/// Describes a Cloud Function that contains user computation executed in
+/// response to an event. It encapsulate function and triggers configurations.
+/// 
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [locations functions patch projects](struct.ProjectLocationFunctionPatchCall.html) (request)
+/// * [locations functions get projects](struct.ProjectLocationFunctionGetCall.html) (response)
+/// * [locations functions create projects](struct.ProjectLocationFunctionCreateCall.html) (request)
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct CloudFunction {
+    /// Output only. Status of the function deployment.
+    pub status: Option<String>,
+    /// A source that fires events in response to a condition in another service.
+    #[serde(rename="eventTrigger")]
+    pub event_trigger: Option<EventTrigger>,
+    /// Output only. The last update timestamp of a Cloud Function.
+    #[serde(rename="updateTime")]
+    pub update_time: Option<String>,
+    /// User-provided description of a function.
+    pub description: Option<String>,
+    /// The limit on the maximum number of function instances that may coexist at a
+    /// given time. This feature is currently in alpha, available only for
+    /// whitelisted users.
+    #[serde(rename="maxInstances")]
+    pub max_instances: Option<i32>,
+    /// **Beta Feature**
+    /// 
+    /// The source repository where a function is hosted.
+    #[serde(rename="sourceRepository")]
+    pub source_repository: Option<SourceRepository>,
+    /// An HTTPS endpoint type of source that can be triggered via URL.
+    #[serde(rename="httpsTrigger")]
+    pub https_trigger: Option<HttpsTrigger>,
+    /// The Google Cloud Storage URL, starting with gs://, pointing to the zip
+    /// archive which contains the function.
+    #[serde(rename="sourceArchiveUrl")]
+    pub source_archive_url: Option<String>,
+    /// Labels associated with this Cloud Function.
+    pub labels: Option<HashMap<String, String>>,
+    /// Output only.
+    /// The version identifier of the Cloud Function. Each deployment attempt
+    /// results in a new version of a function being created.
+    #[serde(rename="versionId")]
+    pub version_id: Option<String>,
+    /// The name of the function (as defined in source code) that will be
+    /// executed. Defaults to the resource name suffix, if not specified. For
+    /// backward compatibility, if function with given name is not found, then the
+    /// system will try to use function named "function".
+    /// For Node.js this is name of a function exported by the module specified
+    /// in `source_location`.
+    #[serde(rename="entryPoint")]
+    pub entry_point: Option<String>,
+    /// A user-defined name of the function. Function names must be unique
+    /// globally and match pattern `projects/*/locations/*/functions/*`
+    pub name: Option<String>,
+    /// The VPC Network that this cloud function can connect to. It can be
+    /// either the fully-qualified URI, or the short name of the network resource.
+    /// If the short network name is used, the network must belong to the same
+    /// project. Otherwise, it must belong to a project within the same
+    /// organization. The format of this field is either
+    /// `projects/{project}/global/networks/{network}` or `{network}`, where
+    /// {project} is a project id where the network is defined, and {network} is
+    /// the short name of the network.
+    /// 
+    /// See [the VPC documentation](https://cloud.google.com/compute/docs/vpc) for
+    /// more information on connecting Cloud projects.
+    /// 
+    /// This feature is currently in alpha, available only for whitelisted users.
+    pub network: Option<String>,
+    /// The Google Cloud Storage signed URL used for source uploading, generated
+    /// by google.cloud.functions.v1.GenerateUploadUrl
+    #[serde(rename="sourceUploadUrl")]
+    pub source_upload_url: Option<String>,
+    /// **Beta Feature**
+    /// 
+    /// Environment variables that shall be available during function execution.
+    #[serde(rename="environmentVariables")]
+    pub environment_variables: Option<HashMap<String, String>>,
+    /// The amount of memory in MB available for a function.
+    /// Defaults to 256MB.
+    #[serde(rename="availableMemoryMb")]
+    pub available_memory_mb: Option<i32>,
+    /// Output only. The email of the function's service account.
+    #[serde(rename="serviceAccountEmail")]
+    pub service_account_email: Option<String>,
+    /// The function execution timeout. Execution is considered failed and
+    /// can be terminated if the function is not completed at the end of the
+    /// timeout period. Defaults to 60 seconds.
+    pub timeout: Option<String>,
+    /// The runtime in which the function is going to run. If empty, defaults to
+    /// Node.js 6.
+    pub runtime: Option<String>,
+}
+
+impl RequestValue for CloudFunction {}
+impl ResponseResult for CloudFunction {}
+
+
+/// Describes EventTrigger, used to request events be sent from another
+/// service.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct EventTrigger {
+    /// Required. The type of event to observe. For example:
+    /// `providers/cloud.storage/eventTypes/object.change` and
+    /// `providers/cloud.pubsub/eventTypes/topic.publish`.
+    /// 
+    /// Event types match pattern `providers/*/eventTypes/*.*`.
+    /// The pattern contains:
+    /// 
+    /// 1. namespace: For example, `cloud.storage` and
+    ///    `google.firebase.analytics`.
+    /// 2. resource type: The type of resource on which event occurs. For
+    ///    example, the Google Cloud Storage API includes the type `object`.
+    /// 3. action: The action that generates the event. For example, action for
+    ///    a Google Cloud Storage Object is 'change'.
+    /// These parts are lower case.
+    #[serde(rename="eventType")]
+    pub event_type: Option<String>,
+    /// Required. The resource(s) from which to observe events, for example,
+    /// `projects/_/buckets/myBucket`.
+    /// 
+    /// Not all syntactically correct values are accepted by all services. For
+    /// example:
+    /// 
+    /// 1. The authorization model must support it. Google Cloud Functions
+    ///    only allows EventTriggers to be deployed that observe resources in the
+    ///    same project as the `CloudFunction`.
+    /// 2. The resource type must match the pattern expected for an
+    ///    `event_type`. For example, an `EventTrigger` that has an
+    ///    `event_type` of "google.pubsub.topic.publish" should have a resource
+    ///    that matches Google Cloud Pub/Sub topics.
+    /// 
+    /// Additionally, some services may support short names when creating an
+    /// `EventTrigger`. These will always be returned in the normalized "long"
+    /// format.
+    /// 
+    /// See each *service's* documentation for supported formats.
+    pub resource: Option<String>,
+    /// The hostname of the service that should be observed.
+    /// 
+    /// If no string is provided, the default service implementing the API will
+    /// be used. For example, `storage.googleapis.com` is the default for all
+    /// event types in the `google.storage` namespace.
+    pub service: Option<String>,
+    /// Specifies policy for failed executions.
+    #[serde(rename="failurePolicy")]
+    pub failure_policy: Option<FailurePolicy>,
+}
+
+impl Part for EventTrigger {}
 
 
 /// The response message for Operations.ListOperations.
@@ -821,79 +882,50 @@ pub struct GenerateUploadUrlRequest { _never_set: Option<bool> }
 impl RequestValue for GenerateUploadUrlRequest {}
 
 
-/// Describes a Cloud Function that contains user computation executed in
-/// response to an event. It encapsulate function and triggers configurations.
+/// This resource represents a long-running operation that is the result of a
+/// network API call.
 /// 
 /// # Activities
 /// 
 /// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
 /// The list links the activity name, along with information about where it is used (one of *request* and *response*).
 /// 
-/// * [locations functions patch projects](struct.ProjectLocationFunctionPatchCall.html) (request)
-/// * [locations functions get projects](struct.ProjectLocationFunctionGetCall.html) (response)
-/// * [locations functions create projects](struct.ProjectLocationFunctionCreateCall.html) (request)
+/// * [locations functions patch projects](struct.ProjectLocationFunctionPatchCall.html) (response)
+/// * [list operations](struct.OperationListCall.html) (none)
+/// * [get operations](struct.OperationGetCall.html) (response)
+/// * [locations functions delete projects](struct.ProjectLocationFunctionDeleteCall.html) (response)
+/// * [locations functions create projects](struct.ProjectLocationFunctionCreateCall.html) (response)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct CloudFunction {
-    /// A source that fires events in response to a condition in another service.
-    #[serde(rename="eventTrigger")]
-    pub event_trigger: Option<EventTrigger>,
-    /// Output only. Status of the function deployment.
-    pub status: Option<String>,
-    /// Output only. The last update timestamp of a Cloud Function.
-    #[serde(rename="updateTime")]
-    pub update_time: Option<String>,
-    /// User-provided description of a function.
-    pub description: Option<String>,
-    /// **Beta Feature**
-    /// 
-    /// The source repository where a function is hosted.
-    #[serde(rename="sourceRepository")]
-    pub source_repository: Option<SourceRepository>,
-    /// The Google Cloud Storage signed URL used for source uploading, generated
-    /// by google.cloud.functions.v1.GenerateUploadUrl
-    #[serde(rename="sourceUploadUrl")]
-    pub source_upload_url: Option<String>,
-    /// An HTTPS endpoint type of source that can be triggered via URL.
-    #[serde(rename="httpsTrigger")]
-    pub https_trigger: Option<HttpsTrigger>,
-    /// The Google Cloud Storage URL, starting with gs://, pointing to the zip
-    /// archive which contains the function.
-    #[serde(rename="sourceArchiveUrl")]
-    pub source_archive_url: Option<String>,
-    /// Labels associated with this Cloud Function.
-    pub labels: Option<HashMap<String, String>>,
-    /// The amount of memory in MB available for a function.
-    /// Defaults to 256MB.
-    #[serde(rename="availableMemoryMb")]
-    pub available_memory_mb: Option<i32>,
-    /// Output only.
-    /// The version identifier of the Cloud Function. Each deployment attempt
-    /// results in a new version of a function being created.
-    #[serde(rename="versionId")]
-    pub version_id: Option<String>,
-    /// The name of the function (as defined in source code) that will be
-    /// executed. Defaults to the resource name suffix, if not specified. For
-    /// backward compatibility, if function with given name is not found, then the
-    /// system will try to use function named "function".
-    /// For Node.js this is name of a function exported by the module specified
-    /// in `source_location`.
-    #[serde(rename="entryPoint")]
-    pub entry_point: Option<String>,
-    /// Output only. The email of the function's service account.
-    #[serde(rename="serviceAccountEmail")]
-    pub service_account_email: Option<String>,
-    /// The function execution timeout. Execution is considered failed and
-    /// can be terminated if the function is not completed at the end of the
-    /// timeout period. Defaults to 60 seconds.
-    pub timeout: Option<String>,
-    /// A user-defined name of the function. Function names must be unique
-    /// globally and match pattern `projects/*/locations/*/functions/*`
+pub struct Operation {
+    /// The error result of the operation in case of failure or cancellation.
+    pub error: Option<Status>,
+    /// If the value is `false`, it means the operation is still in progress.
+    /// If `true`, the operation is completed, and either `error` or `response` is
+    /// available.
+    pub done: Option<bool>,
+    /// The normal response of the operation in case of success.  If the original
+    /// method returns no data on success, such as `Delete`, the response is
+    /// `google.protobuf.Empty`.  If the original method is standard
+    /// `Get`/`Create`/`Update`, the response should be the resource.  For other
+    /// methods, the response should have the type `XxxResponse`, where `Xxx`
+    /// is the original method name.  For example, if the original method name
+    /// is `TakeSnapshot()`, the inferred response type is
+    /// `TakeSnapshotResponse`.
+    pub response: Option<HashMap<String, String>>,
+    /// The server-assigned name, which is only unique within the same service that
+    /// originally returns it. If you use the default HTTP mapping, the
+    /// `name` should have the format of `operations/some/unique/name`.
     pub name: Option<String>,
+    /// Service-specific metadata associated with the operation.  It typically
+    /// contains progress information and common metadata such as create time.
+    /// Some services might not provide such metadata.  Any method that returns a
+    /// long-running operation should document the metadata type, if any.
+    pub metadata: Option<HashMap<String, String>>,
 }
 
-impl RequestValue for CloudFunction {}
-impl ResponseResult for CloudFunction {}
+impl Resource for Operation {}
+impl ResponseResult for Operation {}
 
 
 
@@ -1129,16 +1161,27 @@ impl<'a, C, A> ProjectMethods<'a, C, A> {
     ///
     /// Returns a signed URL for uploading a function source code.
     /// For more information about the signed URL usage see:
-    /// https://cloud.google.com/storage/docs/access-control/signed-urls
+    /// https://cloud.google.com/storage/docs/access-control/signed-urls.
     /// Once the function source code upload is complete, the used signed
     /// URL should be provided in CreateFunction or UpdateFunction request
     /// as a reference to the function source code.
+    /// 
+    /// When uploading source code to the generated signed URL, please follow
+    /// these restrictions:
+    /// 
+    /// * Source file type should be a zip file.
+    /// * Source file size should not exceed 100MB limit.
+    /// 
+    /// When making a HTTP PUT request, these two headers need to be specified:
+    /// 
+    /// * `content-type: application/zip`
+    /// * `x-goog-content-length-range: 0,104857600`
     /// 
     /// # Arguments
     ///
     /// * `request` - No description provided.
     /// * `parent` - The project and location in which the Google Cloud Storage signed URL
-    ///              should be generated, specified in the format `projects/*/locations/*
+    ///              should be generated, specified in the format `projects/*/locations/*`.
     pub fn locations_functions_generate_upload_url(&self, request: GenerateUploadUrlRequest, parent: &str) -> ProjectLocationFunctionGenerateUploadUrlCall<'a, C, A> {
         ProjectLocationFunctionGenerateUploadUrlCall {
             hub: self.hub,
@@ -1435,17 +1478,15 @@ impl<'a, C, A> OperationGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: 
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> OperationGetCall<'a, C, A>
@@ -1708,17 +1749,15 @@ impl<'a, C, A> OperationListCall<'a, C, A> where C: BorrowMut<hyper::Client>, A:
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> OperationListCall<'a, C, A>
@@ -1997,17 +2036,15 @@ impl<'a, C, A> ProjectLocationListCall<'a, C, A> where C: BorrowMut<hyper::Clien
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectLocationListCall<'a, C, A>
@@ -2252,17 +2289,15 @@ impl<'a, C, A> ProjectLocationFunctionDeleteCall<'a, C, A> where C: BorrowMut<hy
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectLocationFunctionDeleteCall<'a, C, A>
@@ -2505,17 +2540,15 @@ impl<'a, C, A> ProjectLocationFunctionGetCall<'a, C, A> where C: BorrowMut<hyper
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectLocationFunctionGetCall<'a, C, A>
@@ -2792,17 +2825,15 @@ impl<'a, C, A> ProjectLocationFunctionCreateCall<'a, C, A> where C: BorrowMut<hy
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectLocationFunctionCreateCall<'a, C, A>
@@ -3089,17 +3120,15 @@ impl<'a, C, A> ProjectLocationFunctionPatchCall<'a, C, A> where C: BorrowMut<hyp
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectLocationFunctionPatchCall<'a, C, A>
@@ -3136,10 +3165,21 @@ impl<'a, C, A> ProjectLocationFunctionPatchCall<'a, C, A> where C: BorrowMut<hyp
 
 /// Returns a signed URL for uploading a function source code.
 /// For more information about the signed URL usage see:
-/// https://cloud.google.com/storage/docs/access-control/signed-urls
+/// https://cloud.google.com/storage/docs/access-control/signed-urls.
 /// Once the function source code upload is complete, the used signed
 /// URL should be provided in CreateFunction or UpdateFunction request
 /// as a reference to the function source code.
+/// 
+/// When uploading source code to the generated signed URL, please follow
+/// these restrictions:
+/// 
+/// * Source file type should be a zip file.
+/// * Source file size should not exceed 100MB limit.
+/// 
+/// When making a HTTP PUT request, these two headers need to be specified:
+/// 
+/// * `content-type: application/zip`
+/// * `x-goog-content-length-range: 0,104857600`
 ///
 /// A builder for the *locations.functions.generateUploadUrl* method supported by a *project* resource.
 /// It is not used directly, but through a `ProjectMethods` instance.
@@ -3349,7 +3389,7 @@ impl<'a, C, A> ProjectLocationFunctionGenerateUploadUrlCall<'a, C, A> where C: B
         self
     }
     /// The project and location in which the Google Cloud Storage signed URL
-    /// should be generated, specified in the format `projects/*/locations/*
+    /// should be generated, specified in the format `projects/*/locations/*`.
     ///
     /// Sets the *parent* path property to the given value.
     ///
@@ -3379,17 +3419,15 @@ impl<'a, C, A> ProjectLocationFunctionGenerateUploadUrlCall<'a, C, A> where C: B
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectLocationFunctionGenerateUploadUrlCall<'a, C, A>
@@ -3664,17 +3702,15 @@ impl<'a, C, A> ProjectLocationFunctionCallCall<'a, C, A> where C: BorrowMut<hype
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectLocationFunctionCallCall<'a, C, A>
@@ -3953,17 +3989,15 @@ impl<'a, C, A> ProjectLocationFunctionGenerateDownloadUrlCall<'a, C, A> where C:
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectLocationFunctionGenerateDownloadUrlCall<'a, C, A>
@@ -4236,17 +4270,15 @@ impl<'a, C, A> ProjectLocationFunctionListCall<'a, C, A> where C: BorrowMut<hype
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ProjectLocationFunctionListCall<'a, C, A>

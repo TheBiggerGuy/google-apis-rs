@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *AnalyticsReporting* crate version *1.0.7+20171108*, where *20171108* is the exact revision of the *analyticsreporting:v4* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *AnalyticsReporting* crate version *1.0.7+20181008*, where *20181008* is the exact revision of the *analyticsreporting:v4* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *AnalyticsReporting* *v4* API can be found at the
 //! [official documentation site](https://developers.google.com/analytics/devguides/reporting/core/v4/).
@@ -525,30 +525,41 @@ pub struct GetReportsResponse {
     /// all responses.
     #[serde(rename="queryCost")]
     pub query_cost: Option<i32>,
+    /// Responses corresponding to each of the request.
+    pub reports: Option<Vec<Report>>,
     /// The amount of resource quota remaining for the property.
     #[serde(rename="resourceQuotasRemaining")]
     pub resource_quotas_remaining: Option<ResourceQuotasRemaining>,
-    /// Responses corresponding to each of the request.
-    pub reports: Option<Vec<Report>>,
 }
 
 impl ResponseResult for GetReportsResponse {}
 
 
-/// SegmentDefinition defines the segment to be a set of SegmentFilters which
-/// are combined together with a logical `AND` operation.
+/// Dimension filter specifies the filtering options on a dimension.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct SegmentDefinition {
-    /// A segment is defined by a set of segment filters which are combined
-    /// together with a logical `AND` operation.
-    #[serde(rename="segmentFilters")]
-    pub segment_filters: Option<Vec<SegmentFilter>>,
+pub struct SegmentDimensionFilter {
+    /// Name of the dimension for which the filter is being applied.
+    #[serde(rename="dimensionName")]
+    pub dimension_name: Option<String>,
+    /// Should the match be case sensitive, ignored for `IN_LIST` operator.
+    #[serde(rename="caseSensitive")]
+    pub case_sensitive: Option<bool>,
+    /// Minimum comparison values for `BETWEEN` match type.
+    #[serde(rename="minComparisonValue")]
+    pub min_comparison_value: Option<String>,
+    /// The operator to use to match the dimension with the expressions.
+    pub operator: Option<String>,
+    /// The list of expressions, only the first element is used for all operators
+    pub expressions: Option<Vec<String>>,
+    /// Maximum comparison values for `BETWEEN` match type.
+    #[serde(rename="maxComparisonValue")]
+    pub max_comparison_value: Option<String>,
 }
 
-impl Part for SegmentDefinition {}
+impl Part for SegmentDimensionFilter {}
 
 
 /// The main request class which specifies the Reporting API request.
@@ -561,16 +572,15 @@ pub struct ReportRequest {
     /// Requests must specify at least one metric. Requests can have a
     /// total of 10 metrics.
     pub metrics: Option<Vec<Metric>>,
-    /// Page size is for paging and specifies the maximum number of returned rows.
-    /// Page size should be >= 0. A query returns the default of 1,000 rows.
-    /// The Analytics Core Reporting API returns a maximum of 10,000 rows per
-    /// request, no matter how many you ask for. It can also return fewer rows
-    /// than requested, if there aren't as many dimension segments as you expect.
-    /// For instance, there are fewer than 300 possible values for `ga:country`,
-    /// so when segmenting only by country, you can't get more than 300 rows,
-    /// even if you set `pageSize` to a higher value.
-    #[serde(rename="pageSize")]
-    pub page_size: Option<i32>,
+    /// Dimension or metric filters that restrict the data returned for your
+    /// request. To use the `filtersExpression`, supply a dimension or metric on
+    /// which to filter, followed by the filter expression. For example, the
+    /// following expression selects `ga:browser` dimension which starts with
+    /// Firefox; `ga:browser=~^Firefox`. For more information on dimensions
+    /// and metric filters, see
+    /// [Filters reference](https://developers.google.com/analytics/devguides/reporting/core/v3/reference#filters).
+    #[serde(rename="filtersExpression")]
+    pub filters_expression: Option<String>,
     /// The Analytics
     /// [view ID](https://support.google.com/analytics/answer/1009618)
     /// from which to retrieve data. Every [ReportRequest](#ReportRequest)
@@ -605,6 +615,16 @@ pub struct ReportRequest {
     ///  for details.
     #[serde(rename="samplingLevel")]
     pub sampling_level: Option<String>,
+    /// Page size is for paging and specifies the maximum number of returned rows.
+    /// Page size should be >= 0. A query returns the default of 1,000 rows.
+    /// The Analytics Core Reporting API returns a maximum of 100,000 rows per
+    /// request, no matter how many you ask for. It can also return fewer rows
+    /// than requested, if there aren't as many dimension segments as you expect.
+    /// For instance, there are fewer than 300 possible values for `ga:country`,
+    /// so when segmenting only by country, you can't get more than 300 rows,
+    /// even if you set `pageSize` to a higher value.
+    #[serde(rename="pageSize")]
+    pub page_size: Option<i32>,
     /// The metric filter clauses. They are logically combined with the `AND`
     /// operator.  Metric filters look at only the first date range and not the
     /// comparing date range. Note that filtering on metrics occurs after the
@@ -642,15 +662,6 @@ pub struct ReportRequest {
     /// ranges in the output get the same row order.
     #[serde(rename="orderBys")]
     pub order_bys: Option<Vec<OrderBy>>,
-    /// Dimension or metric filters that restrict the data returned for your
-    /// request. To use the `filtersExpression`, supply a dimension or metric on
-    /// which to filter, followed by the filter expression. For example, the
-    /// following expression selects `ga:browser` dimension which starts with
-    /// Firefox; `ga:browser=~^Firefox`. For more information on dimensions
-    /// and metric filters, see
-    /// [Filters reference](https://developers.google.com/analytics/devguides/reporting/core/v3/reference#filters).
-    #[serde(rename="filtersExpression")]
-    pub filters_expression: Option<String>,
     /// A continuation token to get the next page of the results. Adding this to
     /// the request will return the rows after the pageToken. The pageToken should
     /// be the value returned in the nextPageToken parameter in the response to
@@ -835,6 +846,21 @@ pub struct MetricHeaderEntry {
 impl Part for MetricHeaderEntry {}
 
 
+/// A list of segment filters in the `OR` group are combined with the logical OR
+/// operator.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct OrFiltersForSegment {
+    /// List of segment filters to be combined with a `OR` operator.
+    #[serde(rename="segmentFilterClauses")]
+    pub segment_filter_clauses: Option<Vec<SegmentFilterClause>>,
+}
+
+impl Part for OrFiltersForSegment {}
+
+
 /// The data response corresponding to the request.
 /// 
 /// # Activities
@@ -893,22 +919,34 @@ pub struct Segment {
 impl Part for Segment {}
 
 
-/// The resource quota tokens remaining for the property after the request is
-/// completed.
+/// Metric filter to be used in a segment filter clause.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct ResourceQuotasRemaining {
-    /// Daily resource quota remaining remaining.
-    #[serde(rename="dailyQuotaTokensRemaining")]
-    pub daily_quota_tokens_remaining: Option<i32>,
-    /// Hourly resource quota tokens remaining.
-    #[serde(rename="hourlyQuotaTokensRemaining")]
-    pub hourly_quota_tokens_remaining: Option<i32>,
+pub struct SegmentMetricFilter {
+    /// Specifies is the operation to perform to compare the metric. The default
+    /// is `EQUAL`.
+    pub operator: Option<String>,
+    /// Scope for a metric defines the level at which that metric is defined.  The
+    /// specified metric scope must be equal to or greater than its primary scope
+    /// as defined in the data model. The primary scope is defined by if the
+    /// segment is selecting users or sessions.
+    pub scope: Option<String>,
+    /// The value to compare against. If the operator is `BETWEEN`, this value is
+    /// treated as minimum comparison value.
+    #[serde(rename="comparisonValue")]
+    pub comparison_value: Option<String>,
+    /// Max comparison value is only used for `BETWEEN` operator.
+    #[serde(rename="maxComparisonValue")]
+    pub max_comparison_value: Option<String>,
+    /// The metric that will be filtered on. A `metricFilter` must contain a
+    /// metric name.
+    #[serde(rename="metricName")]
+    pub metric_name: Option<String>,
 }
 
-impl Part for ResourceQuotasRemaining {}
+impl Part for SegmentMetricFilter {}
 
 
 /// The headers for each of the pivot sections defined in the request.
@@ -979,63 +1017,6 @@ pub struct DateRangeValues {
 }
 
 impl Part for DateRangeValues {}
-
-
-/// Defines a cohort group.
-/// For example:
-/// 
-///     "cohortGroup": {
-///       "cohorts": [{
-///         "name": "cohort 1",
-///         "type": "FIRST_VISIT_DATE",
-///         "dateRange": { "startDate": "2015-08-01", "endDate": "2015-08-01" }
-///       },{
-///         "name": "cohort 2"
-///          "type": "FIRST_VISIT_DATE"
-///          "dateRange": { "startDate": "2015-07-01", "endDate": "2015-07-01" }
-///       }]
-///     }
-/// 
-/// This type is not used in any activity, and only used as *part* of another schema.
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct CohortGroup {
-    /// The definition for the cohort.
-    pub cohorts: Option<Vec<Cohort>>,
-    /// Enable Life Time Value (LTV).  LTV measures lifetime value for users
-    /// acquired through different channels.
-    /// Please see:
-    /// [Cohort Analysis](https://support.google.com/analytics/answer/6074676) and
-    /// [Lifetime Value](https://support.google.com/analytics/answer/6182550)
-    /// If the value of lifetimeValue is false:
-    /// 
-    /// - The metric values are similar to the values in the web interface cohort
-    ///   report.
-    /// - The cohort definition date ranges must be aligned to the calendar week
-    ///   and month. i.e. while requesting `ga:cohortNthWeek` the `startDate` in
-    ///   the cohort definition should be a Sunday and the `endDate` should be the
-    ///   following Saturday, and for `ga:cohortNthMonth`, the `startDate`
-    ///   should be the 1st of the month and `endDate` should be the last day
-    ///   of the month.
-    /// 
-    /// When the lifetimeValue is true:
-    /// 
-    /// - The metric values will correspond to the values in the web interface
-    ///   LifeTime value report.
-    /// - The Lifetime Value report shows you how user value (Revenue) and
-    ///   engagement (Appviews, Goal Completions, Sessions, and Session Duration)
-    ///   grow during the 90 days after a user is acquired.
-    /// - The metrics are calculated as a cumulative average per user per the time
-    ///   increment.
-    /// - The cohort definition date ranges need not be aligned to the calendar
-    ///   week and month boundaries.
-    /// - The `viewId` must be an
-    ///   [app view ID](https://support.google.com/analytics/answer/2649553#WebVersusAppViews)
-    #[serde(rename="lifetimeValue")]
-    pub lifetime_value: Option<bool>,
-}
-
-impl Part for CohortGroup {}
 
 
 /// Dimension filter specifies the filtering options on a dimension.
@@ -1209,46 +1190,77 @@ pub struct Metric {
 impl Part for Metric {}
 
 
-/// Dimension filter specifies the filtering options on a dimension.
+/// SegmentDefinition defines the segment to be a set of SegmentFilters which
+/// are combined together with a logical `AND` operation.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct SegmentDimensionFilter {
-    /// Name of the dimension for which the filter is being applied.
-    #[serde(rename="dimensionName")]
-    pub dimension_name: Option<String>,
-    /// Should the match be case sensitive, ignored for `IN_LIST` operator.
-    #[serde(rename="caseSensitive")]
-    pub case_sensitive: Option<bool>,
-    /// Minimum comparison values for `BETWEEN` match type.
-    #[serde(rename="minComparisonValue")]
-    pub min_comparison_value: Option<String>,
-    /// The operator to use to match the dimension with the expressions.
-    pub operator: Option<String>,
-    /// The list of expressions, only the first element is used for all operators
-    pub expressions: Option<Vec<String>>,
-    /// Maximum comparison values for `BETWEEN` match type.
-    #[serde(rename="maxComparisonValue")]
-    pub max_comparison_value: Option<String>,
+pub struct SegmentDefinition {
+    /// A segment is defined by a set of segment filters which are combined
+    /// together with a logical `AND` operation.
+    #[serde(rename="segmentFilters")]
+    pub segment_filters: Option<Vec<SegmentFilter>>,
 }
 
-impl Part for SegmentDimensionFilter {}
+impl Part for SegmentDefinition {}
 
 
-/// A list of segment filters in the `OR` group are combined with the logical OR
-/// operator.
+/// Defines a cohort group.
+/// For example:
+/// 
+///     "cohortGroup": {
+///       "cohorts": [{
+///         "name": "cohort 1",
+///         "type": "FIRST_VISIT_DATE",
+///         "dateRange": { "startDate": "2015-08-01", "endDate": "2015-08-01" }
+///       },{
+///         "name": "cohort 2"
+///          "type": "FIRST_VISIT_DATE"
+///          "dateRange": { "startDate": "2015-07-01", "endDate": "2015-07-01" }
+///       }]
+///     }
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct OrFiltersForSegment {
-    /// List of segment filters to be combined with a `OR` operator.
-    #[serde(rename="segmentFilterClauses")]
-    pub segment_filter_clauses: Option<Vec<SegmentFilterClause>>,
+pub struct CohortGroup {
+    /// The definition for the cohort.
+    pub cohorts: Option<Vec<Cohort>>,
+    /// Enable Life Time Value (LTV).  LTV measures lifetime value for users
+    /// acquired through different channels.
+    /// Please see:
+    /// [Cohort Analysis](https://support.google.com/analytics/answer/6074676) and
+    /// [Lifetime Value](https://support.google.com/analytics/answer/6182550)
+    /// If the value of lifetimeValue is false:
+    /// 
+    /// - The metric values are similar to the values in the web interface cohort
+    ///   report.
+    /// - The cohort definition date ranges must be aligned to the calendar week
+    ///   and month. i.e. while requesting `ga:cohortNthWeek` the `startDate` in
+    ///   the cohort definition should be a Sunday and the `endDate` should be the
+    ///   following Saturday, and for `ga:cohortNthMonth`, the `startDate`
+    ///   should be the 1st of the month and `endDate` should be the last day
+    ///   of the month.
+    /// 
+    /// When the lifetimeValue is true:
+    /// 
+    /// - The metric values will correspond to the values in the web interface
+    ///   LifeTime value report.
+    /// - The Lifetime Value report shows you how user value (Revenue) and
+    ///   engagement (Appviews, Goal Completions, Sessions, and Session Duration)
+    ///   grow during the 90 days after a user is acquired.
+    /// - The metrics are calculated as a cumulative average per user per the time
+    ///   increment.
+    /// - The cohort definition date ranges need not be aligned to the calendar
+    ///   week and month boundaries.
+    /// - The `viewId` must be an
+    ///   [app view ID](https://support.google.com/analytics/answer/2649553#WebVersusAppViews)
+    #[serde(rename="lifetimeValue")]
+    pub lifetime_value: Option<bool>,
 }
 
-impl Part for OrFiltersForSegment {}
+impl Part for CohortGroup {}
 
 
 /// Filter Clause to be used in a segment definition, can be wither a metric or
@@ -1289,34 +1301,22 @@ pub struct DimensionFilterClause {
 impl Part for DimensionFilterClause {}
 
 
-/// Metric filter to be used in a segment filter clause.
+/// The resource quota tokens remaining for the property after the request is
+/// completed.
 /// 
 /// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct SegmentMetricFilter {
-    /// Specifies is the operation to perform to compare the metric. The default
-    /// is `EQUAL`.
-    pub operator: Option<String>,
-    /// Scope for a metric defines the level at which that metric is defined.  The
-    /// specified metric scope must be equal to or greater than its primary scope
-    /// as defined in the data model. The primary scope is defined by if the
-    /// segment is selecting users or sessions.
-    pub scope: Option<String>,
-    /// The value to compare against. If the operator is `BETWEEN`, this value is
-    /// treated as minimum comparison value.
-    #[serde(rename="comparisonValue")]
-    pub comparison_value: Option<String>,
-    /// Max comparison value is only used for `BETWEEN` operator.
-    #[serde(rename="maxComparisonValue")]
-    pub max_comparison_value: Option<String>,
-    /// The metric that will be filtered on. A `metricFilter` must contain a
-    /// metric name.
-    #[serde(rename="metricName")]
-    pub metric_name: Option<String>,
+pub struct ResourceQuotasRemaining {
+    /// Daily resource quota remaining remaining.
+    #[serde(rename="dailyQuotaTokensRemaining")]
+    pub daily_quota_tokens_remaining: Option<i32>,
+    /// Hourly resource quota tokens remaining.
+    #[serde(rename="hourlyQuotaTokensRemaining")]
+    pub hourly_quota_tokens_remaining: Option<i32>,
 }
 
-impl Part for SegmentMetricFilter {}
+impl Part for ResourceQuotasRemaining {}
 
 
 /// The Pivot describes the pivot section in the request.
@@ -1330,6 +1330,23 @@ pub struct Pivot {
     /// The pivot metrics. Pivot metrics are part of the
     /// restriction on total number of metrics allowed in the request.
     pub metrics: Option<Vec<Metric>>,
+    /// A list of dimensions to show as pivot columns. A Pivot can have a maximum
+    /// of 4 dimensions. Pivot dimensions are part of the restriction on the
+    /// total number of dimensions allowed in the request.
+    pub dimensions: Option<Vec<Dimension>>,
+    /// Specifies the maximum number of groups to return.
+    /// The default value is 10, also the maximum value is 1,000.
+    #[serde(rename="maxGroupCount")]
+    pub max_group_count: Option<i32>,
+    /// DimensionFilterClauses are logically combined with an `AND` operator: only
+    /// data that is included by all these DimensionFilterClauses contributes to
+    /// the values in this pivot region. Dimension filters can be used to restrict
+    /// the columns shown in the pivot region. For example if you have
+    /// `ga:browser` as the requested dimension in the pivot region, and you
+    /// specify key filters to restrict `ga:browser` to only "IE" or "Firefox",
+    /// then only those two browsers would show up as columns.
+    #[serde(rename="dimensionFilterClauses")]
+    pub dimension_filter_clauses: Option<Vec<DimensionFilterClause>>,
     /// If k metrics were requested, then the response will contain some
     /// data-dependent multiple of k columns in the report.  E.g., if you pivoted
     /// on the dimension `ga:browser` then you'd get k columns for "Firefox", k
@@ -1345,23 +1362,6 @@ pub struct Pivot {
     /// included in the response.
     #[serde(rename="startGroup")]
     pub start_group: Option<i32>,
-    /// Specifies the maximum number of groups to return.
-    /// The default value is 10, also the maximum value is 1,000.
-    #[serde(rename="maxGroupCount")]
-    pub max_group_count: Option<i32>,
-    /// DimensionFilterClauses are logically combined with an `AND` operator: only
-    /// data that is included by all these DimensionFilterClauses contributes to
-    /// the values in this pivot region. Dimension filters can be used to restrict
-    /// the columns shown in the pivot region. For example if you have
-    /// `ga:browser` as the requested dimension in the pivot region, and you
-    /// specify key filters to restrict `ga:browser` to only "IE" or "Firefox",
-    /// then only those two browsers would show up as columns.
-    #[serde(rename="dimensionFilterClauses")]
-    pub dimension_filter_clauses: Option<Vec<DimensionFilterClause>>,
-    /// A list of dimensions to show as pivot columns. A Pivot can have a maximum
-    /// of 4 dimensions. Pivot dimensions are part of the restriction on the
-    /// total number of dimensions allowed in the request.
-    pub dimensions: Option<Vec<Dimension>>,
 }
 
 impl Part for Pivot {}
@@ -1639,17 +1639,15 @@ impl<'a, C, A> ReportBatchGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, A
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
-    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
+    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
     /// * *callback* (query-string) - JSONP
     /// * *oauth_token* (query-string) - OAuth 2.0 token for the current user.
     /// * *key* (query-string) - API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.
-    /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
+    /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *alt* (query-string) - Data format for response.
     /// * *$.xgafv* (query-string) - V1 error format.
     pub fn param<T>(mut self, name: T, value: T) -> ReportBatchGetCall<'a, C, A>

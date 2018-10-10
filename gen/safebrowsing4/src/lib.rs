@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *safebrowsing* crate version *1.0.7+20171204*, where *20171204* is the exact revision of the *safebrowsing:v4* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *safebrowsing* crate version *1.0.7+20181003*, where *20181003* is the exact revision of the *safebrowsing:v4* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *safebrowsing* *v4* API can be found at the
 //! [official documentation site](https://developers.google.com/safe-browsing/).
@@ -476,25 +476,17 @@ pub struct ThreatSource {
 impl Part for ThreatSource {}
 
 
-/// Request to check entries against lists.
+/// A set of raw indices to remove from a local list.
 /// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [find threat matches](struct.ThreatMatcheFindCall.html) (request)
+/// This type is not used in any activity, and only used as *part* of another schema.
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct FindThreatMatchesRequest {
-    /// The client metadata.
-    pub client: Option<ClientInfo>,
-    /// The lists and entries to be checked for matches.
-    #[serde(rename="threatInfo")]
-    pub threat_info: Option<ThreatInfo>,
+pub struct RawIndices {
+    /// The indices to remove from a lexicographically-sorted local list.
+    pub indices: Option<Vec<i32>>,
 }
 
-impl RequestValue for FindThreatMatchesRequest {}
+impl Part for RawIndices {}
 
 
 /// A set of threats that should be added or removed from a client's local
@@ -504,26 +496,26 @@ impl RequestValue for FindThreatMatchesRequest {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct ThreatEntrySet {
-    /// The encoded 4-byte prefixes of SHA256-formatted entries, using a
-    /// Golomb-Rice encoding. The hashes are converted to uint32, sorted in
-    /// ascending order, then delta encoded and stored as encoded_data.
-    #[serde(rename="riceHashes")]
-    pub rice_hashes: Option<RiceDeltaEncoding>,
     /// The compression type for the entries in this set.
     #[serde(rename="compressionType")]
     pub compression_type: Option<String>,
     /// The raw removal indices for a local list.
     #[serde(rename="rawIndices")]
     pub raw_indices: Option<RawIndices>,
+    /// The raw SHA256-formatted entries.
+    #[serde(rename="rawHashes")]
+    pub raw_hashes: Option<RawHashes>,
     /// The encoded local, lexicographically-sorted list indices, using a
     /// Golomb-Rice encoding. Used for sending compressed removal indices. The
     /// removal indices (uint32) are sorted in ascending order, then delta encoded
     /// and stored as encoded_data.
     #[serde(rename="riceIndices")]
     pub rice_indices: Option<RiceDeltaEncoding>,
-    /// The raw SHA256-formatted entries.
-    #[serde(rename="rawHashes")]
-    pub raw_hashes: Option<RawHashes>,
+    /// The encoded 4-byte prefixes of SHA256-formatted entries, using a
+    /// Golomb-Rice encoding. The hashes are converted to uint32, sorted in
+    /// ascending order, then delta encoded and stored as encoded_data.
+    #[serde(rename="riceHashes")]
+    pub rice_hashes: Option<RiceDeltaEncoding>,
 }
 
 impl Part for ThreatEntrySet {}
@@ -542,7 +534,8 @@ pub struct RiceDeltaEncoding {
     #[serde(rename="numEntries")]
     pub num_entries: Option<i32>,
     /// The offset of the first entry in the encoded data, or, if only a single
-    /// integer was encoded, that single integer's value.
+    /// integer was encoded, that single integer's value. If the field is empty or
+    /// missing, assume zero.
     #[serde(rename="firstValue")]
     pub first_value: Option<String>,
     /// The encoded deltas that are encoded using the Golomb-Rice coder.
@@ -586,6 +579,12 @@ impl ResponseResult for Empty {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Constraints {
+    /// The compression types supported by the client.
+    #[serde(rename="supportedCompressions")]
+    pub supported_compressions: Option<Vec<String>>,
+    /// Requests the lists for a specific language. Expects ISO 639 alpha-2
+    /// format.
+    pub language: Option<String>,
     /// Sets the maximum number of entries that the client is willing to have
     /// in the local database. This should be a power of 2 between 2**10 and
     /// 2**20. If zero, no database size limit is set.
@@ -595,9 +594,10 @@ pub struct Constraints {
     /// server may pick that value based on the user's IP address. Expects ISO
     /// 3166-1 alpha-2 format.
     pub region: Option<String>,
-    /// The compression types supported by the client.
-    #[serde(rename="supportedCompressions")]
-    pub supported_compressions: Option<Vec<String>>,
+    /// A client's physical location, expressed as a ISO 31166-1 alpha-2
+    /// region code.
+    #[serde(rename="deviceLocation")]
+    pub device_location: Option<String>,
     /// The maximum size in number of entries. The update will not contain more
     /// entries than this value.  This should be a power of 2 between 2**10 and
     /// 2**20.  If zero, no update size limit is set.
@@ -655,24 +655,6 @@ pub struct ClientInfo {
 impl Part for ClientInfo {}
 
 
-/// There is no detailed description.
-/// 
-/// # Activities
-/// 
-/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
-/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
-/// 
-/// * [find threat matches](struct.ThreatMatcheFindCall.html) (response)
-/// 
-#[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct FindThreatMatchesResponse {
-    /// The threat list matches.
-    pub matches: Option<Vec<ThreatMatch>>,
-}
-
-impl ResponseResult for FindThreatMatchesResponse {}
-
-
 /// Describes an individual threat list. A list is defined by three parameters:
 /// the type of threat posed, the type of platform targeted by the threat, and
 /// the type of entries in the list.
@@ -707,12 +689,12 @@ impl Part for ThreatListDescriptor {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct FindFullHashesResponse {
+    /// The full hashes that matched the requested prefixes.
+    pub matches: Option<Vec<ThreatMatch>>,
     /// For requested entities that did not match the threat list, how long to
     /// cache the response.
     #[serde(rename="negativeCacheDuration")]
     pub negative_cache_duration: Option<String>,
-    /// The full hashes that matched the requested prefixes.
-    pub matches: Option<Vec<ThreatMatch>>,
     /// The minimum duration the client must wait before issuing any find hashes
     /// request. If this field is not set, clients can issue a request as soon as
     /// they want.
@@ -744,19 +726,22 @@ pub struct ThreatEntry {
 impl Part for ThreatEntry {}
 
 
-/// A single metadata entry.
+/// There is no detailed description.
 /// 
-/// This type is not used in any activity, and only used as *part* of another schema.
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [find threat matches](struct.ThreatMatcheFindCall.html) (response)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct MetadataEntry {
-    /// The metadata entry value. For JSON requests, the value is base64-encoded.
-    pub value: Option<String>,
-    /// The metadata entry key. For JSON requests, the key is base64-encoded.
-    pub key: Option<String>,
+pub struct FindThreatMatchesResponse {
+    /// The threat list matches.
+    pub matches: Option<Vec<ThreatMatch>>,
 }
 
-impl Part for MetadataEntry {}
+impl ResponseResult for FindThreatMatchesResponse {}
 
 
 /// There is no detailed description.
@@ -802,17 +787,25 @@ pub struct ListThreatListsResponse {
 impl ResponseResult for ListThreatListsResponse {}
 
 
-/// A set of raw indices to remove from a local list.
+/// Request to check entries against lists.
 /// 
-/// This type is not used in any activity, and only used as *part* of another schema.
+/// # Activities
+/// 
+/// This type is used in activities, which are methods you may call on this type or where this type is involved in. 
+/// The list links the activity name, along with information about where it is used (one of *request* and *response*).
+/// 
+/// * [find threat matches](struct.ThreatMatcheFindCall.html) (request)
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
-pub struct RawIndices {
-    /// The indices to remove from a lexicographically-sorted local list.
-    pub indices: Option<Vec<i32>>,
+pub struct FindThreatMatchesRequest {
+    /// The client metadata.
+    pub client: Option<ClientInfo>,
+    /// The lists and entries to be checked for matches.
+    #[serde(rename="threatInfo")]
+    pub threat_info: Option<ThreatInfo>,
 }
 
-impl Part for RawIndices {}
+impl RequestValue for FindThreatMatchesRequest {}
 
 
 /// Describes a Safe Browsing API update request. Clients can request updates for
@@ -915,6 +908,21 @@ pub struct FindFullHashesRequest {
 }
 
 impl RequestValue for FindFullHashesRequest {}
+
+
+/// A single metadata entry.
+/// 
+/// This type is not used in any activity, and only used as *part* of another schema.
+/// 
+#[derive(Default, Clone, Debug, Serialize, Deserialize)]
+pub struct MetadataEntry {
+    /// The metadata entry key. For JSON requests, the key is base64-encoded.
+    pub key: Option<String>,
+    /// The metadata entry value. For JSON requests, the value is base64-encoded.
+    pub value: Option<String>,
+}
+
+impl Part for MetadataEntry {}
 
 
 /// There is no detailed description.
@@ -1609,10 +1617,8 @@ impl<'a, C, A> EncodedFullHasheGetCall<'a, C, A> where C: BorrowMut<hyper::Clien
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -1827,10 +1833,8 @@ impl<'a, C, A> FullHasheFindCall<'a, C, A> where C: BorrowMut<hyper::Client>, A:
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2046,10 +2050,8 @@ impl<'a, C, A> ThreatListUpdateFetchCall<'a, C, A> where C: BorrowMut<hyper::Cli
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2291,10 +2293,8 @@ impl<'a, C, A> EncodedUpdateGetCall<'a, C, A> where C: BorrowMut<hyper::Client>,
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2478,10 +2478,8 @@ impl<'a, C, A> ThreatListListCall<'a, C, A> where C: BorrowMut<hyper::Client>, A
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2696,10 +2694,8 @@ impl<'a, C, A> ThreatMatcheFindCall<'a, C, A> where C: BorrowMut<hyper::Client>,
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -2915,10 +2911,8 @@ impl<'a, C, A> ThreatHitCreateCall<'a, C, A> where C: BorrowMut<hyper::Client>, 
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *uploadType* (query-string) - Legacy upload protocol for media (e.g. "media", "multipart").
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.

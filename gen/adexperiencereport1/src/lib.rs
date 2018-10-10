@@ -2,7 +2,7 @@
 // This file was generated automatically from 'src/mako/api/lib.rs.mako'
 // DO NOT EDIT !
 
-//! This documentation was generated from *Ad Experience Report* crate version *1.0.7+20171129*, where *20171129* is the exact revision of the *adexperiencereport:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
+//! This documentation was generated from *Ad Experience Report* crate version *1.0.7+20180911*, where *20180911* is the exact revision of the *adexperiencereport:v1* schema built by the [mako](http://www.makotemplates.org/) code generator *v1.0.7*.
 //! 
 //! Everything else about the *Ad Experience Report* *v1* API can be found at the
 //! [official documentation site](https://developers.google.com/ad-experience-report/).
@@ -370,14 +370,14 @@ pub struct PlatformSummary {
     /// The last time that the site changed status.
     #[serde(rename="lastChangeTime")]
     pub last_change_time: Option<String>,
-    /// The ad filtering status of the site.
-    #[serde(rename="filterStatus")]
-    pub filter_status: Option<String>,
-    /// The assigned regions for the site and platform.
-    pub region: Option<Vec<String>>,
     /// A link that leads to a full ad experience report.
     #[serde(rename="reportUrl")]
     pub report_url: Option<String>,
+    /// The assigned regions for the site and platform.
+    pub region: Option<Vec<String>>,
+    /// The ad filtering status of the site.
+    #[serde(rename="filterStatus")]
+    pub filter_status: Option<String>,
     /// The status of the site reviewed for the Better Ads Standards.
     #[serde(rename="betterAdsStatus")]
     pub better_ads_status: Option<String>,
@@ -397,12 +397,12 @@ impl Part for PlatformSummary {}
 /// 
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct SiteSummaryResponse {
-    /// Summary for the desktop review of the site.
-    #[serde(rename="desktopSummary")]
-    pub desktop_summary: Option<PlatformSummary>,
     /// The name of the site reviewed.
     #[serde(rename="reviewedSite")]
     pub reviewed_site: Option<String>,
+    /// Summary for the desktop review of the site.
+    #[serde(rename="desktopSummary")]
+    pub desktop_summary: Option<PlatformSummary>,
     /// Summary for the mobile review of the site.
     #[serde(rename="mobileSummary")]
     pub mobile_summary: Option<PlatformSummary>,
@@ -774,10 +774,8 @@ impl<'a, C, A> SiteGetCall<'a, C, A> where C: BorrowMut<hyper::Client>, A: oauth
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
@@ -990,10 +988,8 @@ impl<'a, C, A> ViolatingSiteListCall<'a, C, A> where C: BorrowMut<hyper::Client>
     ///
     /// # Additional Parameters
     ///
-    /// * *bearer_token* (query-string) - OAuth bearer token.
-    /// * *pp* (query-boolean) - Pretty-print response.
-    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *upload_protocol* (query-string) - Upload protocol for media (e.g. "raw", "multipart").
+    /// * *prettyPrint* (query-boolean) - Returns response with indentations and line breaks.
     /// * *access_token* (query-string) - OAuth access token.
     /// * *fields* (query-string) - Selector specifying which fields to include in a partial response.
     /// * *quotaUser* (query-string) - Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.
