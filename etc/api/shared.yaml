@@ -29,6 +29,8 @@ api:
     - slides
     # invalid code generation - syntax error
     - poly
+    # versions listed but do not exists
+    - websecurityscanner-v1beta
   manually_added:
     - name: photoslibrary
       version: v1
