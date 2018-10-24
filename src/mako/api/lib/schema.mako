@@ -3,48 +3,33 @@
                       IO_TYPES, activity_split, enclose_in, REQUEST_MARKER_TRAIT, mb_type, indent_all_but_first_by,
                       NESTED_TYPE_SUFFIX, RESPONSE_MARKER_TRAIT, split_camelcase_s, METHODS_RESOURCE, unique_type_name, 
                       PART_MARKER_TRAIT, canonical_type_name, TO_PARTS_MARKER, UNUSED_TYPE_MARKER, is_schema_with_optionals)
+    from rust_struct import (RustStruct)
 %>\
 ## Build a schema which must be an object
 ###################################################################################################################
 ###################################################################################################################
 <%def name="_new_object(s, properties, c, allow_optionals)">\
-<% struct = 'pub struct ' + unique_type_name(s.id) %>\
-% if properties:
-${struct} {
-% for pn, p in properties.iteritems():
-    ${p.get('description', 'no description provided') | rust_doc_comment, indent_all_but_first_by(1)}
-    % if pn != mangle_ident(pn):
-    #[serde(rename="${pn}")]
-    % endif
-    pub ${mangle_ident(pn)}: ${to_rust_type(schemas, s.id, pn, p, allow_optionals=allow_optionals)},
-% endfor
-}
-% elif 'additionalProperties' in s:
-${struct}(${to_rust_type(schemas, s.id, NESTED_TYPE_SUFFIX, s, allow_optionals=allow_optionals)});
-% elif 'variant' in s:
-<% 
-    et = unique_type_name(s.id)
-    variant_type = lambda p: canonical_type_name(p.type_value)
+<%
+    rust_struct = RustStruct(s)
+    struct_name = rust_struct.unique_type_name()
 %>\
-pub enum ${et} {
-% for p in s.variant.map:
-    ${p.get('description', 'no description provided') | rust_doc_comment, indent_all_but_first_by(1)}
-    % if variant_type(p) != p.type_value:
-    #[serde(rename="${p.type_value}")]
+<% struct = 'pub struct ' + struct_name %>\
+% if rust_struct.has_properties():
+${struct} {
+% for rust_property in rust_struct.properties():
+    ${rust_property.description | rust_doc_comment, indent_all_but_first_by(1)}
+    % if rust_property.name != rust_property.rust_safe_name():
+    #[serde(rename="${rust_property.name}")]
     % endif
-    ${variant_type(p)}(${to_rust_type(schemas, s.id, None, p, allow_optionals=allow_optionals)}),
+    pub ${rust_property.rust_safe_name()}: ${to_rust_type(schemas, rust_struct.id, rust_property.name, rust_property.raw_schema, allow_optionals=allow_optionals)},
 % endfor
 }
-
-impl Default for ${et} {
-    fn default() -> ${et} {
-        ${et}::${variant_type(s.variant.map[0])}(Default::default())
-    }
-}
+% elif rust_struct.has_additional_properties():
+${struct}(${to_rust_type(schemas, rust_struct.id, NESTED_TYPE_SUFFIX, rust_struct.raw_schema, allow_optionals=allow_optionals)});
 % else: ## it's an empty struct, i.e. struct Foo;
         ## However, to enable the empty JSON object to be parsed, we set one unused optional parameter.
 ${struct} { _never_set: Option<bool> }
-% endif ## 'properties' in s
+% endif ## 'has_properties/has_additional_properties/empty' in s
 </%def>
 
 ## Create new schema with everything.
@@ -58,10 +43,6 @@ ${struct} { _never_set: Option<bool> }
     # only deserialize it.
     # And since we don't know what others want to do, we implement Deserialize as well by default ... 
     traits = ['Clone', 'Debug', 'Serialize', 'Deserialize']
-
-    # default only works for structs, and 'variant' will be an enum
-    if 'variant' not in s:
-        traits.insert(0, 'Default')
     
     nt_markers = schema_markers(s, c, transitive=False)
     allow_optionals = is_schema_with_optionals(nt_markers)

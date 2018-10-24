@@ -1,5 +1,6 @@
 mako
 pyyaml
+six
 mkdocs==0.16.3
 pytest
 pytest-cov

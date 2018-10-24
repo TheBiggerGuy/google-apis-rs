@@ -315,9 +315,9 @@ def _assure_unique_type_name(schemas, tn):
 def to_rust_type(schemas, sn, pn, t, allow_optionals=True, _is_recursive=False):
     def nested_type(nt):
         if 'items' in nt:
-            nt = nt['items']
-        elif 'additionalProperties' in nt:
-            nt = nt['additionalProperties']
+            nt = nt.items
+        elif nt.get('additionalProperties'):
+            nt = nt.additionalProperties
         else:
             assert(is_nested_type_property(nt))
             # It's a nested type - we take it literally like $ref, but generate a name for the type ourselves
@@ -339,18 +339,18 @@ def to_rust_type(schemas, sn, pn, t, allow_optionals=True, _is_recursive=False):
             tn = 'Option<Box<%s>>' % unique_type_name(tn)
         return wrap_type(tn)
     try:
-        rust_type = TYPE_MAP[t['type']]
-        if t['type'] == 'array':
+        rust_type = TYPE_MAP[t.type]
+        if t.type == 'array':
             return wrap_type("%s<%s>" % (rust_type, unique_type_name((nested_type(t)))))
-        elif t['type'] == 'object':
+        elif t.type == 'object':
             if is_map_prop(t):
                 return wrap_type("%s<String, %s>" % (rust_type, nested_type(t)))
             else:
                 return wrap_type(nested_type(t))
-        elif t['type'] == 'string' and 'Count' in pn:
+        elif t.type == 'string' and 'Count' in pn:
             rust_type = 'i64'
         elif rust_type == USE_FORMAT:
-            rust_type = TYPE_MAP[t['format']]
+            rust_type = TYPE_MAP[t.format]
 
         if t.get('repeated', False):
             rust_type = 'Vec<%s>' % rust_type
@@ -358,13 +358,13 @@ def to_rust_type(schemas, sn, pn, t, allow_optionals=True, _is_recursive=False):
             rust_type = wrap_type(rust_type)
         return rust_type
     except KeyError as err:
-        raise AssertionError("%s: Property type '%s' unknown - add new type mapping: %s" % (str(err), t['type'], str(t)))
+        raise AssertionError("%s: Property type '%s' unknown - add new type mapping: %s" % (str(err), t.type, str(t)))
     except AttributeError as err:
         raise AssertionError("%s: unknown dict layout: %s" % (str(err), t))
 
 # return True if this property is actually a nested type
 def is_nested_type_property(t):
-    return 'type' in t and t['type'] == 'object' and 'properties' in t or ('items' in t and 'properties' in t['items'])
+    return 'type' in t and t.type == 'object' and 'properties' in t or ('items' in t and 'properties' in t.items)
 
 # Return True if the schema is nested
 def is_nested_type(s):
@@ -488,7 +488,7 @@ def iter_acitivities(c):
 # return a list of parameter structures of all params of the given method dict
 # apply a prune filter to restrict the set of returned parameters.
 # The order will always be: partOrder + alpha
-def _method_params(m, required=None, location=None):
+def method_params(m, required=None, location=None):
     res = list()
     po = m.get('parameterOrder', [])
     for pn, p in m.get('parameters', dict()).iteritems():
@@ -563,7 +563,7 @@ def setter_fn_name(p):
         fn_name = 'add_' + fn_name
     return fn_name
 
-# _method_params(...), request_value|None -> (required_properties, optional_properties, part_prop|None)
+# method_params(...), request_value|None -> (required_properties, optional_properties, part_prop|None)
 def organize_params(params, request_value):
     part_prop = None
     optional_props = list()
@@ -615,7 +615,7 @@ def method_media_params(m):
 # schemas, context, method(dict), 'request'|'response', request_prop_name -> (params, request_value|None)
 def build_all_params(c, m):
     request_value = method_request(c, m)
-    params = _method_params(m)
+    params = method_params(m)
     if request_value:
         params.insert(0, schema_to_required_property(request_value, REQUEST_VALUE_PROPERTY_NAME))
     # add the delegate. It's a type parameter, which has to remain in sync with the type-parameters we actually build.
