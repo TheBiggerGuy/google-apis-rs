@@ -414,6 +414,7 @@ impl<'a, C, A> PhotosLibrary<C, A>
 #[derive(Default, Clone, Debug, Serialize, Deserialize)]
 pub struct Album {
     /// [Output only] The number of media items in the album.
+    #[serde(skip)]
     #[serde(rename="mediaItemsCount")]
     pub media_items_count: Option<i64>,
     /// Name of the album displayed to the user in their Google Photos account.
